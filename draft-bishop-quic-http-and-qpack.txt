@@ -9,7 +9,7 @@ Expires: May 19, 2017
 
 
             HTTP over QUIC - Mapping and Header Compression
-                     draft-bishop-quic-qpack-latest
+                draft-bishop-quic-http-and-qpack-latest
 
 Abstract
 
