@@ -590,9 +590,9 @@ Internet-Draft                    QPACK                    November 2016
 
 3.2.5.  SETTINGS
 
-   The EXTENDED_SETTINGS frame as defined in [I-D.draft-bishop-httpbis-
-   extended-settings] will be renamed SETTINGS and will replace the
-   HTTP/2 SETTINGS frame.
+   The EXTENDED_SETTINGS frame as defined in
+   [I-D.bishop-httpbis-extended-settings] will be renamed SETTINGS and
+   will replace the HTTP/2 SETTINGS frame.
 
    *TODO:* SETTINGS_ACK and stream state.  Do we need to emit the ACK on
    every active stream?  What about idle streams and in-flight data?

@@ -549,7 +549,7 @@ li, p {
 <p id="rfc.section.3.2.4.p.10">The PRIORITY frame can create a dependency on a stream in the &#8220;idle&#8221; or &#8220;closed&#8221; state.  This allows for the reprioritization of a group of dependent streams by altering the priority of an unused or closed parent stream.</p>
 <p id="rfc.section.3.2.4.p.11">A PRIORITY frame with a length other than 9 octets MUST be treated as a connection error of type FRAME_SIZE_ERROR.</p>
 <h1 id="rfc.section.3.2.5"><a href="#rfc.section.3.2.5">3.2.5.</a> <a href="#settings" id="settings">SETTINGS</a></h1>
-<p id="rfc.section.3.2.5.p.1">The EXTENDED_SETTINGS frame as defined in [I-D.draft-bishop-httpbis-extended-settings] will be renamed SETTINGS and will replace the HTTP/2 SETTINGS frame.</p>
+<p id="rfc.section.3.2.5.p.1">The EXTENDED_SETTINGS frame as defined in <a href="#I-D.bishop-httpbis-extended-settings">[I-D.bishop-httpbis-extended-settings]</a> will be renamed SETTINGS and will replace the HTTP/2 SETTINGS frame.</p>
 <p><strong>TODO:</strong>  SETTINGS_ACK and stream state.  Do we need to emit the ACK on every active stream?  What about idle streams and in-flight data?</p>
 <h1 id="rfc.section.3.2.6"><a href="#rfc.section.3.2.6">3.2.6.</a> <a href="#other-frames-not-mentioned" id="other-frames-not-mentioned">Other frames not mentioned</a></h1>
 <p id="rfc.section.3.2.6.p.1">QUIC stream 3 is equivalent to HTTP/2&#8217;s stream 0, and the same framing is used as for other streams.  SETTINGS frames remain on stream 3, as do any other HTTP/2 stream-zero frames.  This enables HTTP/2 extension frames which do not have a hard cross-stream ordering requirement to continue to function.</p>
