@@ -405,7 +405,7 @@ li, p {
 <p id="rfc.section.2.1.p.4">The dynamic table is still constrained to the size specified by the receiver. An attempt to add a header to the dynamic table which causes it to exceed the maximum size MUST be treated as an error by a decoder.</p>
 <p id="rfc.section.2.1.p.5">Because it is possible for QPACK frames to arrive which reference indices which have not yet been defined, such frames MUST wait until another frame has arrived and defined the index. In order to guard against malicious senders, implementations SHOULD impose a time limit and treat expiration of the timer as a decoding error. However, if the implementation chooses not to abort the connection, the remainder of the header block MUST be decoded and the output discarded.</p>
 <h1 id="rfc.section.2.1.1"><a href="#rfc.section.2.1.1">2.1.1.</a> <a href="#dynamic-table-state-synchronization" id="dynamic-table-state-synchronization">Dynamic table state synchronization</a></h1>
-<p id="rfc.section.2.1.1.p.1">No entries are evicted from the dynamic table. Size management is purely the responsibility of the sender, which MUST NOT exceed the declared memory size of the receiver.  The receiver will periodically summarize its current understanding of the header table in a QPACK-ACK frame, which permits the sender to update its state as needed.</p>
+<p id="rfc.section.2.1.1.p.1">No entries are evicted from the dynamic table. Size management is purely the responsibility of the sender, which MUST NOT exceed the declared memory size of the receiver.</p>
 <p id="rfc.section.2.1.1.p.2">Both sender and receiver will maintain a count of references to the indexed entry.  This count includes:</p>
 <p/>
 
@@ -414,16 +414,8 @@ li, p {
   <li>Literal values which use the indexed entry to provide the header name</li>
   <li>Explicit emissions of the indexed value</li>
 </ul>
-<p id="rfc.section.2.1.1.p.4">The sender MUST consider memory as committed beginning with the first time the indexed entry is assigned.  A newly-added entry proceeds through the following state:</p>
-<p/>
-
-<ol>
-  <li><strong>Insert requested.</strong>  The encoder emits at least one identical literal header value with indexing creating the dynamic table entry. At this point, it begins counting the new entry against the maximum table size.</li>
-  <li><strong>Insert acknowledged.</strong>  When the decoder has received a literal header value with indexing creating the dynamic table entry, it MUST emit a QPACK-ACK frame showing the entry as occupied.</li>
-  <li><strong>Insert completed.</strong>  When the encoder has received a QPACK-ACK frame acknowledging the insertion, it SHOULD NOT emit further literal header values with indexing for the same value.</li>
-</ol>
-<p id="rfc.section.2.1.1.p.6">The encoder MUST NOT emit a delete instruction until the insertion instruction has completed.  A decoder that receives a delete instruction for a vacant table entry MUST consider this to be a fatal error.</p>
-<p id="rfc.section.2.1.1.p.7">When the sender wishes to delete an inserted value, it flows through the following set of states:</p>
+<p id="rfc.section.2.1.1.p.4">The sender MUST consider memory as committed beginning with the first time the indexed entry is assigned.  An encoder MAY repeat the insertion instruction in other frames rather than leveraging the index while it waits for the frame to arrive.</p>
+<p id="rfc.section.2.1.1.p.5">When the sender wishes to delete an inserted value, it flows through the following set of states:</p>
 <p/>
 
 <ol>
@@ -432,6 +424,7 @@ li, p {
   <li><strong>Delete acknowledged.</strong>  The receiver has received all QPACK frames which reference the deleted value, and can safely delete the entry.  The receiver SHOULD promptly emit a QPACK-ACK frame, but MAY delay briefly waiting for other pending deletes as well.</li>
   <li><strong>Delete completed.</strong>  When the sender receives a QPACK-ACK frame acknowledging the delete, it no longer counts the size of the deleted entry against the table size and MAY emit insert instructions for the field with a new value.</li>
 </ol>
+<p id="rfc.section.2.1.1.p.7">The decoder can receive a delete instruction for a vacant table entry. A decoder MUST NOT consider this to be an error, but MUST handle the delete as usual even while waiting for the definition to arrive.</p>
 <h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#changes-to-binary-format" id="changes-to-binary-format">Changes to Binary Format</a></h1>
 <h1 id="rfc.section.2.2.1"><a href="#rfc.section.2.2.1">2.2.1.</a> <a href="#literal-header-field-representation" id="literal-header-field-representation">Literal Header Field Representation</a></h1>
 <p id="rfc.section.2.2.1.p.1">(This section replaces <a href="#RFC7541">[RFC7541]</a>, Section 6.2.1.)</p>
@@ -481,14 +474,8 @@ li, p {
 <p id="rfc.section.2.2.2.p.3">The sender may delete an entry in the dynamic header table at any time in order to stay below the receiver&#8217;s declared memory boundary.  This instruction tells the receiver that they should prepare to delete the specified entry after all preceding frames referencing it have been received.  The delete instruction includes the count of such frames to facilitate the receiver&#8217;s garbage collection process.</p>
 <h1 id="rfc.section.2.2.3"><a href="#rfc.section.2.2.3">2.2.3.</a> <a href="#the-qpack-ack-frame" id="the-qpack-ack-frame">The QPACK-ACK frame</a></h1>
 <p id="rfc.section.2.2.3.p.1">Each peer MUST periodically emit a QPACK-ACK frame (0xTBD) on QUIC stream 3 to reflect the current state of its header table.  A peer MAY omit sending a new QPACK-ACK frame if the dynamic table has not changed since the last frame.</p>
-<p id="rfc.section.2.2.3.p.2">The QPACK-ACK frame defines no flags and consists of a bitmap.  The first bit in the bitmap reflects the first index after the static table (currently 62), and each successive bit indicates the next integer value.  Each bit MUST be set if the index currently has a value assigned (whether active or pending delete) and MUST be unset otherwise.  Indices beyond the end of the QPACK-ACK frame are assumed to be unset.</p>
-<p id="rfc.section.2.2.3.p.3">Upon receipt, an encoder uses the table to update the following information:</p>
-<p/>
-
-<ul>
-  <li>Newly-inserted items can be confirmed to have been added, and can be leveraged without concern of head-of-line blocking, or can be deleted.</li>
-  <li>Items which have been deleted can be confirmed removed, allowing the encoder to safely reuse the index and the memory space for new values.</li>
-</ul>
+<p id="rfc.section.2.2.3.p.2">The QPACK-ACK frame defines no flags and consists of a bitmap.  The first bit in the bitmap reflects the first index after the static table (currently 62), and each successive bit indicates the next integer value.  Each bit MUST be set if the indexed entry has had a delete complete since the preceding QUIC frame and MUST be unset otherwise.  Indices beyond the end of the QPACK-ACK frame are assumed to be unset.</p>
+<p id="rfc.section.2.2.3.p.3">Upon receipt, an encoder uses the table to confirm which items have been deleted. At this point, the space can be recovered by the encoder and the encoder can safely reuse the index for future insertions.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#http-over-quic-mapping" id="http-over-quic-mapping">HTTP over QUIC Mapping</a></h1>
 <p><a href="#I-D.shade-quic-http2-mapping">[I-D.shade-quic-http2-mapping]</a> refers to QUIC Stream 3 as carrying &#8220;headers,&#8221; but more accurately, it carries a nearly-complete HTTP/2 session, complete with framing and multiplexing.  The mapping deletes certain elements of HTTP/2&#8217;s framing layer which can be delegated to the QUIC transport layer.</p>
 <p id="rfc.section.3.p.2">This was done in large part for expediency, reusing HTTP/2 code in place anywhere no QUIC-specific approach had yet been added.  A primary driver of this is the need for in-order reliable delivery of frames carrying HPACK data (HEADERS, CONTINUATION, PUSH_PROMISE).</p>
@@ -562,10 +549,10 @@ li, p {
 <p id="rfc.section.3.2.4.p.10">The PRIORITY frame can create a dependency on a stream in the &#8220;idle&#8221; or &#8220;closed&#8221; state.  This allows for the reprioritization of a group of dependent streams by altering the priority of an unused or closed parent stream.</p>
 <p id="rfc.section.3.2.4.p.11">A PRIORITY frame with a length other than 9 octets MUST be treated as a connection error of type FRAME_SIZE_ERROR.</p>
 <h1 id="rfc.section.3.2.5"><a href="#rfc.section.3.2.5">3.2.5.</a> <a href="#settings" id="settings">SETTINGS</a></h1>
-<p id="rfc.section.3.2.5.p.1">The SETTINGS frame in QUIC will be as defined in</p>
+<p id="rfc.section.3.2.5.p.1">The EXTENDED_SETTINGS frame as defined in [I-D.draft-bishop-httpbis-extended-settings] will be renamed SETTINGS and will replace the HTTP/2 SETTINGS frame.</p>
+<p><strong>TODO:</strong>  SETTINGS_ACK and stream state.  Do we need to emit the ACK on every active stream?  What about idle streams and in-flight data?</p>
 <h1 id="rfc.section.3.2.6"><a href="#rfc.section.3.2.6">3.2.6.</a> <a href="#other-frames-not-mentioned" id="other-frames-not-mentioned">Other frames not mentioned</a></h1>
 <p id="rfc.section.3.2.6.p.1">QUIC stream 3 is equivalent to HTTP/2&#8217;s stream 0, and the same framing is used as for other streams.  SETTINGS frames remain on stream 3, as do any other HTTP/2 stream-zero frames.  This enables HTTP/2 extension frames which do not have a hard cross-stream ordering requirement to continue to function.</p>
-<p><strong>TODO:</strong>  SETTINGS_ACK and stream state.  Do we need to emit the ACK on every active stream?  What about idle streams and in-flight data?</p>
 <h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#http-message-exchanges" id="http-message-exchanges">HTTP Message Exchanges</a></h1>
 <p id="rfc.section.3.3.p.1">A client sends an HTTP request on a new pair of QUIC stream. A server sends an HTTP response on the same streams as the request.</p>
 <p id="rfc.section.3.3.p.2">An HTTP message (request or response) consists of:</p>
@@ -598,6 +585,7 @@ li, p {
   <li>Patrick McManus</li>
   <li>Martin Thomson</li>
   <li>Charles &#8216;Buck&#8217; Krasic</li>
+  <li>Kyle Rose</li>
 </ul>
 <h1 id="rfc.references"><a href="#rfc.references">8.</a> References</h1>
 <h1 id="rfc.references.1"><a href="#rfc.references.1">8.1.</a> Normative References</h1>
