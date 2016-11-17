@@ -4,8 +4,8 @@
 
 QUIC Working Group                                             M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                       November 15, 2016
-Expires: May 19, 2017
+Intended status: Standards Track                       November 17, 2016
+Expires: May 21, 2017
 
 
             HTTP over QUIC - Mapping and Header Compression
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 19, 2017.
+   This Internet-Draft will expire on May 21, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                    Expires May 19, 2017                  [Page 1]
+Bishop                    Expires May 21, 2017                  [Page 1]
 
 Internet-Draft                    QPACK                    November 2016
 
@@ -82,7 +82,7 @@ Table of Contents
        3.2.4.  PRIORITY  . . . . . . . . . . . . . . . . . . . . . .  10
        3.2.5.  SETTINGS  . . . . . . . . . . . . . . . . . . . . . .  11
        3.2.6.  Other frames not mentioned  . . . . . . . . . . . . .  11
-     3.3.  HTTP Message Exchanges  . . . . . . . . . . . . . . . . .  11
+     3.3.  HTTP Message Exchanges  . . . . . . . . . . . . . . . . .  12
    4.  Performance Considerations  . . . . . . . . . . . . . . . . .  13
    5.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bishop                    Expires May 19, 2017                  [Page 2]
+Bishop                    Expires May 21, 2017                  [Page 2]
 
 Internet-Draft                    QPACK                    November 2016
 
@@ -165,7 +165,7 @@ Internet-Draft                    QPACK                    November 2016
 
 
 
-Bishop                    Expires May 19, 2017                  [Page 3]
+Bishop                    Expires May 21, 2017                  [Page 3]
 
 Internet-Draft                    QPACK                    November 2016
 
@@ -221,7 +221,7 @@ Internet-Draft                    QPACK                    November 2016
 
 
 
-Bishop                    Expires May 19, 2017                  [Page 4]
+Bishop                    Expires May 21, 2017                  [Page 4]
 
 Internet-Draft                    QPACK                    November 2016
 
@@ -277,7 +277,7 @@ Internet-Draft                    QPACK                    November 2016
 
 
 
-Bishop                    Expires May 19, 2017                  [Page 5]
+Bishop                    Expires May 21, 2017                  [Page 5]
 
 Internet-Draft                    QPACK                    November 2016
 
@@ -333,7 +333,7 @@ Internet-Draft                    QPACK                    November 2016
 
 
 
-Bishop                    Expires May 19, 2017                  [Page 6]
+Bishop                    Expires May 21, 2017                  [Page 6]
 
 Internet-Draft                    QPACK                    November 2016
 
@@ -342,7 +342,12 @@ Internet-Draft                    QPACK                    November 2016
    renumbering _all_ the instructions to fit a new one.  If we think we
    still need this in QUIC, we'll have to do the renumbering later.
 
- 0   1   2   3   4   5   6   7    +---+---+---+---+---+---+---+---+    | 0 | 0 | 0 | 1 | RefCount (4+) |    +---+---+---+---+---------------+    |          Index (8+)           |    +-------------------------------+ ~~~~~~~~~~
+        0   1   2   3   4   5   6   7
+      +---+---+---+---+---+---+---+---+
+      | 0 | 0 | 0 | 1 | RefCount (4+) |
+      +---+---+---+---+---------------+
+      |          Index (8+)           |
+      +-------------------------------+
 
                            Header Field Deletion
 
@@ -381,18 +386,18 @@ Internet-Draft                    QPACK                    November 2016
    certain elements of HTTP/2's framing layer which can be delegated to
    the QUIC transport layer.
 
+
+
+
+Bishop                    Expires May 21, 2017                  [Page 7]
+
+Internet-Draft                    QPACK                    November 2016
+
+
    This was done in large part for expediency, reusing HTTP/2 code in
    place anywhere no QUIC-specific approach had yet been added.  A
    primary driver of this is the need for in-order reliable delivery of
    frames carrying HPACK data (HEADERS, CONTINUATION, PUSH_PROMISE).
-
-
-
-
-Bishop                    Expires May 19, 2017                  [Page 7]
-
-Internet-Draft                    QPACK                    November 2016
-
 
    While the ability to reuse HTTP/2 framing is useful, the double-mux
    layer is unwieldy and has proved unpopular in the working group.
@@ -436,19 +441,17 @@ Internet-Draft                    QPACK                    November 2016
    Because stream termination is handled by QUIC, an END_STREAM flag is
    not required.
 
-   On QUIC streams other than Stream 1, the general frame format is as
-   follows:
 
 
 
 
-
-
-
-Bishop                    Expires May 19, 2017                  [Page 8]
+Bishop                    Expires May 21, 2017                  [Page 8]
 
 Internet-Draft                    QPACK                    November 2016
 
+
+   On QUIC streams other than Stream 1, the general frame format is as
+   follows:
 
         0   1   2   3   4   5   6   7
       +---+---+---+---+---+---+---+---+
@@ -494,18 +497,19 @@ Internet-Draft                    QPACK                    November 2016
    HEADERS frames without EHB set, followed by a HEADERS frame with EHB
    set.
 
-   HEADERS frames from various streams may be processed by the QPACK
-   decoder in any order, completely or partially.  It is not necessary
-   to withhold decoding results until the end of the header block has
-   arrived.  However, depending on the contents, the processing of one
 
 
 
-Bishop                    Expires May 19, 2017                  [Page 9]
+
+Bishop                    Expires May 21, 2017                  [Page 9]
 
 Internet-Draft                    QPACK                    November 2016
 
 
+   HEADERS frames from various streams may be processed by the QPACK
+   decoder in any order, completely or partially.  It is not necessary
+   to withhold decoding results until the end of the header block has
+   arrived.  However, depending on the contents, the processing of one
    frame might depend on other QPACK frames.  The results of decoding
    MUST be emitted in the same order as the HEADERS frames were placed
    on the stream.
@@ -546,27 +550,26 @@ Internet-Draft                    QPACK                    November 2016
    Prioritized Stream:  The 32-bit stream identifier for the stream
       whose priority is being modified.
 
-   Stream Dependency:
-   :The 32-bit stream identifier for the stream that this stream depends
-   on.
-
-   Weight: :An unsigned 8-bit integer representing a priority weight for
-   the stream (see Section 5.3).  Add one to the value to obtain a
-   weight between 1 and 256.
+   Stream Dependency:  The 32-bit stream identifier for the stream that
+      this stream depends on.
 
 
 
 
-Bishop                    Expires May 19, 2017                 [Page 10]
+
+Bishop                    Expires May 21, 2017                 [Page 10]
 
 Internet-Draft                    QPACK                    November 2016
 
 
+   Weight:  An unsigned 8-bit integer representing a priority weight for
+      the stream (see Section 5.3).  Add one to the value to obtain a
+      weight between 1 and 256.
+
    The PRIORITY frame defines one flag:
 
-   EXCLUSIVE (0x01):
-   :Indicates that the stream dependency is exclusive (see [RFC7540]
-   Section 5.3).
+   EXCLUSIVE (0x01):  Indicates that the stream dependency is exclusive
+      (see [RFC7540] Section 5.3).
 
    If a PRIORITY frame is received which attempts to modify a stream
    which is not a request control scheme, the recipient MUST respond
@@ -605,18 +608,20 @@ Internet-Draft                    QPACK                    November 2016
    HTTP/2 extension frames which do not have a hard cross-stream
    ordering requirement to continue to function.
 
+
+
+
+
+
+Bishop                    Expires May 21, 2017                 [Page 11]
+
+Internet-Draft                    QPACK                    November 2016
+
+
 3.3.  HTTP Message Exchanges
 
    A client sends an HTTP request on a new pair of QUIC stream.  A
    server sends an HTTP response on the same streams as the request.
-
-
-
-
-Bishop                    Expires May 19, 2017                 [Page 11]
-
-Internet-Draft                    QPACK                    November 2016
-
 
    An HTTP message (request or response) consists of:
 
@@ -664,12 +669,7 @@ Internet-Draft                    QPACK                    November 2016
 
 
 
-
-
-
-
-
-Bishop                    Expires May 19, 2017                 [Page 12]
+Bishop                    Expires May 21, 2017                 [Page 12]
 
 Internet-Draft                    QPACK                    November 2016
 
@@ -725,7 +725,7 @@ Internet-Draft                    QPACK                    November 2016
 
 
 
-Bishop                    Expires May 19, 2017                 [Page 13]
+Bishop                    Expires May 21, 2017                 [Page 13]
 
 Internet-Draft                    QPACK                    November 2016
 
@@ -736,8 +736,8 @@ Internet-Draft                    QPACK                    November 2016
 
    [I-D.bishop-httpbis-extended-settings]
               Bishop, M., "HTTP/2 Extended SETTINGS Extension", draft-
-              bishop-httpbis-extended-settings-00 (work in progress),
-              June 2016.
+              bishop-httpbis-extended-settings-01 (work in progress),
+              November 2016.
 
    [I-D.hamilton-quic-transport-protocol]
               Hamilton, R., Iyengar, J., Swett, I., and A. Wilk, "QUIC:
@@ -781,7 +781,7 @@ Internet-Draft                    QPACK                    November 2016
 
 
 
-Bishop                    Expires May 19, 2017                 [Page 14]
+Bishop                    Expires May 21, 2017                 [Page 14]
 
 Internet-Draft                    QPACK                    November 2016
 
@@ -837,4 +837,4 @@ Author's Address
 
 
 
-Bishop                    Expires May 19, 2017                 [Page 15]
+Bishop                    Expires May 21, 2017                 [Page 15]

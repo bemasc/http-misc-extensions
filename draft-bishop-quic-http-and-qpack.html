@@ -302,7 +302,7 @@ li, p {
 
   <meta name="dct.creator" content="Bishop, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-quic-http-and-qpack-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2016-11-15" />
+  <meta name="dct.issued" scheme="ISO8601" content="2016-11-17" />
   <meta name="dct.abstract" content="HTTP/2 " />
   <meta name="description" content="HTTP/2 " />
 
@@ -323,10 +323,10 @@ li, p {
 </tr>
 <tr>
   <td class="left">Intended status: Standards Track</td>
-  <td class="right">November 15, 2016</td>
+  <td class="right">November 17, 2016</td>
 </tr>
 <tr>
-  <td class="left">Expires: May 19, 2017</td>
+  <td class="left">Expires: May 21, 2017</td>
   <td class="right"></td>
 </tr>
 
@@ -347,7 +347,7 @@ li, p {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on May 19, 2017.</p>
+<p>This Internet-Draft will expire on May 21, 2017.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -468,7 +468,12 @@ li, p {
 <p id="rfc.section.2.2.2.p.1">(This section replaces <a href="#RFC7541">[RFC7541]</a>, Section 6.2.3.)</p>
 <p><strong>DISCUSS:</strong>  I stole the never-indexed instruction code to avoid renumbering <em>all</em> the instructions to fit a new one.  If we think we still need this in QUIC, we&#8217;ll have to do the renumbering later.</p>
 <pre>
- 0   1   2   3   4   5   6   7    +---+---+---+---+---+---+---+---+    | 0 | 0 | 0 | 1 | RefCount (4+) |    +---+---+---+---+---------------+    |          Index (8+)           |    +-------------------------------+ ~~~~~~~~~~
+     0   1   2   3   4   5   6   7
+   +---+---+---+---+---+---+---+---+
+   | 0 | 0 | 0 | 1 | RefCount (4+) |
+   +---+---+---+---+---------------+
+   |          Index (8+)           |
+   +-------------------------------+
 </pre>
 <p class="figure">Header Field Deletion</p>
 <p id="rfc.section.2.2.2.p.3">The sender may delete an entry in the dynamic header table at any time in order to stay below the receiver&#8217;s declared memory boundary.  This instruction tells the receiver that they should prepare to delete the specified entry after all preceding frames referencing it have been received.  The delete instruction includes the count of such frames to facilitate the receiver&#8217;s garbage collection process.</p>
@@ -539,15 +544,22 @@ li, p {
 <dl>
   <dt>Prioritized Stream:</dt>
   <dd style="margin-left: 8">The 32-bit stream identifier for the stream whose priority is being modified.</dd>
+  <dt>Stream Dependency:</dt>
+  <dd style="margin-left: 8">The 32-bit stream identifier for the stream that this stream depends on.</dd>
+  <dt>Weight:</dt>
+  <dd style="margin-left: 8">An unsigned 8-bit integer representing a priority weight for the stream (see Section 5.3).  Add one to the value to obtain a weight between 1 and 256.</dd>
 </dl>
-<p id="rfc.section.3.2.4.p.4">Stream Dependency:<br/> :The 32-bit stream identifier for the stream that this stream depends on.</p>
-<p id="rfc.section.3.2.4.p.5">Weight: :An unsigned 8-bit integer representing a priority weight for the stream (see Section 5.3).  Add one to the value to obtain a weight between 1 and 256.</p>
-<p id="rfc.section.3.2.4.p.6">The PRIORITY frame defines one flag:</p>
-<p id="rfc.section.3.2.4.p.7">EXCLUSIVE (0x01):<br/> :Indicates that the stream dependency is exclusive (see <a href="#RFC7540">[RFC7540]</a> Section 5.3).</p>
-<p id="rfc.section.3.2.4.p.8">If a PRIORITY frame is received which attempts to modify a stream which is not a request control scheme, the recipient MUST respond with a connection error (Section 5.4.1) of type PROTOCOL_ERROR.</p>
-<p id="rfc.section.3.2.4.p.9">The PRIORITY frame can affect a stream in any state.  Note that this frame could arrive after processing or frame sending has completed, which would cause it to have no effect on the identified stream.  For a stream that is in the &#8220;half-closed (remote)&#8221; or &#8220;closed&#8221; state, this frame can only affect processing of the identified stream and its dependent streams; it does not affect frame transmission on that stream.</p>
-<p id="rfc.section.3.2.4.p.10">The PRIORITY frame can create a dependency on a stream in the &#8220;idle&#8221; or &#8220;closed&#8221; state.  This allows for the reprioritization of a group of dependent streams by altering the priority of an unused or closed parent stream.</p>
-<p id="rfc.section.3.2.4.p.11">A PRIORITY frame with a length other than 9 octets MUST be treated as a connection error of type FRAME_SIZE_ERROR.</p>
+<p id="rfc.section.3.2.4.p.4">The PRIORITY frame defines one flag:</p>
+<p/>
+
+<dl>
+  <dt>EXCLUSIVE (0x01):</dt>
+  <dd style="margin-left: 8">Indicates that the stream dependency is exclusive (see <a href="#RFC7540">[RFC7540]</a> Section 5.3).</dd>
+</dl>
+<p id="rfc.section.3.2.4.p.6">If a PRIORITY frame is received which attempts to modify a stream which is not a request control scheme, the recipient MUST respond with a connection error (Section 5.4.1) of type PROTOCOL_ERROR.</p>
+<p id="rfc.section.3.2.4.p.7">The PRIORITY frame can affect a stream in any state. Note that this frame could arrive after processing or frame sending has completed, which would cause it to have no effect on the identified stream. For a stream that is in the &#8220;half-closed (remote)&#8221; or &#8220;closed&#8221; state, this frame can only affect processing of the identified stream and its dependent streams; it does not affect frame transmission on that stream.</p>
+<p id="rfc.section.3.2.4.p.8">The PRIORITY frame can create a dependency on a stream in the &#8220;idle&#8221; or &#8220;closed&#8221; state. This allows for the reprioritization of a group of dependent streams by altering the priority of an unused or closed parent stream.</p>
+<p id="rfc.section.3.2.4.p.9">A PRIORITY frame with a length other than 9 octets MUST be treated as a connection error of type FRAME_SIZE_ERROR.</p>
 <h1 id="rfc.section.3.2.5"><a href="#rfc.section.3.2.5">3.2.5.</a> <a href="#settings" id="settings">SETTINGS</a></h1>
 <p id="rfc.section.3.2.5.p.1">The EXTENDED_SETTINGS frame as defined in <a href="#I-D.bishop-httpbis-extended-settings">[I-D.bishop-httpbis-extended-settings]</a> will be renamed SETTINGS and will replace the HTTP/2 SETTINGS frame.</p>
 <p><strong>TODO:</strong>  SETTINGS_ACK and stream state.  Do we need to emit the ACK on every active stream?  What about idle streams and in-flight data?</p>
@@ -595,7 +607,7 @@ li, p {
       <td class="reference">
         <b id="I-D.bishop-httpbis-extended-settings">[I-D.bishop-httpbis-extended-settings]</b>
       </td>
-      <td class="top"><a>Bishop, M.</a>, "<a href="http://tools.ietf.org/html/draft-bishop-httpbis-extended-settings-00">HTTP/2 Extended SETTINGS Extension</a>", Internet-Draft draft-bishop-httpbis-extended-settings-00, June 2016.</td>
+      <td class="top"><a>Bishop, M.</a>, "<a href="http://tools.ietf.org/html/draft-bishop-httpbis-extended-settings-01">HTTP/2 Extended SETTINGS Extension</a>", Internet-Draft draft-bishop-httpbis-extended-settings-01, November 2016.</td>
     </tr>
     <tr>
       <td class="reference">
