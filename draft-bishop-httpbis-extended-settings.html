@@ -7,7 +7,8 @@
 
   <title>HTTP/2 Extended SETTINGS Extension</title>
 
-  <style type="text/css">/*<![CDATA[*/
+  
+<style type="text/css">/*<![CDATA[*/
 @viewport {
   zoom: 1.0;
   width: extend-to-zoom;
@@ -73,7 +74,11 @@ ul.toc li {
   padding-bottom: 5px;
   margin: 0;
 }
-ul.toc, ul.toc ul {
+ul.toc ul {
+  margin: 0;
+}
+/* xml2rfc nests ul directly inside ul which messes with the style badly */
+ul.toc, ul.toc>ul, ul.toc ul>ul {
   margin: 0 0 0 1.5em;
 }
 
@@ -208,6 +213,9 @@ ol, ul, li, p {
 li, p {
   margin-left: 0;
 }
+address {
+  font-style: normal;
+}
 
 .github-fork-ribbon-wrapper {
   display: none;
@@ -267,6 +275,7 @@ li, p {
   }
   /*]]>*/</style>
 
+
   <link href="#rfc.toc" rel="Contents"/>
 <link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
 <link href="#rfc.section.2" rel="Chapter" title="2 Detection of Support"/>
@@ -286,12 +295,12 @@ li, p {
 <link href="#rfc.authors" rel="Chapter"/>
 
 
-  <meta name="generator" content="xml2rfc version 2.5.1 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.5.2 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Bishop, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-httpbis-extended-settings-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2016-11-17" />
+  <meta name="dct.issued" scheme="ISO8601" content="2016-12-27" />
   <meta name="dct.abstract" content="HTTP/2 defines the SETTINGS frame to contain a single 32-bit value per setting. While this is sufficient to convey everything used in the core HTTP/2 specification, some protocols will require more complex values, such as arrays of code-points or strings." />
   <meta name="description" content="HTTP/2 defines the SETTINGS frame to contain a single 32-bit value per setting. While this is sufficient to convey everything used in the core HTTP/2 specification, some protocols will require more complex values, such as arrays of code-points or strings." />
 
@@ -312,10 +321,10 @@ li, p {
 </tr>
 <tr>
   <td class="left">Intended status: Informational</td>
-  <td class="right">November 17, 2016</td>
+  <td class="right">December 27, 2016</td>
 </tr>
 <tr>
-  <td class="left">Expires: May 21, 2017</td>
+  <td class="left">Expires: June 30, 2017</td>
   <td class="right"></td>
 </tr>
 
@@ -337,7 +346,7 @@ li, p {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on May 21, 2017.</p>
+<p>This Internet-Draft will expire on June 30, 2017.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -380,7 +389,7 @@ li, p {
 <p id="rfc.section.2.p.3">This setting MUST be sent before any of the frame types in <a href="#frames">Section 3</a> are sent, but those frames MAY be sent before the setting is acknowledged and MAY be sent regardless of whether the peer has sent this setting.</p>
 <h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#frames" id="frames">Extension Frame Types</a></h1>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#settings-frame" id="settings-frame">EXTENDED_SETTINGS Frame</a></h1>
-<p id="rfc.section.3.1.p.1">The EXTENDED_SETTINGS frame (type=0xTBD1) conveys configuration parameters that affect how endpoints communicate, such as preferences and constraints on peer behavior which occur in a form other than a 32-bit value.  The EXTENDED_SETTINGS frame is also used to acknowledge the receipt of those parameters.  Individually, an EXTENDED_SETTINGS parameter can also be referred to as a &#8220;setting&#8221;.</p>
+<p id="rfc.section.3.1.p.1">The EXTENDED_SETTINGS frame (type=0xTBD1) conveys configuration parameters that affect how endpoints communicate, such as preferences and constraints on peer behavior which occur in a form other than a 32-bit value. Individually, an EXTENDED_SETTINGS parameter can also be referred to as a &#8220;setting&#8221;.</p>
 <p id="rfc.section.3.1.p.2">EXTENDED_SETTINGS parameters are not negotiated; they describe characteristics of the sending peer, which are used by the receiving peer.  However, a negotiation can be implied by the use of EXTENDED_SETTINGS &#8211; a peer uses EXTENDED_SETTINGS to advertise a set of supported values.  The recipient can then choose which entries from this list are also acceptable and proceed with the value it has chosen.  (This choice could be announced in a field of an extension frame, or in a value in SETTINGS.)</p>
 <p id="rfc.section.3.1.p.3">Different values for the same parameter can be advertised by each peer.  For example, a server might support many different signing algorithms, while a resource constrained client has only one or two that it can validate.</p>
 <p id="rfc.section.3.1.p.4">An EXTENDED_SETTINGS frame MAY be sent at any time by either endpoint over the lifetime of the connection.</p>
@@ -530,5 +539,6 @@ li, p {
   </address>
 </div>
 
+  <div class="github-fork-ribbon-wrapper"><div class="github-fork-ribbon"><a href="https://github.com/MikeBishop/http-misc-extensions">Fork me on GitHub</a></div></div>
 </body>
 </html>
