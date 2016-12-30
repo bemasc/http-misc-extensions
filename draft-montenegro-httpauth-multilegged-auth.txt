@@ -4,7 +4,7 @@
 
 Hypertext Transfer Protocol Authentication                 G. Montenegro
 Internet-Draft                                                 M. Bishop
-Intended status: Standards Track                               Microsoft
+Intended status: Informational                                 Microsoft
 Expires: July 3, 2017                                  December 30, 2016
 
 
