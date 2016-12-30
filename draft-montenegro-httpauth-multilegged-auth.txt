@@ -69,7 +69,7 @@ Table of Contents
    3.  Multilegged Authentication in the Presence of Multiplexing  .   5
      3.1.  Request Management  . . . . . . . . . . . . . . . . . . .   6
      3.2.  The Auth-ID Header  . . . . . . . . . . . . . . . . . . .   7
-     3.3.  The Persisted-Auth Response Header  . . . . . . . . . . .   8
+     3.3.  The Persistent-Auth Response Header . . . . . . . . . . .   8
    4.  Stateful Authentication via Proxies . . . . . . . . . . . . .   8
      4.1.  HTTP/1.1 Client Authenticating to HTTP/2 Server via
            HTTP/2 Proxy  . . . . . . . . . . . . . . . . . . . . . .   9
@@ -268,7 +268,7 @@ Internet-Draft            HTTP Multilegged Auth            December 2016
          |                                      |
          | <------- (4) HTTP 200 OK-----------  |
          |              WWW-Authenticate header |
-         |              (Persisted-Auth header) |
+         |              (Persistent-Auth header) |
          |                                      |
          |                                      |
          v                                      v
@@ -305,7 +305,7 @@ Internet-Draft            HTTP Multilegged Auth            December 2016
 
    5.  Authentication succeeds and the server returns the requested
        resource.  If the exchange authenticated the connection, the
-       server SHOULD include a "Persisted-Auth" header (see
+       server SHOULD include a "Persistent-Auth" header (see
        Section 3.3).
 
 3.1.  Request Management
@@ -394,29 +394,29 @@ Montenegro & Bishop       Expires July 3, 2017                  [Page 7]
 Internet-Draft            HTTP Multilegged Auth            December 2016
 
 
-3.3.  The Persisted-Auth Response Header
+3.3.  The Persistent-Auth Response Header
 
    Some multilegged authentication schemes can result in per-request or
    per-connection (i.e., Kerberos or Negotiate) authentication.  When a
-   session is authenticated, servers SHOULD generate a "Persisted-Auth"
+   session is authenticated, servers SHOULD generate a "Persistent-Auth"
    header and send it along with the HTTP 200 OK response.
 
-   The "Persisted-Auth" header is defined as follows:
+   The "Persistent-Auth" header is defined as follows:
 
-   Persisted-Auth = "true" / "false"
+   Persistent-Auth = "true" / "false"
 
-   A "Persisted-Auth" header with an unknown value, or the absence of a
-   "Persisted-Auth" header, MUST be treated as the value "false".  The
-   client MUST use the "Persisted-Auth" header to determine what action
+   A "Persistent-Auth" header with an unknown value, or the absence of a
+   "Persistent-Auth" header, MUST be treated as the value "false".  The
+   client MUST use the "Persistent-Auth" header to determine what action
    to take with queued or subsequent requests:
 
    1.  If the session was authenticated, as indicated by the presence of
-       the "Persisted-Auth" header with the value "true", the client
+       the "Persistent-Auth" header with the value "true", the client
        does not need to authenticate new streams it creates to service
        future requests on the authenticated session.
 
    2.  If the session was not authenticated, as indicated by the absence
-       of the "Persisted-Auth" header or the value "false", the client
+       of the "Persistent-Auth" header or the value "false", the client
        SHOULD remember the negotiated authentication scheme used for
        authentication.  The client SHOULD NOT block streams on the
        session when processing requests using the multilegged
@@ -425,11 +425,11 @@ Internet-Draft            HTTP Multilegged Auth            December 2016
 
    Clients SHOULD assume that successful authentication with schemes
    that only support connection-based authentication (e.g.  NTLM) always
-   results in an authenticated session, even if the "Persisted-Auth"
+   results in an authenticated session, even if the "Persistent-Auth"
    header is not present.
 
    The client CANNOT make any assumptions by the absence of the
-   "Persisted-Auth" header until the authentication process is complete
+   "Persistent-Auth" header until the authentication process is complete
    and it receives the final server response containing the requested
    resource.
 
@@ -494,7 +494,7 @@ Internet-Draft            HTTP Multilegged Auth            December 2016
 
    The proxy MUST bind the HTTP/2 connections it maintains with the
    client and server, using a separate connection to the server for each
-   client.  The proxy MUST relay the "Auth-ID" and "Persisted-Auth"
+   client.  The proxy MUST relay the "Auth-ID" and "Persistent-Auth"
    headers unmodified between these connections.
 
 
@@ -570,7 +570,7 @@ Internet-Draft            HTTP Multilegged Auth            December 2016
      +---+-------------------+----------+-------------+-------------+
      |   | Auth-ID           | http     | provisional | Section 3.2 |
      |   |                   |          |             |             |
-     |   | Persisted-Auth    | http     | provisional | Section 3.3 |
+     |   | Persistent-Auth   | http     | provisional | Section 3.3 |
      +---+-------------------+----------+-------------+-------------+
 
    The change controllers are the authors of this document.

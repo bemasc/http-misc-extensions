@@ -283,7 +283,7 @@ address {
 <link href="#rfc.section.3" rel="Chapter" title="3 Multilegged Authentication in the Presence of Multiplexing"/>
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Request Management"/>
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 The Auth-ID Header"/>
-<link href="#rfc.section.3.3" rel="Chapter" title="3.3 The Persisted-Auth Response Header"/>
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 The Persistent-Auth Response Header"/>
 <link href="#rfc.section.4" rel="Chapter" title="4 Stateful Authentication via Proxies"/>
 <link href="#rfc.section.4.1" rel="Chapter" title="4.1 HTTP/1.1 Client Authenticating to HTTP/2 Server via HTTP/2 Proxy"/>
 <link href="#rfc.section.4.2" rel="Chapter" title="4.2 HTTP/2 Client Authenticating to an HTTP/1.1 Server via HTTP/2 Proxy"/>
@@ -367,7 +367,7 @@ address {
 <li>3.   <a href="#rfc.section.3">Multilegged Authentication in the Presence of Multiplexing</a></li>
 <ul><li>3.1.   <a href="#rfc.section.3.1">Request Management</a></li>
 <li>3.2.   <a href="#rfc.section.3.2">The Auth-ID Header</a></li>
-<li>3.3.   <a href="#rfc.section.3.3">The Persisted-Auth Response Header</a></li>
+<li>3.3.   <a href="#rfc.section.3.3">The Persistent-Auth Response Header</a></li>
 </ul><li>4.   <a href="#rfc.section.4">Stateful Authentication via Proxies</a></li>
 <ul><li>4.1.   <a href="#rfc.section.4.1">HTTP/1.1 Client Authenticating to HTTP/2 Server via HTTP/2 Proxy</a></li>
 <li>4.2.   <a href="#rfc.section.4.2">HTTP/2 Client Authenticating to an HTTP/1.1 Server via HTTP/2 Proxy</a></li>
@@ -503,7 +503,7 @@ address {
       |                                      |
       | &lt;------- (4) HTTP 200 OK-----------  |
       |              WWW-Authenticate header |
-      |              (Persisted-Auth header) |
+      |              (Persistent-Auth header) |
       |                                      |
       |                                      |
       v                                      v
@@ -516,7 +516,7 @@ address {
   <li>Client re-issues the HTTP GET request for the resource, including the <samp>Authorization</samp> header.  If the server provided an <samp>Auth-ID</samp> header, the client MUST echo the same value on the subsequent request.</li>
   <li>If additional information is required, server responds with an HTTP 401 and a <samp>WWW-Authenticate</samp> header requesting additional information.  An <samp>Auth-ID</samp> header MUST be included, since the additional information relies on existing state already provided by the client.</li>
   <li>Client re-issues the HTTP GET request for the resource and MUST include the required <samp>Authorization</samp> header and the <samp>Auth-ID</samp> header, to inform the server that the request is part of a previously-initiated multilegged authentication process.</li>
-  <li>Authentication succeeds and the server returns the requested resource.  If the exchange authenticated the connection, the server SHOULD include a <samp>Persisted-Auth</samp> header (see <a href="#header-persisted-auth">Section 3.3</a>).</li>
+  <li>Authentication succeeds and the server returns the requested resource.  If the exchange authenticated the connection, the server SHOULD include a <samp>Persistent-Auth</samp> header (see <a href="#header-Persistent-auth">Section 3.3</a>).</li>
 </ol>
 <h1 id="rfc.section.3.1"><a href="#rfc.section.3.1">3.1.</a> <a href="#request-management" id="request-management">Request Management</a></h1>
 <p id="rfc.section.3.1.p.1">Multilegged authentication schemes could authenticate individual requests or the HTTP/2 session. Clients SHOULD NOT attempt to authenticate individual requests when the HTTP connection has already been authenticated.</p>
@@ -532,21 +532,21 @@ Auth-ID = token; see [RFC7230], Section 3.2.6
 </pre>
 <p id="rfc.section.3.2.p.5">The <samp>Auth-ID</samp> header represents a key into short-lived data on the server associated with the current connection, and MAY be selected by the server using any implementation-defined method. It is an opaque identifier, and clients MUST NOT attempt to interpet it. The Auth-ID mapping is destroyed when the authentication process completes, whether in success or failure.</p>
 <p id="rfc.section.3.2.p.6">Servers SHOULD limit the number of incomplete security contexts per session, to protect against misbehaving clients that cause the server to create multiple authentication contexts but never complete the authentication process. Servers SHOULD define a maximum number of incomplete security contexts and discard inactive contexts.  If a request contains an unknown or expired Auth-ID, the request should be treated as containing no Auth-ID.</p>
-<h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#header-persisted-auth" id="header-persisted-auth">The Persisted-Auth Response Header</a></h1>
-<p id="rfc.section.3.3.p.1">Some multilegged authentication schemes can result in per-request or per-connection (i.e., Kerberos or Negotiate) authentication. When a session is authenticated, servers SHOULD generate a <samp>Persisted-Auth</samp> header and send it along with the HTTP 200 OK response.</p>
-<p id="rfc.section.3.3.p.2">The <samp>Persisted-Auth</samp> header is defined as follows:</p>
+<h1 id="rfc.section.3.3"><a href="#rfc.section.3.3">3.3.</a> <a href="#header-Persistent-auth" id="header-Persistent-auth">The Persistent-Auth Response Header</a></h1>
+<p id="rfc.section.3.3.p.1">Some multilegged authentication schemes can result in per-request or per-connection (i.e., Kerberos or Negotiate) authentication. When a session is authenticated, servers SHOULD generate a <samp>Persistent-Auth</samp> header and send it along with the HTTP 200 OK response.</p>
+<p id="rfc.section.3.3.p.2">The <samp>Persistent-Auth</samp> header is defined as follows:</p>
 <pre>
-Persisted-Auth = "true" / "false"
+Persistent-Auth = "true" / "false"
 </pre>
-<p id="rfc.section.3.3.p.3">A <samp>Persisted-Auth</samp> header with an unknown value, or the absence of a <samp>Persisted-Auth</samp> header, MUST be treated as the value &#8220;false&#8221;. The client MUST use the <samp>Persisted-Auth</samp> header to determine what action to take with queued or subsequent requests:</p>
+<p id="rfc.section.3.3.p.3">A <samp>Persistent-Auth</samp> header with an unknown value, or the absence of a <samp>Persistent-Auth</samp> header, MUST be treated as the value &#8220;false&#8221;. The client MUST use the <samp>Persistent-Auth</samp> header to determine what action to take with queued or subsequent requests:</p>
 <p/>
 
 <ol>
-  <li>If the session was authenticated, as indicated by the presence of the <samp>Persisted-Auth</samp> header with the value &#8220;true&#8221;, the client does not need to authenticate new streams it creates to service future requests on the authenticated session.</li>
-  <li>If the session was not authenticated, as indicated by the absence of the <samp>Persisted-Auth</samp> header or the value &#8220;false&#8221;, the client SHOULD remember the negotiated authentication scheme used for authentication.  The client SHOULD NOT block streams on the session when processing requests using the multilegged authentication scheme that previously resulted in per-request authentication.</li>
+  <li>If the session was authenticated, as indicated by the presence of the <samp>Persistent-Auth</samp> header with the value &#8220;true&#8221;, the client does not need to authenticate new streams it creates to service future requests on the authenticated session.</li>
+  <li>If the session was not authenticated, as indicated by the absence of the <samp>Persistent-Auth</samp> header or the value &#8220;false&#8221;, the client SHOULD remember the negotiated authentication scheme used for authentication.  The client SHOULD NOT block streams on the session when processing requests using the multilegged authentication scheme that previously resulted in per-request authentication.</li>
 </ol>
-<p id="rfc.section.3.3.p.5">Clients SHOULD assume that successful authentication with schemes that only support connection-based authentication (e.g. NTLM) always results in an authenticated session, even if the <samp>Persisted-Auth</samp> header is not present.</p>
-<p id="rfc.section.3.3.p.6">The client CANNOT make any assumptions by the absence of the <samp>Persisted-Auth</samp> header until the authentication process is complete and it receives the final server response containing the requested resource.</p>
+<p id="rfc.section.3.3.p.5">Clients SHOULD assume that successful authentication with schemes that only support connection-based authentication (e.g. NTLM) always results in an authenticated session, even if the <samp>Persistent-Auth</samp> header is not present.</p>
+<p id="rfc.section.3.3.p.6">The client CANNOT make any assumptions by the absence of the <samp>Persistent-Auth</samp> header until the authentication process is complete and it receives the final server response containing the requested resource.</p>
 <h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#stateful-authentication-via-proxies" id="stateful-authentication-via-proxies">Stateful Authentication via Proxies</a></h1>
 <p id="rfc.section.4.p.1">Typically, authenticated connections via a forward proxy will occur using the CONNECT method (<a href="#RFC7231">[RFC7231]</a>, Section 4.3.6) and the proxy will not be involved in the authentication flow. Authenticated connections via a reverse proxy will often terminate authentication at the proxy, with only authorized requests reaching the content server.</p>
 <p id="rfc.section.4.p.2">When the proxy speaks only HTTP/1.1, no multiplexing will occur and the considerations in this document do not apply. Proxy and gateway applications should take the consideration outlined by <a href="#RFC7230">[RFC7230]</a> when forwarding messages between client and servers with different protocol version capabilities.</p>
@@ -558,7 +558,7 @@ Persisted-Auth = "true" / "false"
 <p id="rfc.section.4.2.p.1">HTTP/2 clients can multiplex streams within the authenticated HTTP/2 client-proxy session, but the proxy MUST serialize these requests through HTTP/1.1 proxy-server connections. These connections MUST NOT be shared between different clients if per-connection authorization is in use, and SHOULD NOT be shared between different clients even if per-request authorization is in use.</p>
 <p id="rfc.section.4.2.p.2">The proxy MUST generate and insert an <samp>Auth-ID</samp> header corresponding to each TCP connection it maintains to the server, and add the <samp>Auth-ID</samp> header to any 401 response from the server. Client requests which include an <samp>Auth-ID</samp> header MUST be directed to the associated TCP connection, or a new connection if that one has closed. Requests which do not include an <samp>Auth-ID</samp> header MAY be relayed over any connection.</p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#http2-client-authenticating-to-an-http2-server-via-http2-proxy" id="http2-client-authenticating-to-an-http2-server-via-http2-proxy">HTTP/2 Client Authenticating to an HTTP/2 Server via HTTP/2 Proxy</a></h1>
-<p id="rfc.section.4.3.p.1">The proxy MUST bind the HTTP/2 connections it maintains with the client and server, using a separate connection to the server for each client.  The proxy MUST relay the <samp>Auth-ID</samp> and <samp>Persisted-Auth</samp> headers unmodified between these connections.</p>
+<p id="rfc.section.4.3.p.1">The proxy MUST bind the HTTP/2 connections it maintains with the client and server, using a separate connection to the server for each client.  The proxy MUST relay the <samp>Auth-ID</samp> and <samp>Persistent-Auth</samp> headers unmodified between these connections.</p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#authentication-and-multi-host-sessions" id="authentication-and-multi-host-sessions">Authentication and multi-host sessions</a></h1>
 <p id="rfc.section.5.p.1">Clients MUST NOT make requests to multiple origins when per-connection authentication has been established to one origin.  If an authentication scheme which might result in per-connection authentication is requested on a connection which has already been used to make requests of multiple origins, the client SHOULD repeat the request on a different connection.</p>
 <p id="rfc.section.5.p.2">Servers SHOULD respond to requests for different origins on an authenticated connection with the 421 status code (defined in <a href="#RFC7540">[RFC7540]</a>), requiring clients to retry on a separate connection.</p>
@@ -594,11 +594,11 @@ Persisted-Auth = "true" / "false"
     </tr>
     <tr>
       <td class="left"/>
-      <td class="left">Persisted-Auth</td>
+      <td class="left">Persistent-Auth</td>
       <td class="left">http</td>
       <td class="left">provisional</td>
       <td class="left">
-        <a href="#header-persisted-auth">Section 3.3</a>
+        <a href="#header-Persistent-auth">Section 3.3</a>
       </td>
     </tr>
   </tbody>
