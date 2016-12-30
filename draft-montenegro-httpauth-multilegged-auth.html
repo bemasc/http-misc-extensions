@@ -483,27 +483,27 @@ address {
                                        Multiplexing
    Client                               HTTP Server
       |                                      |
-      | --------   HTTP GET Request ------&gt;  |
+      | -------- (0) HTTP GET Request ----&gt;  |
       |                                      |
-      | &lt;------- (0) HTTP 401 -------------  |
+      | &lt;------- (1) HTTP 401 -------------  |
       |              WWW-Authenticate header |
       |              (Auth-ID header)        |
       |                                      |
-      | -------- (1) HTTP Get Request ----&gt;  |
+      | -------- (2) HTTP Get Request ----&gt;  |
       |              Authorization header    |
       |              (Auth-ID header)        |
       |                                      |
-      | &lt;------- (2) HTTP 401 -------------  |
+      | &lt;------- (3) HTTP 401 -------------  |
       |              WWW-Authenticate header |
       |              Auth-ID header          |
       |                                      |
-      | -------- (3) HTTP Get Request ----&gt;  |
+      | -------- (4) HTTP Get Request ----&gt;  |
       |              Authorization header    |
       |              Auth-ID header          |
       |                                      |
-      | &lt;------- (4) HTTP 200 OK-----------  |
+      | &lt;------- (5) HTTP 200 OK-----------  |
       |              WWW-Authenticate header |
-      |              (Persistent-Auth header) |
+      |              (Persistent-Auth header)|
       |                                      |
       |                                      |
       v                                      v
