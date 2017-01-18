@@ -4,8 +4,8 @@
 
 QUIC Working Group                                             M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                       December 30, 2016
-Expires: July 3, 2017
+Intended status: Standards Track                        January 18, 2017
+Expires: July 22, 2017
 
 
                     Header Compression for HTTP/QUIC
@@ -35,11 +35,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 3, 2017.
+   This Internet-Draft will expire on July 22, 2017.
 
 Copyright Notice
 
-   Copyright (c) 2016 IETF Trust and the persons identified as the
+   Copyright (c) 2017 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                    Expires July 3, 2017                  [Page 1]
+Bishop                    Expires July 22, 2017                 [Page 1]
 
-Internet-Draft                    QPACK                    December 2016
+Internet-Draft                    QPACK                     January 2017
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -73,11 +73,12 @@ Table of Contents
        2.2.1.  Literal Header Field Representation . . . . . . . . .   5
        2.2.2.  Deletion  . . . . . . . . . . . . . . . . . . . . . .   7
        2.2.3.  The QPACK-ACK frame . . . . . . . . . . . . . . . . .   7
-   3.  Performance Considerations  . . . . . . . . . . . . . . . . .   8
-   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
-   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-   6.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   8
-   7.  Normative References  . . . . . . . . . . . . . . . . . . . .   9
+   3.  Use in HTTP/QUIC  . . . . . . . . . . . . . . . . . . . . . .   8
+   4.  Performance Considerations  . . . . . . . . . . . . . . . . .   8
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
+   7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   9
+   8.  Normative References  . . . . . . . . . . . . . . . . . . . .   9
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction
@@ -105,15 +106,15 @@ Table of Contents
 
    In the following sections, this document proposes a new version of
    HPACK which makes different trade-offs, enabling out-of-order
-   interpretation and bounded memory consumption with minimal head-of-
 
 
 
-Bishop                    Expires July 3, 2017                  [Page 2]
+Bishop                    Expires July 22, 2017                 [Page 2]
 
-Internet-Draft                    QPACK                    December 2016
+Internet-Draft                    QPACK                     January 2017
 
 
+   interpretation and bounded memory consumption with minimal head-of-
    line blocking.  None of the proposed improvements to HPACK (strongly-
    typed fields, binary compression of common header syntax) are
    currently included, but certainly could be.
@@ -164,10 +165,9 @@ Internet-Draft                    QPACK                    December 2016
 
 
 
-
-Bishop                    Expires July 3, 2017                  [Page 3]
+Bishop                    Expires July 22, 2017                 [Page 3]
 
-Internet-Draft                    QPACK                    December 2016
+Internet-Draft                    QPACK                     January 2017
 
 
 2.1.1.  Dynamic Table State Synchronization
@@ -221,9 +221,9 @@ Internet-Draft                    QPACK                    December 2016
 
 
 
-Bishop                    Expires July 3, 2017                  [Page 4]
+Bishop                    Expires July 22, 2017                 [Page 4]
 
-Internet-Draft                    QPACK                    December 2016
+Internet-Draft                    QPACK                     January 2017
 
 
    handle the delete as usual even while waiting for the definition to
@@ -242,11 +242,11 @@ Internet-Draft                    QPACK                    December 2016
    applicable to the encoder immediately upon sending the SETTINGS_ACK
    frames.
 
-   Upon a reduced maximum value being applied, the dynamic table MAY be
-   larger than the new maximum.  This MUST NOT be considered an error,
-   but any attempt to insert a new value into the dynamic table that
-   takes it above the currently-applicable limit MUST be considered a
-   fatal error.  Before making any further insertions to the dynamic
+   Upon a reduced maximum value being applied, the dynamic table might
+   be larger than the new maximum.  This MUST NOT be considered an
+   error, but any attempt to insert a new value into the dynamic table
+   that takes it above the currently-applicable limit MUST be considered
+   a fatal error.  Before making any further insertions to the dynamic
    table, the encoder MUST delete enough entries to perform the
    insertion without violating the table maximum.
 
@@ -277,9 +277,9 @@ Internet-Draft                    QPACK                    December 2016
 
 
 
-Bishop                    Expires July 3, 2017                  [Page 5]
+Bishop                    Expires July 22, 2017                 [Page 5]
 
-Internet-Draft                    QPACK                    December 2016
+Internet-Draft                    QPACK                     January 2017
 
 
         0   1   2   3   4   5   6   7
@@ -333,9 +333,9 @@ Internet-Draft                    QPACK                    December 2016
 
 
 
-Bishop                    Expires July 3, 2017                  [Page 6]
+Bishop                    Expires July 22, 2017                 [Page 6]
 
-Internet-Draft                    QPACK                    December 2016
+Internet-Draft                    QPACK                     January 2017
 
 
    An encoder MUST NOT attempt to place a value at an index not known to
@@ -389,9 +389,9 @@ Internet-Draft                    QPACK                    December 2016
 
 
 
-Bishop                    Expires July 3, 2017                  [Page 7]
+Bishop                    Expires July 22, 2017                 [Page 7]
 
-Internet-Draft                    QPACK                    December 2016
+Internet-Draft                    QPACK                     January 2017
 
 
    Upon receipt, an encoder uses the table to confirm which items have
@@ -399,7 +399,29 @@ Internet-Draft                    QPACK                    December 2016
    encoder and the encoder can safely reuse the index for future
    insertions.
 
-3.  Performance Considerations
+3.  Use in HTTP/QUIC
+
+   HTTP/QUIC [I-D.ietf-quic-http] currently retains the HPACK encoder/
+   decoder from HTTP/2, using a Sequence number to enforce ordering.
+   Using QPACK instead would entail the following changes:
+
+   o  The Sequence field is removed from HEADERS frames (Section 5.2.2)
+      and PUSH_PROMISE frames (Section 5.2.6).
+
+   o  Header Block Fragments consist of QPACK data instead of HPACK
+      data.
+
+   o  The ordering requirements of header block fragments are
+      eliminated.
+
+   A HEADERS or PUSH_PROMISE frame MAY contain an arbitrary number of
+   QPACK instructions, but QPACK instructions SHOULD NOT cross a
+   boundary between successive HEADERS frames.  A partial HEADERS or
+   PUSH_PROMISE frame MAY be processed upon arrival and the resulting
+   partial header set emitted or buffered according to implementation
+   requirements.
+
+4.  Performance Considerations
 
    While QPACK is designed to minimize head-of-line blocking between
    streams on header decoding, there are some situations in which lost
@@ -420,35 +442,42 @@ Internet-Draft                    QPACK                    December 2016
    maximum.  Decoders SHOULD be prompt about emitting QPACK-ACK frames
    to enable the encoder to recover the table space.
 
+
+
+
+Bishop                    Expires July 22, 2017                 [Page 8]
+
+Internet-Draft                    QPACK                     January 2017
+
+
    Note that this situation can arise as well from reducing the maximum
    table size abruptly - the encoder will find itself unable to add new
    entries for at least one RTT.
 
-4.  Security Considerations
+   Decoders MAY choose whether to process partial header blocks upon
+   arrival.  Failure to process partial header blocks could introduce
+   head-of-line blocking on other streams which depend on the
+   definitions in the blocks, but processing them means buffering the
+   resulting output, which is presumably larger than the encoded form.
+
+5.  Security Considerations
 
    The security considerations for QPACK are believed to be the same as
    for HPACK.
 
-5.  IANA Considerations
+6.  IANA Considerations
 
    This document currently makes no request of IANA, but probably
-   should.
+   should.  In particular, the QPACK-ACK frame needs to be registered
+   and have a frame type number assigned.
 
-6.  Acknowledgements
+7.  Acknowledgements
 
    This draft draws heavily on the text of [RFC7541].  The indirect
    input of those authors is gratefully acknowledged, as well as ideas
    gleefully stolen from:
 
    o  Jana Iyengar
-
-
-
-
-Bishop                    Expires July 3, 2017                  [Page 8]
-
-Internet-Draft                    QPACK                    December 2016
-
 
    o  Patrick McManus
 
@@ -458,17 +487,24 @@ Internet-Draft                    QPACK                    December 2016
 
    o  Kyle Rose
 
-7.  Normative References
+8.  Normative References
 
    [I-D.ietf-quic-http]
               Bishop, M., "Hypertext Transfer Protocol (HTTP) over
-              QUIC", draft-ietf-quic-http-00 (work in progress),
-              November 2016.
+              QUIC", draft-ietf-quic-http-01 (work in progress), January
+              2017.
 
    [I-D.ietf-quic-transport]
               Iyengar, J. and M. Thomson, "QUIC: A UDP-Based Multiplexed
-              and Secure Transport", draft-ietf-quic-transport-00 (work
-              in progress), November 2016.
+              and Secure Transport", draft-ietf-quic-transport-01 (work
+              in progress), January 2017.
+
+
+
+Bishop                    Expires July 22, 2017                 [Page 9]
+
+Internet-Draft                    QPACK                     January 2017
+
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -493,18 +529,6 @@ Internet-Draft                    QPACK                    December 2016
    [RFC7541]  Peon, R. and H. Ruellan, "HPACK: Header Compression for
               HTTP/2", RFC 7541, DOI 10.17487/RFC7541, May 2015,
               <http://www.rfc-editor.org/info/rfc7541>.
-
-
-
-
-
-
-
-
-Bishop                    Expires July 3, 2017                  [Page 9]
-
-Internet-Draft                    QPACK                    December 2016
-
 
 Author's Address
 
@@ -533,28 +557,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bishop                    Expires July 3, 2017                 [Page 10]
+Bishop                    Expires July 22, 2017                [Page 10]
