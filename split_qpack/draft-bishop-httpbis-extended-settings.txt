@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Informational                          January 26, 2017
-Expires: July 30, 2017
+Intended status: Informational                          January 30, 2017
+Expires: August 3, 2017
 
 
                    HTTP/2 Extended SETTINGS Extension
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 30, 2017.
+   This Internet-Draft will expire on August 3, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                    Expires July 30, 2017                 [Page 1]
+Bishop                   Expires August 3, 2017                 [Page 1]
 
 Internet-Draft              EXTENDED_SETTINGS               January 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bishop                    Expires July 30, 2017                 [Page 2]
+Bishop                   Expires August 3, 2017                 [Page 2]
 
 Internet-Draft              EXTENDED_SETTINGS               January 2017
 
@@ -165,7 +165,7 @@ Internet-Draft              EXTENDED_SETTINGS               January 2017
 
 
 
-Bishop                    Expires July 30, 2017                 [Page 3]
+Bishop                   Expires August 3, 2017                 [Page 3]
 
 Internet-Draft              EXTENDED_SETTINGS               January 2017
 
@@ -221,7 +221,7 @@ Internet-Draft              EXTENDED_SETTINGS               January 2017
 
 
 
-Bishop                    Expires July 30, 2017                 [Page 4]
+Bishop                   Expires August 3, 2017                 [Page 4]
 
 Internet-Draft              EXTENDED_SETTINGS               January 2017
 
@@ -277,7 +277,7 @@ Internet-Draft              EXTENDED_SETTINGS               January 2017
 
 
 
-Bishop                    Expires July 30, 2017                 [Page 5]
+Bishop                   Expires August 3, 2017                 [Page 5]
 
 Internet-Draft              EXTENDED_SETTINGS               January 2017
 
@@ -333,7 +333,7 @@ Internet-Draft              EXTENDED_SETTINGS               January 2017
 
 
 
-Bishop                    Expires July 30, 2017                 [Page 6]
+Bishop                   Expires August 3, 2017                 [Page 6]
 
 Internet-Draft              EXTENDED_SETTINGS               January 2017
 
@@ -389,7 +389,7 @@ Internet-Draft              EXTENDED_SETTINGS               January 2017
 
 
 
-Bishop                    Expires July 30, 2017                 [Page 7]
+Bishop                   Expires August 3, 2017                 [Page 7]
 
 Internet-Draft              EXTENDED_SETTINGS               January 2017
 
@@ -445,4 +445,4 @@ Author's Address
 
 
 
-Bishop                    Expires July 30, 2017                 [Page 8]
+Bishop                   Expires August 3, 2017                 [Page 8]
