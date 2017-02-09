@@ -4,8 +4,8 @@
 
 QUIC Working Group                                             M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                        February 8, 2017
-Expires: August 12, 2017
+Intended status: Standards Track                        February 9, 2017
+Expires: August 13, 2017
 
 
                     Header Compression for HTTP/QUIC
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 12, 2017.
+   This Internet-Draft will expire on August 13, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                   Expires August 12, 2017                [Page 1]
+Bishop                   Expires August 13, 2017                [Page 1]
 
 Internet-Draft                    QPACK                    February 2017
 
@@ -67,21 +67,22 @@ Table of Contents
      1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  QPACK . . . . . . . . . . . . . . . . . . . . . . . . . . . .   3
      2.1.  Basic model . . . . . . . . . . . . . . . . . . . . . . .   3
-     2.2.  Changes to Static and Dynamic Tables  . . . . . . . . . .   3
-       2.2.1.  Dynamic Table State Synchronization . . . . . . . . .   4
-     2.3.  Format of Header Management stream  . . . . . . . . . . .   5
-       2.3.1.  Insert  . . . . . . . . . . . . . . . . . . . . . . .   5
-       2.3.2.  Delete  . . . . . . . . . . . . . . . . . . . . . . .   6
-       2.3.3.  Delete-Ack  . . . . . . . . . . . . . . . . . . . . .   9
+     2.2.  Changes to Static and Dynamic Tables  . . . . . . . . . .   4
+       2.2.1.  Changes to Header Table Size  . . . . . . . . . . . .   4
+       2.2.2.  Dynamic Table State Synchronization . . . . . . . . .   5
+     2.3.  Format of Header Management stream  . . . . . . . . . . .   6
+       2.3.1.  Insert  . . . . . . . . . . . . . . . . . . . . . . .   6
+       2.3.2.  Delete  . . . . . . . . . . . . . . . . . . . . . . .   7
+       2.3.3.  Delete-Ack  . . . . . . . . . . . . . . . . . . . . .  10
      2.4.  Format of Encoded Headers on Message Streams  . . . . . .  10
        2.4.1.  Indexed Header Field Representation . . . . . . . . .  10
-       2.4.2.  Literal Header Field Representation . . . . . . . . .  10
-   3.  Use in HTTP/QUIC  . . . . . . . . . . . . . . . . . . . . . .  11
+       2.4.2.  Literal Header Field Representation . . . . . . . . .  11
+   3.  Use in HTTP/QUIC  . . . . . . . . . . . . . . . . . . . . . .  12
    4.  Performance Considerations  . . . . . . . . . . . . . . . . .  12
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  12
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
    6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
    7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  13
-   8.  Normative References  . . . . . . . . . . . . . . . . . . . .  13
+   8.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction
@@ -104,15 +105,17 @@ Table of Contents
    Any solution to the above will almost certainly fall afoul of the
    memory constraints the decompressor imposes.  The automatic eviction
    of entries is done based on the compressor's declared dynamic table
-   size, which MUST be less than the maximum permitted by the
-   decompressor (and relayed using an HTTP/2 SETTINGS value).
 
 
 
-Bishop                   Expires August 12, 2017                [Page 2]
+
+Bishop                   Expires August 13, 2017                [Page 2]
 
 Internet-Draft                    QPACK                    February 2017
 
+
+   size, which MUST be less than the maximum permitted by the
+   decompressor (and relayed using an HTTP/2 SETTINGS value).
 
    Further, streams in QUIC are lossy in the presence of stream resets.
    While HTTP/2 (via TCP) guarantees the delivery of all previously-sent
@@ -135,8 +138,8 @@ Internet-Draft                    QPACK                    February 2017
 
    In this document, the key words "MUST", "MUST NOT", "REQUIRED",
    "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY",
-   and "OPTIONAL" are to be interpreted as described in BCP 14, RFC 2119
-   [RFC2119] and indicate requirement levels for compliant STuPiD
+   and "OPTIONAL" are to be interpreted as described in BCP 14,
+   [RFC2119] and indicate requirement levels for compliant
    implementations.
 
 2.  QPACK
@@ -157,18 +160,20 @@ Internet-Draft                    QPACK                    February 2017
    header table state, no state is lost if these instructions are
    discarded due to a stream reset.
 
+
+
+
+
+
+Bishop                   Expires August 13, 2017                [Page 3]
+
+Internet-Draft                    QPACK                    February 2017
+
+
 2.2.  Changes to Static and Dynamic Tables
 
    QPACK uses two tables for associating header fields to indexes.  The
    static table is unchanged from [RFC7541].
-
-
-
-
-Bishop                   Expires August 12, 2017                [Page 3]
-
-Internet-Draft                    QPACK                    February 2017
-
 
    The dynamic table is a map from index to header field.  Indices are
    arbitrary numbers greater than the last index of the static table and
@@ -191,7 +196,37 @@ Internet-Draft                    QPACK                    February 2017
    the implementation chooses not to abort the connection, the remainder
    of the header block MUST be decoded and the output discarded.
 
-2.2.1.  Dynamic Table State Synchronization
+2.2.1.  Changes to Header Table Size
+
+   HTTP/QUIC prohibits mid-stream changes of settings.  As a result,
+   only one table size change is possible: From the value a client
+   assumes during the 0-RTT flight to the actual value included in the
+   server's SETTINGS frame.  The assumed value is required to be either
+   a server's previous value or zero.  A server whose configuration has
+   recently changed MAY overlook inadvertent violations of its maximum
+   table size during the first round-trip.
+
+   In the case that the value has increased, either from zero to a non-
+   zero value or from the cached value to a higher value, no action is
+   required by the client.  The encoder can simply begin using the
+   additional space.  In the case that the value has decreased, the
+   encoder MUST immediately emit delete instructions which, upon
+   completion, would bring the table within the required size.
+
+   Regardless of changes to header table size, the encoder MUST NOT add
+   entries to the table which would result in a size greater than the
+   maximum permitted.  This can imply that no additions are permitted
+   while waiting for these delete instructions to complete.
+
+
+
+
+Bishop                   Expires August 13, 2017                [Page 4]
+
+Internet-Draft                    QPACK                    February 2017
+
+
+2.2.2.  Dynamic Table State Synchronization
 
    In order to ensure table consistency, all modifications of the header
    table occur on a dedicated control stream.  Message control streams
@@ -218,14 +253,6 @@ Internet-Draft                    QPACK                    February 2017
    The encoder MUST consider memory as committed beginning when the
    indexed entry is assigned.
 
-
-
-
-Bishop                   Expires August 12, 2017                [Page 4]
-
-Internet-Draft                    QPACK                    February 2017
-
-
    When the encoder wishes to delete an inserted value, it flows through
    the following set of states:
 
@@ -247,6 +274,14 @@ Internet-Draft                    QPACK                    February 2017
 
    4.  *Delete completed.* When the encoder receives a Delete-Ack
        instruction acknowledging the delete, it no longer counts the
+
+
+
+Bishop                   Expires August 13, 2017                [Page 5]
+
+Internet-Draft                    QPACK                    February 2017
+
+
        size of the deleted entry against the table size and MAY emit
        insert instructions for the field with a new value.
 
@@ -270,17 +305,8 @@ Internet-Draft                    QPACK                    February 2017
    stored in the static table or the dynamic table, the header field
    name can be represented using the index of that entry.  In this case,
    the index of the entry is represented as an integer with an 8-bit
-   prefix (see Section 5.1 of [RFC7231]).  This value is always non-
+   prefix (see Section 5.1 of [RFC7541]).  This value is always non-
    zero.
-
-
-
-
-
-Bishop                   Expires August 12, 2017                [Page 5]
-
-Internet-Draft                    QPACK                    February 2017
-
 
         0   1   2   3   4   5   6   7
       +---+---+---+---+---+---+---+---+
@@ -296,8 +322,21 @@ Internet-Draft                    QPACK                    February 2017
                     Insert Header Field -- Indexed Name
 
    Otherwise, the header field name is represented as a string literal
-   (see Section 5.2 of [RFC7231]).  A value 0 is used in place of the
+   (see Section 5.2 of [RFC7541]).  A value 0 is used in place of the
    8-bit index, followed by the header field name.
+
+
+
+
+
+
+
+
+
+Bishop                   Expires August 13, 2017                [Page 6]
+
+Internet-Draft                    QPACK                    February 2017
+
 
         0   1   2   3   4   5   6   7
       +---+---+---+---+---+---+---+---+
@@ -331,13 +370,6 @@ Internet-Draft                    QPACK                    February 2017
    an integer with a 6-bit prefix.  This value is always greater than
    the number of entries in the static table.
 
-
-
-Bishop                   Expires August 12, 2017                [Page 6]
-
-Internet-Draft                    QPACK                    February 2017
-
-
    A delete instruction then encodes a series of stream IDs which might
    have contained references to the entry in question.
 
@@ -351,6 +383,16 @@ Internet-Draft                    QPACK                    February 2017
       +-------------------------------+
 
                             Delete Instruction
+
+
+
+
+
+
+Bishop                   Expires August 13, 2017                [Page 7]
+
+Internet-Draft                    QPACK                    February 2017
+
 
    Both the Non-Trailer List and Trailer List are Stream ID Lists (see
    below) encoding a list of streams which might have referenced the
@@ -368,31 +410,9 @@ Internet-Draft                    QPACK                    February 2017
    Following the horizon, a sequence of deltas indicates all streams
    since the Horizon on which a value has been used.
 
-   In the extreme case, a Stream ID List might be a horizon value
+   In the simplest case, a Stream ID List might be a horizon value
    followed by one zero byte.  This indicates an absolute cut-off after
    which the entry is guaranteed not to be referenced.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bishop                   Expires August 12, 2017                [Page 7]
-
-Internet-Draft                    QPACK                    February 2017
-
 
         0   1   2   3   4   5   6   7
       +-------------------------------+
@@ -421,6 +441,15 @@ Internet-Draft                    QPACK                    February 2017
       might reference the entry and are listed in the remainder of the
       instruction
 
+
+
+
+
+Bishop                   Expires August 13, 2017                [Page 8]
+
+Internet-Draft                    QPACK                    February 2017
+
+
    Delta1..N:  A sequence of streams greater than the Horizon which
       might reference the entry, encoded as the difference in stream
       number from the previously-listed stream.  This field is repeated
@@ -441,14 +470,6 @@ Internet-Draft                    QPACK                    February 2017
       all streams explicitly listed are in one of two states:
 
       *  closed
-
-
-
-
-Bishop                   Expires August 12, 2017                [Page 8]
-
-Internet-Draft                    QPACK                    February 2017
-
 
       *  headers completely processed
 
@@ -476,6 +497,15 @@ Internet-Draft                    QPACK                    February 2017
    tracked by the decoder without changing the correctness of the
    requirements above.
 
+
+
+
+
+Bishop                   Expires August 13, 2017                [Page 9]
+
+Internet-Draft                    QPACK                    February 2017
+
+
 2.3.3.  Delete-Ack
 
    Confirmation that a delete has completed is expressed by an
@@ -497,14 +527,6 @@ Internet-Draft                    QPACK                    February 2017
    This instruction MUST NOT be sent before the conditions described in
    Section 2.3.2.2 have been satisfied, and SHOULD be sent as soon as
    possible once they are.
-
-
-
-
-Bishop                   Expires August 12, 2017                [Page 9]
-
-Internet-Draft                    QPACK                    February 2017
-
 
 2.4.  Format of Encoded Headers on Message Streams
 
@@ -532,35 +554,36 @@ Internet-Draft                    QPACK                    February 2017
    The index value of 0 is not used.  It MUST be treated as a decoding
    error if found in an indexed header field representation.
 
+
+
+
+Bishop                   Expires August 13, 2017               [Page 10]
+
+Internet-Draft                    QPACK                    February 2017
+
+
 2.4.2.  Literal Header Field Representation
 
    A literal header field representation starts with the '0' 1-bit
    pattern and causes a header field to be added the decoded header
    list.
 
-   The second bit, 'N', indicates whether an intermediary may add this
-   header to the dynamic header table on subsequent hops.  When the 'N'
-   bit is set, the encoded header MUST always be encoded with this
-   specific literal representation.  In particular, when a peer sends a
-   header field that it received represented as a literal header field
-   never indexed, it MUST use the same representation to forward this
-   header field.  This bit is intended for protecting header field
-   values that are not to be put at risk by compressing them (see
-   Section 7.1 of [RFC7541] for more details).
+   The second bit, 'N', indicates whether an intermediary is permitted
+   to add this header to the dynamic header table on subsequent hops.
+   When the 'N' bit is set, the encoded header MUST always be encoded
+   with this specific literal representation.  In particular, when a
+   peer sends a header field that it received represented as a literal
+   header field with the 'N' bit set, it MUST use the same
+   representation to forward this header field.  This bit is intended
+   for protecting header field values that are not to be put at risk by
+   compressing them (see Section 7.1 of [RFC7541] for more details).
 
    If the header field name matches the header field name of an entry
    stored in the static table or the dynamic table, the header field
    name can be represented using the index of that entry.  In this case,
    the index of the entry is represented as an integer with a 6-bit
-   prefix (see Section 5.1 of [RFC7231]).  This value is always non-
+   prefix (see Section 5.1 of [RFC7541]).  This value is always non-
    zero.
-
-
-
-Bishop                   Expires August 12, 2017               [Page 10]
-
-Internet-Draft                    QPACK                    February 2017
-
 
         0   1   2   3   4   5   6   7
       +---+---+---+---+---+---+---+---+
@@ -574,8 +597,26 @@ Internet-Draft                    QPACK                    February 2017
                    Literal Header Field -- Indexed Name
 
    Otherwise, the header field name is represented as a string literal
-   (see Section 5.2 of [RFC7231]).  A value 0 is used in place of the
+   (see Section 5.2 of [RFC7541]).  A value 0 is used in place of the
    6-bit index, followed by the header field name.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bishop                   Expires August 13, 2017               [Page 11]
+
+Internet-Draft                    QPACK                    February 2017
+
 
         0   1   2   3   4   5   6   7
       +---+---+---+---+---+---+---+---+
@@ -611,13 +652,6 @@ Internet-Draft                    QPACK                    February 2017
       Alternately, this could be carried by HEADERS frames on the
       connection control stream.
 
-
-
-Bishop                   Expires August 12, 2017               [Page 11]
-
-Internet-Draft                    QPACK                    February 2017
-
-
    A HEADERS or PUSH_PROMISE frame MAY contain an arbitrary number of
    QPACK instructions, but QPACK instructions SHOULD NOT cross a
    boundary between successive HEADERS frames.  A partial HEADERS or
@@ -631,6 +665,14 @@ Internet-Draft                    QPACK                    February 2017
    streams on header decoding, there are some situations in which lost
    or delayed packets can still impact the performance of header
    compression.
+
+
+
+
+Bishop                   Expires August 13, 2017               [Page 12]
+
+Internet-Draft                    QPACK                    February 2017
+
 
    References to indexed entries will block if the frame containing the
    entry definition is lost or delayed.  Encoders MAY choose to trade
@@ -665,15 +707,6 @@ Internet-Draft                    QPACK                    February 2017
    of consistency for deletes, but could delay completion and reduce
    performance if done aggressively.
 
-
-
-
-
-Bishop                   Expires August 12, 2017               [Page 12]
-
-Internet-Draft                    QPACK                    February 2017
-
-
 6.  IANA Considerations
 
    This document currently makes no request of IANA, and might not need
@@ -688,6 +721,14 @@ Internet-Draft                    QPACK                    February 2017
    o  Jana Iyengar
 
    o  Patrick McManus
+
+
+
+
+Bishop                   Expires August 13, 2017               [Page 13]
+
+Internet-Draft                    QPACK                    February 2017
+
 
    o  Martin Thomson
 
@@ -711,24 +752,6 @@ Internet-Draft                    QPACK                    February 2017
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <http://www.rfc-editor.org/info/rfc2119>.
-
-   [RFC7230]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
-              Protocol (HTTP/1.1): Message Syntax and Routing",
-              RFC 7230, DOI 10.17487/RFC7230, June 2014,
-              <http://www.rfc-editor.org/info/rfc7230>.
-
-   [RFC7231]  Fielding, R., Ed. and J. Reschke, Ed., "Hypertext Transfer
-              Protocol (HTTP/1.1): Semantics and Content", RFC 7231,
-              DOI 10.17487/RFC7231, June 2014,
-              <http://www.rfc-editor.org/info/rfc7231>.
-
-
-
-
-Bishop                   Expires August 12, 2017               [Page 13]
-
-Internet-Draft                    QPACK                    February 2017
-
 
    [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
               Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
@@ -758,27 +781,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bishop                   Expires August 12, 2017               [Page 14]
+Bishop                   Expires August 13, 2017               [Page 14]
