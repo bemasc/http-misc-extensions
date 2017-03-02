@@ -283,10 +283,12 @@ address {
 <link href="#rfc.section.3" rel="Chapter" title="3 Providing Inspected Access"/>
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 The INSPECTED_CONNECT method"/>
 <link href="#rfc.section.3.1.1" rel="Chapter" title="3.1.1 Tunnel Establishment"/>
-<link href="#rfc.section.3.1.2" rel="Chapter" title="3.1.2 Client Use of Tunnel"/>
-<link href="#rfc.references" rel="Chapter" title="4 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="4.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="4.2 Informative References"/>
+<link href="#rfc.section.3.1.2" rel="Chapter" title="3.1.2 Use of Encrypted Tunnel"/>
+<link href="#rfc.section.4" rel="Chapter" title="4 Security Considerations"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 IANA Considerations"/>
+<link href="#rfc.references" rel="Chapter" title="6 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="6.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="6.2 Informative References"/>
 <link href="#rfc.authors" rel="Chapter"/>
 
 
@@ -358,10 +360,12 @@ address {
 <li>3.   <a href="#rfc.section.3">Providing Inspected Access</a></li>
 <ul><li>3.1.   <a href="#rfc.section.3.1">The INSPECTED_CONNECT method</a></li>
 <ul><li>3.1.1.   <a href="#rfc.section.3.1.1">Tunnel Establishment</a></li>
-<li>3.1.2.   <a href="#rfc.section.3.1.2">Client Use of Tunnel</a></li>
-</ul></ul><li>4.   <a href="#rfc.references">References</a></li>
-<ul><li>4.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>4.2.   <a href="#rfc.references.2">Informative References</a></li>
+<li>3.1.2.   <a href="#rfc.section.3.1.2">Use of Encrypted Tunnel</a></li>
+</ul></ul><li>4.   <a href="#rfc.section.4">Security Considerations</a></li>
+<li>5.   <a href="#rfc.section.5">IANA Considerations</a></li>
+<li>6.   <a href="#rfc.references">References</a></li>
+<ul><li>6.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>6.2.   <a href="#rfc.references.2">Informative References</a></li>
 </ul><li><a href="#rfc.authors">Author's Address</a></li>
 
 
@@ -372,7 +376,7 @@ address {
 <p id="rfc.section.1.p.2">At the same time, increasing desires for privacy and security online have increased the required use of TLS for encryption and authentication <a href="#RFC6797">[RFC6797]</a>.  The only solution available to proxy vendors so far has been to deploy man-in-the-middle proxies, intercepting either the raw traffic or the contents of HTTP CONNECT tunnels <a href="#RFC7231">[RFC7231]</a> and responding with forged certificates from a captive private Certificate Authority.  (Because the clients in these scenarios are owned and managed by the same entity as the proxy, the clients are configured to trust this Certificate Authority.)</p>
 <p id="rfc.section.1.p.3">This has created an arms-race between user agents and proxies:  User agents deploy mechanisms such as certificate key pinning <a href="#RFC7469">[RFC7469]</a> to detect man-in-the-middle certificates; enterprises request management mechanisms to disable this feature.  Because the entities performing the monitoring often have legal mandates to inspect the traffic, they will continue to attempt to do so.  Because user agents correctly prioritize the security and privacy of their users, they will continue to invest in mechanisms to detect tampering with connections.</p>
 <p id="rfc.section.1.p.4">This document proposes a mechanism whereby a configured HTTP proxy can inform clients that it will not permit a particular connection without being able to inspect the contents.  Clients are fully aware of the proxy&#8217;s inspection, and servers have the option to be aware of the proxy&#8217;s inspection as well.  Participating servers are able to achieve an integrity-protected connection with the client which can be inspected only by the proxy.</p>
-<p id="rfc.section.1.p.5">This enables clients, servers, and proxies to make informed decisions about whether to proceed with a connection given a known level of privacy.  It also permits user agents to provide detailed information to users about the proxy and its level of access to their traffic.</p>
+<p id="rfc.section.1.p.5">This enables clients, servers, and proxies to make informed decisions about whether to proceed with a connection given a known level of privacy.  It also permits user agents to provide detailed information to users about the proxy and its level of access to their traffic.  Because at least one, and potentially all, parties are aware that the inspection is occurring, this does not qualify as &#8220;wiretapping&#8221; as defined by <a href="#RFC2840">[RFC2840]</a>.</p>
 <p id="rfc.section.1.p.6">This document specifically addresses the case where the same entity exercise management over both the client devices and the proxy server, and assumes some ability to configure the clients and enforce application capabilities.  The case where no such administrative control exists is specifically outside the scope of this document.</p>
 <h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> <a href="#existing-http-proxy-usage" id="existing-http-proxy-usage">Existing HTTP Proxy Usage</a></h1>
 <p id="rfc.section.1.1.p.1">When an explicitly-configured HTTP proxy is in use, HTTP clients make requests in two ways:</p>
@@ -405,8 +409,9 @@ ALPN: h2, http%2F1.1
 <p id="rfc.section.3.1.p.6">A tunnel is closed when a tunnel intermediary detects that either side has closed its connection: the intermediary MUST attempt to send any outstanding data that came from the closed side to the other side, close both connections, and then discard any remaining data left undelivered.</p>
 <p id="rfc.section.3.1.p.7">Proxy authentication might be used to establish the authority to create a tunnel.  For example,</p>
 <pre>
-CONNECT server.example.com:80 HTTP/1.1
+INSPECTED_CONNECT server.example.com:80 HTTP/1.1
 Host: server.example.com:80
+ALPN: h2, http%2F1.1
 Proxy-Authorization: basic aGVsbG86d29ybGQ=
 </pre>
 <p id="rfc.section.3.1.p.8">There are significant risks in establishing a tunnel to arbitrary servers, particularly when the destination is a well-known or reserved TCP port that is not intended for Web traffic.  For example, an INSPECTED_CONNECT to a request-target of &#8220;example.com:25&#8221; would suggest that the proxy connect to the reserved port for SMTP traffic; if allowed, that could trick the proxy into relaying spam email. Proxies that support INSPECTED_CONNECT SHOULD restrict its use to a limited set of known ports or a configurable whitelist of safe request targets, and SHOULD verify that the client is actually speaking the protocol which it proposed to speak.</p>
@@ -414,20 +419,43 @@ Proxy-Authorization: basic aGVsbG86d29ybGQ=
 <p id="rfc.section.3.1.p.10">A payload within an INSPECTED_CONNECT request message has no defined semantics; sending a payload body on an INSPECTED_CONNECT request might cause some implementations to reject the request.</p>
 <p id="rfc.section.3.1.p.11">Responses to the INSPECTED_CONNECT method are not cacheable.</p>
 <h1 id="rfc.section.3.1.1"><a href="#rfc.section.3.1.1">3.1.1.</a> <a href="#tunnel-establishment" id="tunnel-establishment">Tunnel Establishment</a></h1>
-<p id="rfc.section.3.1.1.p.1">In handling an INSPECTED_CONNECT request, the server MUST attempt to establish an encrypted tunnel to the identified origin server.  The encrypted tunnel MUST use TLS <a href="#RFC5426">[RFC5426]</a> and MUST include the ALPN extension <a href="#RFC7301">[RFC7301]</a>.  The protocols proposed in ALPN MUST include:</p>
+<p id="rfc.section.3.1.1.p.1">In handling an INSPECTED_CONNECT request, the server MUST attempt to establish an encrypted tunnel to the identified origin server.  The encrypted tunnel MUST use TLS <a href="#RFC5426">[RFC5426]</a> and MUST include the ALPN extension <a href="#RFC7301">[RFC7301]</a>.   The proxy MAY remove from the client&#8217;s ALPN list protocols it is not prepared to inspect.</p>
+<p id="rfc.section.3.1.1.p.2">The protocols proposed in ALPN MUST include each acceptable protocol in the client&#8217;s ALPN header, prefixed with &#8220;inspected_&#8221;.  That is, if the client sent the ALPN header &#8220;h2, http%2F1.1&#8221;, the server would include the ALPN tokens &#8220;inspected_h2&#8221; and &#8220;inspected_http/1.1&#8221;. Optionally, the proxy MAY include protocols it is capable of using to relay requests from clients.</p>
+<p id="rfc.section.3.1.1.p.3">If the origin server supports inspected tunnels and is willing to accept an inspected connection, it SHOULD select one of the &#8220;inspected_&#8221; ALPN tokens.  If the origin server is not willing to accept inspection, it SHOULD respond with a fatal &#8220;no_application_protocol&#8221; alert.</p>
+<p id="rfc.section.3.1.1.p.4">An origin server SHOULD NOT select a non-&#8220;inspected_&#8221; token if it implements this protocol and an &#8220;inspected_&#8221; token is present.  Selection of an uninspected protocol token indicates that the origin server is unaware of inspection.  The proxy MUST NOT consider the tunnel connection successful in this case, but MAY retain the completed TLS connection to relay client request.  Proxies MAY cache that origin servers do not support this protocol, in order to return errors more quickly when appropriate.</p>
+<p id="rfc.section.3.1.1.p.5">The proxy MUST validate the certificate presented by the origin server, and MUST NOT consider the tunnel successfully established if the certificate cannot be validated.</p>
+<p id="rfc.section.3.1.1.p.6">If a proxy cannot reach the origin server directly, it MAY establish its own tunneled connection using CONNECT or INSPECTED_CONNECT as needed.</p>
+<h1 id="rfc.section.3.1.2"><a href="#rfc.section.3.1.2">3.1.2.</a> <a href="#status-codes" id="status-codes">Use of Encrypted Tunnel</a></h1>
+<p id="rfc.section.3.1.2.p.1">If the origin server accepts the connection, the proxy completes the INSPECTED_CONNECT request with status code 200 (Success).  The remainder of the connection (in HTTP/1.1) or stream (in HTTP/2) is a tunnel which is encrypted between the proxy and the origin server.  The proxy&#8217;s response SHOULD include an ALPN header specifying the protocol selected by the origin server on the proxy&#8217;s connection.</p>
+<p id="rfc.section.3.1.2.p.2">If the selected protocol is an &#8220;inspected_&#8221; token, the client MUST proceed by establishing a TLS <a href="#RFC5246">[RFC5246]</a> connection, but proposing only NULL encryption.  (A non-NULL key exchange and MAC MUST be negotiated.)  The client MUST include the ALPN extension and the token for the uninspected protocol on this inner TLS connection.  The server MUST accept the client&#8217;s NULL encryption.  Confidentiality is provided by the TLS session between the proxy and the origin server.</p>
+<p id="rfc.section.3.1.2.p.3">If the origin server did not demonstrate support for this protocol, the server MUST return a status code 502 (Bad Gateway).  The client MAY then issue requests for &#8220;https&#8221; resources directly to the proxy using absolute-form, but cannot have assurance that the proxy is not modifying the responses.</p>
+<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
+<p id="rfc.section.4.p.1">This protocol intentionally allows multiple parties to an HTTP exchange to make security trade-offs.  Proxies have the choice of permitting clients to make fully-encrypted connections to certain endpoints (existing CONNECT).  Alternatively, the proxy can force the client to choose between disclosing the contents of the exchange or not performing the exchange.</p>
+<p id="rfc.section.4.p.2">Clients that choose to disclose the contents of the exchange face a second junction based on origin server support (and, potentially, the honesty of the proxy).  When the origin server supports this protocol, the client is able to receive and validate the origin server&#8217;s certificate.  The client SHOULD apply all available tampering-detection mechanisms in this circumstance and MAY exclude administratively-configured root certificates from the set considered trusted.</p>
+<p id="rfc.section.4.p.3">If the origin server does not support this protocol, the client will be unable to verify the server&#8217;s certificate itself.  It MAY trust the proxy&#8217;s validation of the certificate, or refuse to proceed with the request.</p>
+<p id="rfc.section.4.p.4">In the event that multiple proxies must be traversed to reach the origin server, the client can only verify the identity of the first proxy.  Even if no other proxy server is involved in the connection, the proxy is fully able to relay the contents of the client&#8217;s connection to other parties in real time or to store them and provide them at a later time.  This is inherent in the power of inspection.</p>
+<p id="rfc.section.4.p.5">In each of these cases, user consent MUST be obtained for anything less than an end-to-end encrypted and authenticated connection.  As a convenience, this consent MAY be persistent for a given proxy server, but some indication SHOULD be provided to the user at all times when a connection is known to be inspected.</p>
+<p id="rfc.section.4.p.6">When CONNECT is used to establish a tunnel via a proxy, the contents of the tunnel are typically encrypted end-to-end.  As a result, the use of TLS when connecting to the proxy is less critical.  The INSPECTED_CONNECT method provides encryption only between the proxy and the origin server; as a result, it SHOULD only be used over a TLS connection to the proxy.</p>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
+<p id="rfc.section.5.p.1">If it had even a snowball&#8217;s chance of becoming an RFC, this document would need to register:</p>
 <p/>
 
 <ul>
-  <li>Each protocol in the client&#8217;s ALPN header, prefixed with the string &#8220;inspected_&#8221;.  That is, if the client sent &#8220;h2, http%2F1.1&#8221;, the server would include the ALPN tokens &#8220;inspected_h2&#8221; and &#8220;inspected_http/1.1&#8221;.</li>
-  <li>Each protocol in the client&#8217;s ALPN header</li>
+  <li>the INSPECTED_CONNECT method,</li>
+  <li>the inspected_* ALPN token collection, and</li>
+  <li>possibly the &#8220;ALPN&#8221; header as a response header.</li>
 </ul>
-<p id="rfc.section.3.1.1.p.3">If the origin server supports inspected tunnels and is willing to accept an inspected connection, it SHOULD select one of the &#8220;inspected_&#8221; ALPN tokens.  If the origin server is not willing to accept inspection, it SHOULD respond with a fatal &#8220;no_application_protocol&#8221; alert.</p>
-<p id="rfc.section.3.1.1.p.4">An origin server SHOULD NOT select one of the client&#8217;s ALPN tokens if it implements this protocol.</p>
-<h1 id="rfc.section.3.1.2"><a href="#rfc.section.3.1.2">3.1.2.</a> <a href="#status-codes" id="status-codes">Client Use of Tunnel</a></h1>
-<h1 id="rfc.references"><a href="#rfc.references">4.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">4.1.</a> Normative References</h1>
+<p id="rfc.section.5.p.3">But as that is not the case, this document makes no requests of IANA.</p>
+<h1 id="rfc.references"><a href="#rfc.references">6.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">6.1.</a> Normative References</h1>
 <table>
   <tbody>
+    <tr>
+      <td class="reference">
+        <b id="RFC5246">[RFC5246]</b>
+      </td>
+      <td class="top"><a>Dierks, T.</a> and <a>E. Rescorla</a>, "<a href="http://tools.ietf.org/html/rfc5246">The Transport Layer Security (TLS) Protocol Version 1.2</a>", RFC 5246, DOI 10.17487/RFC5246, August 2008.</td>
+    </tr>
     <tr>
       <td class="reference">
         <b id="RFC5426">[RFC5426]</b>
@@ -460,7 +488,7 @@ Proxy-Authorization: basic aGVsbG86d29ybGQ=
     </tr>
   </tbody>
 </table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">4.2.</a> Informative References</h1>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">6.2.</a> Informative References</h1>
 <table>
   <tbody>
     <tr>
