@@ -297,7 +297,7 @@ address {
 
   <meta name="dct.creator" content="Bishop, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-httpbis-proxy-inspection-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-3-2" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-3-10" />
   <meta name="dct.abstract" content="The IETF has unilaterally opposed the standardization of &#8220;wiretapping&#8221; features in protocols (" />
   <meta name="description" content="The IETF has unilaterally opposed the standardization of &#8220;wiretapping&#8221; features in protocols (" />
 
@@ -318,10 +318,10 @@ address {
 </tr>
 <tr>
   <td class="left">Intended status: Standards Track</td>
-  <td class="right">March 2, 2017</td>
+  <td class="right">March 10, 2017</td>
 </tr>
 <tr>
-  <td class="left">Expires: September 3, 2017</td>
+  <td class="left">Expires: September 11, 2017</td>
   <td class="right"></td>
 </tr>
 
@@ -335,14 +335,14 @@ address {
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>The IETF has unilaterally opposed the standardization of &#8220;wiretapping&#8221; features in protocols (<a href="#RFC2840">[RFC2840]</a>).  At the same time, there exist legitimate scenarios in which entities might be required for various reasons to inspect traffic sent from and to clients under their control.  For a number of reasons, such inspection cannot always occur within the user agent.  This document describes mechanisms whereby an explicitly configured proxy can, with the consent of the user agent, examine the contents of client network traffic.</p>
+<p>The IETF has unilaterally opposed the standardization of &#8220;wiretapping&#8221; features in protocols (<a href="#RFC2804">[RFC2804]</a>).  At the same time, there exist legitimate scenarios in which entities might be required for various reasons to inspect traffic sent from and to clients under their control.  For a number of reasons, such inspection cannot always occur within the user agent.  This document describes mechanisms whereby an explicitly configured proxy can, with the consent of the user agent, examine the contents of client network traffic.</p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on September 3, 2017.</p>
+<p>This Internet-Draft will expire on September 11, 2017.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -376,7 +376,7 @@ address {
 <p id="rfc.section.1.p.2">At the same time, increasing desires for privacy and security online have increased the required use of TLS for encryption and authentication <a href="#RFC6797">[RFC6797]</a>.  The only solution available to proxy vendors so far has been to deploy man-in-the-middle proxies, intercepting either the raw traffic or the contents of HTTP CONNECT tunnels <a href="#RFC7231">[RFC7231]</a> and responding with forged certificates from a captive private Certificate Authority.  (Because the clients in these scenarios are owned and managed by the same entity as the proxy, the clients are configured to trust this Certificate Authority.)</p>
 <p id="rfc.section.1.p.3">This has created an arms-race between user agents and proxies:  User agents deploy mechanisms such as certificate key pinning <a href="#RFC7469">[RFC7469]</a> to detect man-in-the-middle certificates; enterprises request management mechanisms to disable this feature.  Because the entities performing the monitoring often have legal mandates to inspect the traffic, they will continue to attempt to do so.  Because user agents correctly prioritize the security and privacy of their users, they will continue to invest in mechanisms to detect tampering with connections.</p>
 <p id="rfc.section.1.p.4">This document proposes a mechanism whereby a configured HTTP proxy can inform clients that it will not permit a particular connection without being able to inspect the contents.  Clients are fully aware of the proxy&#8217;s inspection, and servers have the option to be aware of the proxy&#8217;s inspection as well.  Participating servers are able to achieve an integrity-protected connection with the client which can be inspected only by the proxy.</p>
-<p id="rfc.section.1.p.5">This enables clients, servers, and proxies to make informed decisions about whether to proceed with a connection given a known level of privacy.  It also permits user agents to provide detailed information to users about the proxy and its level of access to their traffic.  Because at least one, and potentially all, parties are aware that the inspection is occurring, this does not qualify as &#8220;wiretapping&#8221; as defined by <a href="#RFC2840">[RFC2840]</a>.</p>
+<p id="rfc.section.1.p.5">This enables clients, servers, and proxies to make informed decisions about whether to proceed with a connection given a known level of privacy.  It also permits user agents to provide detailed information to users about the proxy and its level of access to their traffic.  Because at least one, and potentially all, parties are aware that the inspection is occurring, this does not qualify as &#8220;wiretapping&#8221; as defined by <a href="#RFC2804">[RFC2804]</a>.</p>
 <p id="rfc.section.1.p.6">This document specifically addresses the case where the same entity exercise management over both the client devices and the proxy server, and assumes some ability to configure the clients and enforce application capabilities.  The case where no such administrative control exists is specifically outside the scope of this document.</p>
 <h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> <a href="#existing-http-proxy-usage" id="existing-http-proxy-usage">Existing HTTP Proxy Usage</a></h1>
 <p id="rfc.section.1.1.p.1">When an explicitly-configured HTTP proxy is in use, HTTP clients make requests in two ways:</p>
@@ -414,7 +414,7 @@ Host: server.example.com:80
 ALPN: h2, http%2F1.1
 Proxy-Authorization: basic aGVsbG86d29ybGQ=
 </pre>
-<p id="rfc.section.3.1.p.8">There are significant risks in establishing a tunnel to arbitrary servers, particularly when the destination is a well-known or reserved TCP port that is not intended for Web traffic.  For example, an INSPECTED_CONNECT to a request-target of &#8220;example.com:25&#8221; would suggest that the proxy connect to the reserved port for SMTP traffic; if allowed, that could trick the proxy into relaying spam email. Proxies that support INSPECTED_CONNECT SHOULD restrict its use to a limited set of known ports or a configurable whitelist of safe request targets, and SHOULD verify that the client is actually speaking the protocol which it proposed to speak.</p>
+<p id="rfc.section.3.1.p.8">There are risks in establishing a tunnel to arbitrary servers, particularly when the destination is a well-known or reserved TCP port that is not intended for Web traffic.  This is largely mitigated by the use of TLS and the requirement to successfully negotiate a protocol using ALPN. However, proxies that support INSPECTED_CONNECT SHOULD restrict its use to a limited set of known ports or a configurable whitelist of safe request targets, and SHOULD verify that the client is actually speaking the protocol which it proposed to speak.</p>
 <p id="rfc.section.3.1.p.9">A server MUST NOT send any Transfer-Encoding or Content-Length header fields in a 2xx (Successful) response to INSPECTED_CONNECT.  A client MUST ignore any Content-Length or Transfer-Encoding header fields received in a successful response to INSPECTED_CONNECT.</p>
 <p id="rfc.section.3.1.p.10">A payload within an INSPECTED_CONNECT request message has no defined semantics; sending a payload body on an INSPECTED_CONNECT request might cause some implementations to reject the request.</p>
 <p id="rfc.section.3.1.p.11">Responses to the INSPECTED_CONNECT method are not cacheable.</p>
@@ -493,9 +493,9 @@ Proxy-Authorization: basic aGVsbG86d29ybGQ=
   <tbody>
     <tr>
       <td class="reference">
-        <b id="RFC2840">[RFC2840]</b>
+        <b id="RFC2804">[RFC2804]</b>
       </td>
-      <td class="top"><a>Altman, J.</a> and <a>F. da Cruz</a>, "<a href="http://tools.ietf.org/html/rfc2840">TELNET KERMIT OPTION</a>", RFC 2840, DOI 10.17487/RFC2840, May 2000.</td>
+      <td class="top"><a>IAB</a> and <a>IESG</a>, "<a href="http://tools.ietf.org/html/rfc2804">IETF Policy on Wiretapping</a>", RFC 2804, DOI 10.17487/RFC2804, May 2000.</td>
     </tr>
     <tr>
       <td class="reference">

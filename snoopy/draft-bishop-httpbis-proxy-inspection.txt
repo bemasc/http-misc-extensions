@@ -4,8 +4,8 @@
 
 XMPP Working Group                                             M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                           March 2, 2017
-Expires: September 3, 2017
+Intended status: Standards Track                          March 10, 2017
+Expires: September 11, 2017
 
 
             Inspection of Encrypted HTTP Traffic by Proxies
@@ -14,7 +14,7 @@ Expires: September 3, 2017
 Abstract
 
    The IETF has unilaterally opposed the standardization of
-   "wiretapping" features in protocols ([RFC2840]).  At the same time,
+   "wiretapping" features in protocols ([RFC2804]).  At the same time,
    there exist legitimate scenarios in which entities might be required
    for various reasons to inspect traffic sent from and to clients under
    their control.  For a number of reasons, such inspection cannot
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 3, 2017.
+   This Internet-Draft will expire on September 11, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                  Expires September 3, 2017               [Page 1]
+Bishop                 Expires September 11, 2017               [Page 1]
 
 Internet-Draft            Inspection by Proxies               March 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bishop                  Expires September 3, 2017               [Page 2]
+Bishop                 Expires September 11, 2017               [Page 2]
 
 Internet-Draft            Inspection by Proxies               March 2017
 
@@ -131,7 +131,7 @@ Internet-Draft            Inspection by Proxies               March 2017
    to users about the proxy and its level of access to their traffic.
    Because at least one, and potentially all, parties are aware that the
    inspection is occurring, this does not qualify as "wiretapping" as
-   defined by [RFC2840].
+   defined by [RFC2804].
 
    This document specifically addresses the case where the same entity
    exercise management over both the client devices and the proxy
@@ -165,7 +165,7 @@ Internet-Draft            Inspection by Proxies               March 2017
 
 
 
-Bishop                  Expires September 3, 2017               [Page 3]
+Bishop                 Expires September 11, 2017               [Page 3]
 
 Internet-Draft            Inspection by Proxies               March 2017
 
@@ -221,7 +221,7 @@ Internet-Draft            Inspection by Proxies               March 2017
 
 
 
-Bishop                  Expires September 3, 2017               [Page 4]
+Bishop                 Expires September 11, 2017               [Page 4]
 
 Internet-Draft            Inspection by Proxies               March 2017
 
@@ -267,24 +267,23 @@ Internet-Draft            Inspection by Proxies               March 2017
    ALPN: h2, http%2F1.1
    Proxy-Authorization: basic aGVsbG86d29ybGQ=
 
-   There are significant risks in establishing a tunnel to arbitrary
-   servers, particularly when the destination is a well-known or
-   reserved TCP port that is not intended for Web traffic.  For example,
-   an INSPECTED_CONNECT to a request-target of "example.com:25" would
-   suggest that the proxy connect to the reserved port for SMTP traffic;
-   if allowed, that could trick the proxy into relaying spam email.
-   Proxies that support INSPECTED_CONNECT SHOULD restrict its use to a
+   There are risks in establishing a tunnel to arbitrary servers,
+   particularly when the destination is a well-known or reserved TCP
+   port that is not intended for Web traffic.  This is largely mitigated
+   by the use of TLS and the requirement to successfully negotiate a
+   protocol using ALPN.  However, proxies that support INSPECTED_CONNECT
+   SHOULD restrict its use to a limited set of known ports or a
+   configurable whitelist of safe request targets, and SHOULD verify
 
 
 
-Bishop                  Expires September 3, 2017               [Page 5]
+Bishop                 Expires September 11, 2017               [Page 5]
 
 Internet-Draft            Inspection by Proxies               March 2017
 
 
-   limited set of known ports or a configurable whitelist of safe
-   request targets, and SHOULD verify that the client is actually
-   speaking the protocol which it proposed to speak.
+   that the client is actually speaking the protocol which it proposed
+   to speak.
 
    A server MUST NOT send any Transfer-Encoding or Content-Length header
    fields in a 2xx (Successful) response to INSPECTED_CONNECT.  A client
@@ -333,7 +332,8 @@ Internet-Draft            Inspection by Proxies               March 2017
 
 
 
-Bishop                  Expires September 3, 2017               [Page 6]
+
+Bishop                 Expires September 11, 2017               [Page 6]
 
 Internet-Draft            Inspection by Proxies               March 2017
 
@@ -389,7 +389,7 @@ Internet-Draft            Inspection by Proxies               March 2017
 
 
 
-Bishop                  Expires September 3, 2017               [Page 7]
+Bishop                 Expires September 11, 2017               [Page 7]
 
 Internet-Draft            Inspection by Proxies               March 2017
 
@@ -445,7 +445,7 @@ Internet-Draft            Inspection by Proxies               March 2017
 
 
 
-Bishop                  Expires September 3, 2017               [Page 8]
+Bishop                 Expires September 11, 2017               [Page 8]
 
 Internet-Draft            Inspection by Proxies               March 2017
 
@@ -471,9 +471,9 @@ Internet-Draft            Inspection by Proxies               March 2017
 
 6.2.  Informative References
 
-   [RFC2840]  Altman, J. and F. da Cruz, "TELNET KERMIT OPTION",
-              RFC 2840, DOI 10.17487/RFC2840, May 2000,
-              <http://www.rfc-editor.org/info/rfc2840>.
+   [RFC2804]  IAB and IESG, "IETF Policy on Wiretapping", RFC 2804,
+              DOI 10.17487/RFC2804, May 2000,
+              <http://www.rfc-editor.org/info/rfc2804>.
 
    [RFC6797]  Hodges, J., Jackson, C., and A. Barth, "HTTP Strict
               Transport Security (HSTS)", RFC 6797,
@@ -501,4 +501,4 @@ Author's Address
 
 
 
-Bishop                  Expires September 3, 2017               [Page 9]
+Bishop                 Expires September 11, 2017               [Page 9]
