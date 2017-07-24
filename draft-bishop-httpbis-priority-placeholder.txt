@@ -1,0 +1,168 @@
+
+
+
+
+HTTPbis                                                        M. Bishop
+Internet-Draft                                                 Microsoft
+Intended status: Standards Track                           July 24, 2017
+Expires: January 25, 2018
+
+
+                    Priority Placeholders in HTTP/2
+           draft-bishop-httpbis-priority-placeholders-latest
+
+Abstract
+
+   [RFC7540] defines HTTP/2, including a method for communicating
+   priorities.  Some implementations have begun using closed streams as
+   placeholders when constructing their priority tree, but this has
+   unbounded state commitments and interacts poorly with HTTP/QUIC
+   ([I-D.ietf-quic-http]).  This document proposes an extension to the
+   HTTP/2 priority scheme for both protocols.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on January 25, 2018.
+
+Copyright Notice
+
+   Copyright (c) 2017 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+
+
+
+
+Bishop                  Expires January 25, 2018                [Page 1]
+
+Internet-Draft           Placeholders in HTTP/2                July 2017
+
+
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+     1.1.  Notational Conventions  . . . . . . . . . . . . . . . . .   2
+   2.  The Priority Placeholder Extension  . . . . . . . . . . . . .   3
+     2.1.  Priority Placeholder Setting  . . . . . . . . . . . . . .   3
+     2.2.  PRIORITY Frame Modifications  . . . . . . . . . . . . . .   3
+     2.3.  Priority Management Logic . . . . . . . . . . . . . . . .   3
+   3.  Security Considerations . . . . . . . . . . . . . . . . . . .   3
+   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   3
+   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   3
+     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   3
+     5.2.  Informative References  . . . . . . . . . . . . . . . . .   3
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   3
+
+1.  Introduction
+
+   Stream Priority is described in [RFC7540], Section 5.3.  Priority is
+   communicated using PRIORITY frames and with reference to other
+   streams, with stream 0 being the root of the tree.  Each stream
+   depends on one other stream with a particular weight; these weights
+   represent relative priorities among the multiple children of a
+   stream.
+
+   Unfortunately, the scheme as specified encourages servers to actively
+   maintain closed streams in the priority tree, since other streams
+   might reference them later.  This produces an unbounded state
+   commitment on the part of the server if it is to correctly reflect
+   any possible reference the client might make.  While priorities are
+   only advisory and the server is free to discard as much state as it
+   needs to, references to streams which are no longer in the server's
+   state are treated as references to the root of the tree.  This can
+   result in wildly different conceptions of the priority tree between
+   client and server, a situation which all parties would prefer to
+   avoid.
+
+1.1.  Notational Conventions
+
+   The words "MUST", "MUST NOT", "SHOULD", and "MAY" are used in this
+   document.  It's not shouting; when they are capitalized, they have
+   the special meaning defined in [RFC2119].
+
+
+
+
+
+
+
+Bishop                  Expires January 25, 2018                [Page 2]
+
+Internet-Draft           Placeholders in HTTP/2                July 2017
+
+
+2.  The Priority Placeholder Extension
+
+   This extension consists of an additional setting Section 2.1, new
+   flags on the PRIORITY frame Section 2.2, and modified state
+   management logic on the server Section 2.3.
+
+2.1.  Priority Placeholder Setting
+
+2.2.  PRIORITY Frame Modifications
+
+2.3.  Priority Management Logic
+
+3.  Security Considerations
+
+   TBD.
+
+4.  IANA Considerations
+
+   TBD.
+
+5.  References
+
+5.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <http://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
+              Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
+              DOI 10.17487/RFC7540, May 2015,
+              <http://www.rfc-editor.org/info/rfc7540>.
+
+5.2.  Informative References
+
+   [I-D.ietf-quic-http]
+              Bishop, M., "Hypertext Transfer Protocol (HTTP) over
+              QUIC", draft-ietf-quic-http-04 (work in progress), June
+              2017.
+
+Author's Address
+
+   Mike Bishop
+   Microsoft
+
+   Email: michael.bishop@microsoft.com
+
+
+
+
+Bishop                  Expires January 25, 2018                [Page 3]

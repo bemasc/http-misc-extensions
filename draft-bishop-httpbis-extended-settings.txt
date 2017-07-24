@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Informational                          February 9, 2017
-Expires: August 13, 2017
+Intended status: Informational                             July 24, 2017
+Expires: January 25, 2018
 
 
                    HTTP/2 Extended SETTINGS Extension
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 13, 2017.
+   This Internet-Draft will expire on January 25, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                   Expires August 13, 2017                [Page 1]
+Bishop                  Expires January 25, 2018                [Page 1]
 
-Internet-Draft              EXTENDED_SETTINGS              February 2017
+Internet-Draft              EXTENDED_SETTINGS                  July 2017
 
 
    carefully, as they describe your rights and restrictions with respect
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                   Expires August 13, 2017                [Page 2]
+Bishop                  Expires January 25, 2018                [Page 2]
 
-Internet-Draft              EXTENDED_SETTINGS              February 2017
+Internet-Draft              EXTENDED_SETTINGS                  July 2017
 
 
    Each extension could define its own SETTINGS-equivalent frame to
@@ -165,9 +165,9 @@ Internet-Draft              EXTENDED_SETTINGS              February 2017
 
 
 
-Bishop                   Expires August 13, 2017                [Page 3]
+Bishop                  Expires January 25, 2018                [Page 3]
 
-Internet-Draft              EXTENDED_SETTINGS              February 2017
+Internet-Draft              EXTENDED_SETTINGS                  July 2017
 
 
    Each parameter in an EXTENDED_SETTINGS frame replaces any existing
@@ -221,9 +221,9 @@ Internet-Draft              EXTENDED_SETTINGS              February 2017
 
 
 
-Bishop                   Expires August 13, 2017                [Page 4]
+Bishop                  Expires January 25, 2018                [Page 4]
 
-Internet-Draft              EXTENDED_SETTINGS              February 2017
+Internet-Draft              EXTENDED_SETTINGS                  July 2017
 
 
    An implementation MUST ignore the contents for any EXTENDED_SETTINGS
@@ -277,9 +277,9 @@ Internet-Draft              EXTENDED_SETTINGS              February 2017
 
 
 
-Bishop                   Expires August 13, 2017                [Page 5]
+Bishop                  Expires January 25, 2018                [Page 5]
 
-Internet-Draft              EXTENDED_SETTINGS              February 2017
+Internet-Draft              EXTENDED_SETTINGS                  July 2017
 
 
    details about how the contents can be parsed and stored, and SHOULD
@@ -333,9 +333,9 @@ Internet-Draft              EXTENDED_SETTINGS              February 2017
 
 
 
-Bishop                   Expires August 13, 2017                [Page 6]
+Bishop                  Expires January 25, 2018                [Page 6]
 
-Internet-Draft              EXTENDED_SETTINGS              February 2017
+Internet-Draft              EXTENDED_SETTINGS                  July 2017
 
 
 6.3.  New HTTP/2 Frames
@@ -358,7 +358,7 @@ Internet-Draft              EXTENDED_SETTINGS              February 2017
 7.1.  Normative References
 
    [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
-              IANA Considerations Section in RFCs", BCP 26, RFC 5226,
+              IANA Considerations Section in RFCs", RFC 5226,
               DOI 10.17487/RFC5226, May 2008,
               <http://www.rfc-editor.org/info/rfc5226>.
 
@@ -370,14 +370,15 @@ Internet-Draft              EXTENDED_SETTINGS              February 2017
 7.2.  Informative References
 
    [I-D.bishop-httpbis-http2-additional-certs]
-              Bishop, M. and M. Thomson, "Secondary Certificate
-              Authentication in HTTP/2", draft-bishop-httpbis-http2-
-              additional-certs-02 (work in progress), October 2016.
+              Bishop, M., Sullivan, N., and M. Thomson, "Secondary
+              Certificate Authentication in HTTP/2", draft-bishop-
+              httpbis-http2-additional-certs-04 (work in progress), May
+              2017.
 
    [I-D.ietf-httpbis-origin-frame]
               Nottingham, M. and E. Nygren, "The ORIGIN HTTP/2 Frame",
-              draft-ietf-httpbis-origin-frame-01 (work in progress),
-              September 2016.
+              draft-ietf-httpbis-origin-frame-03 (work in progress),
+              April 2017.
 
    [MS-HTTP2E]
               "Hypertext Transfer Protocol Version 2 (HTTP/2)
@@ -388,10 +389,9 @@ Internet-Draft              EXTENDED_SETTINGS              February 2017
 
 
 
-
-Bishop                   Expires August 13, 2017                [Page 7]
+Bishop                  Expires January 25, 2018                [Page 7]
 
-Internet-Draft              EXTENDED_SETTINGS              February 2017
+Internet-Draft              EXTENDED_SETTINGS                  July 2017
 
 
    [RFC7838]  Nottingham, M., McManus, P., and J. Reschke, "HTTP
@@ -445,4 +445,4 @@ Author's Address
 
 
 
-Bishop                   Expires August 13, 2017                [Page 8]
+Bishop                  Expires January 25, 2018                [Page 8]

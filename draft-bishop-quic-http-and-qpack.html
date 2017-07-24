@@ -23,13 +23,12 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    right: calc(50vw - 500px);
+    right: calc(50vw - 525px);
     width: 300px;
-    padding: 0 1em;
     z-index: 1;
   }
   #rfc\.toc {
-    top: 16px;
+    top: 15px;
   }
   ul.toc {
     top: 80px;
@@ -37,8 +36,7 @@
   }
 
   body {
-    padding-left: 1.5em;
-    padding-right: 29em;
+    padding-right: 350px;
   }
 }
 
@@ -47,7 +45,7 @@ body {
   color: #333;
   font-size-adjust: 0.5;
   line-height: 130%;
-  margin: 2.5em auto;
+  margin: 25px auto;
   max-width: 724px;
 }
 
@@ -276,36 +274,36 @@ address {
   /*]]>*/</style>
 
 
-  <link href="#rfc.toc" rel="Contents"/>
-<link href="#rfc.section.1" rel="Chapter" title="1 Introduction"/>
-<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Terminology"/>
-<link href="#rfc.section.2" rel="Chapter" title="2 QPACK"/>
-<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Basic model"/>
-<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Changes to Static and Dynamic Tables"/>
-<link href="#rfc.section.2.2.1" rel="Chapter" title="2.2.1 Changes to Header Table Size"/>
-<link href="#rfc.section.2.2.2" rel="Chapter" title="2.2.2 Dynamic Table State Synchronization"/>
-<link href="#rfc.section.2.3" rel="Chapter" title="2.3 Format of Header Management stream"/>
-<link href="#rfc.section.2.3.1" rel="Chapter" title="2.3.1 Insert"/>
-<link href="#rfc.section.2.3.2" rel="Chapter" title="2.3.2 Delete"/>
-<link href="#rfc.section.2.3.3" rel="Chapter" title="2.3.3 Delete-Ack"/>
-<link href="#rfc.section.2.4" rel="Chapter" title="2.4 Format of Encoded Headers on Message Streams"/>
-<link href="#rfc.section.2.4.1" rel="Chapter" title="2.4.1 Indexed Header Field Representation"/>
-<link href="#rfc.section.2.4.2" rel="Chapter" title="2.4.2 Literal Header Field Representation"/>
-<link href="#rfc.section.3" rel="Chapter" title="3 Use in HTTP/QUIC"/>
-<link href="#rfc.section.4" rel="Chapter" title="4 Performance Considerations"/>
-<link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations"/>
-<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations"/>
-<link href="#rfc.section.7" rel="Chapter" title="7 Acknowledgements"/>
-<link href="#rfc.references" rel="Chapter" title="8 Normative References"/>
-<link href="#rfc.authors" rel="Chapter"/>
+  <link href="#rfc.toc" rel="Contents">
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
+<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Terminology">
+<link href="#rfc.section.2" rel="Chapter" title="2 QPACK">
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Basic model">
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Changes to Static and Dynamic Tables">
+<link href="#rfc.section.2.2.1" rel="Chapter" title="2.2.1 Changes to Header Table Size">
+<link href="#rfc.section.2.2.2" rel="Chapter" title="2.2.2 Dynamic Table State Synchronization">
+<link href="#rfc.section.2.3" rel="Chapter" title="2.3 Format of Header Management stream">
+<link href="#rfc.section.2.3.1" rel="Chapter" title="2.3.1 Insert">
+<link href="#rfc.section.2.3.2" rel="Chapter" title="2.3.2 Delete">
+<link href="#rfc.section.2.3.3" rel="Chapter" title="2.3.3 Delete-Ack">
+<link href="#rfc.section.2.4" rel="Chapter" title="2.4 Format of Encoded Headers on Message Streams">
+<link href="#rfc.section.2.4.1" rel="Chapter" title="2.4.1 Indexed Header Field Representation">
+<link href="#rfc.section.2.4.2" rel="Chapter" title="2.4.2 Literal Header Field Representation">
+<link href="#rfc.section.3" rel="Chapter" title="3 Use in HTTP/QUIC">
+<link href="#rfc.section.4" rel="Chapter" title="4 Performance Considerations">
+<link href="#rfc.section.5" rel="Chapter" title="5 Security Considerations">
+<link href="#rfc.section.6" rel="Chapter" title="6 IANA Considerations">
+<link href="#rfc.section.7" rel="Chapter" title="7 Acknowledgements">
+<link href="#rfc.references" rel="Chapter" title="8 Normative References">
+<link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.5.2 - http://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.7.0 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Bishop, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-quic-http-and-qpack-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-2-9" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-7-24" />
   <meta name="dct.abstract" content="HTTP/2 " />
   <meta name="description" content="HTTP/2 " />
 
@@ -317,20 +315,20 @@ address {
     <tbody>
     
     	<tr>
-  <td class="left">QUIC Working Group</td>
-  <td class="right">M. Bishop</td>
+<td class="left">QUIC Working Group</td>
+<td class="right">M. Bishop</td>
 </tr>
 <tr>
-  <td class="left">Internet-Draft</td>
-  <td class="right">Microsoft</td>
+<td class="left">Internet-Draft</td>
+<td class="right">Microsoft</td>
 </tr>
 <tr>
-  <td class="left">Intended status: Standards Track</td>
-  <td class="right">February 9, 2017</td>
+<td class="left">Intended status: Standards Track</td>
+<td class="right">July 24, 2017</td>
 </tr>
 <tr>
-  <td class="left">Expires: August 13, 2017</td>
-  <td class="right"></td>
+<td class="left">Expires: January 25, 2018</td>
+<td class="right"></td>
 </tr>
 
     	
@@ -340,20 +338,14 @@ address {
   <p class="title">Header Compression for HTTP/QUIC<br />
   <span class="filename">draft-bishop-quic-http-and-qpack-latest</span></p>
   
-  <h1 id="rfc.abstract">
-  <a href="#rfc.abstract">Abstract</a>
-</h1>
-<p>HTTP/2 <a href="#RFC7540">[RFC7540]</a> uses HPACK <a href="#RFC7541">[RFC7541]</a> for header compression. However, HPACK relies on the in-order message-based semantics of the HTTP/2 framing layer in order to function.  Messages can only be successfully decoded if processed by the decoder in the same order as generated by the encoder.  This draft refines HPACK to loosen the ordering requirements for use over QUIC <a href="#I-D.ietf-quic-transport">[I-D.ietf-quic-transport]</a>.</p>
-<h1 id="rfc.status">
-  <a href="#rfc.status">Status of This Memo</a>
-</h1>
+  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
+<p>HTTP/2 <a href="#RFC7540" class="xref">[RFC7540]</a> uses HPACK <a href="#RFC7541" class="xref">[RFC7541]</a> for header compression. However, HPACK relies on the in-order message-based semantics of the HTTP/2 framing layer in order to function.  Messages can only be successfully decoded if processed by the decoder in the same order as generated by the encoder.  This draft refines HPACK to loosen the ordering requirements for use over QUIC <a href="#I-D.ietf-quic-transport" class="xref">[I-D.ietf-quic-transport]</a>.</p>
+<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on August 13, 2017.</p>
-<h1 id="rfc.copyrightnotice">
-  <a href="#rfc.copyrightnotice">Copyright Notice</a>
-</h1>
+<p>This Internet-Draft will expire on January 25, 2018.</p>
+<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 
@@ -362,86 +354,129 @@ address {
   <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
   <ul class="toc">
 
-  	<li>1.   <a href="#rfc.section.1">Introduction</a></li>
-<ul><li>1.1.   <a href="#rfc.section.1.1">Terminology</a></li>
-</ul><li>2.   <a href="#rfc.section.2">QPACK</a></li>
-<ul><li>2.1.   <a href="#rfc.section.2.1">Basic model</a></li>
-<li>2.2.   <a href="#rfc.section.2.2">Changes to Static and Dynamic Tables</a></li>
-<ul><li>2.2.1.   <a href="#rfc.section.2.2.1">Changes to Header Table Size</a></li>
-<li>2.2.2.   <a href="#rfc.section.2.2.2">Dynamic Table State Synchronization</a></li>
-</ul><li>2.3.   <a href="#rfc.section.2.3">Format of Header Management stream</a></li>
-<ul><li>2.3.1.   <a href="#rfc.section.2.3.1">Insert</a></li>
-<li>2.3.2.   <a href="#rfc.section.2.3.2">Delete</a></li>
-<li>2.3.3.   <a href="#rfc.section.2.3.3">Delete-Ack</a></li>
-</ul><li>2.4.   <a href="#rfc.section.2.4">Format of Encoded Headers on Message Streams</a></li>
-<ul><li>2.4.1.   <a href="#rfc.section.2.4.1">Indexed Header Field Representation</a></li>
-<li>2.4.2.   <a href="#rfc.section.2.4.2">Literal Header Field Representation</a></li>
-</ul></ul><li>3.   <a href="#rfc.section.3">Use in HTTP/QUIC</a></li>
-<li>4.   <a href="#rfc.section.4">Performance Considerations</a></li>
-<li>5.   <a href="#rfc.section.5">Security Considerations</a></li>
-<li>6.   <a href="#rfc.section.6">IANA Considerations</a></li>
-<li>7.   <a href="#rfc.section.7">Acknowledgements</a></li>
-<li>8.   <a href="#rfc.references">Normative References</a></li>
-<li><a href="#rfc.authors">Author's Address</a></li>
+  	<li>1.   <a href="#rfc.section.1">Introduction</a>
+</li>
+<ul><li>1.1.   <a href="#rfc.section.1.1">Terminology</a>
+</li>
+</ul><li>2.   <a href="#rfc.section.2">QPACK</a>
+</li>
+<ul><li>2.1.   <a href="#rfc.section.2.1">Basic model</a>
+</li>
+<li>2.2.   <a href="#rfc.section.2.2">Changes to Static and Dynamic Tables</a>
+</li>
+<ul><li>2.2.1.   <a href="#rfc.section.2.2.1">Changes to Header Table Size</a>
+</li>
+<li>2.2.2.   <a href="#rfc.section.2.2.2">Dynamic Table State Synchronization</a>
+</li>
+</ul><li>2.3.   <a href="#rfc.section.2.3">Format of Header Management stream</a>
+</li>
+<ul><li>2.3.1.   <a href="#rfc.section.2.3.1">Insert</a>
+</li>
+<li>2.3.2.   <a href="#rfc.section.2.3.2">Delete</a>
+</li>
+<li>2.3.3.   <a href="#rfc.section.2.3.3">Delete-Ack</a>
+</li>
+</ul><li>2.4.   <a href="#rfc.section.2.4">Format of Encoded Headers on Message Streams</a>
+</li>
+<ul><li>2.4.1.   <a href="#rfc.section.2.4.1">Indexed Header Field Representation</a>
+</li>
+<li>2.4.2.   <a href="#rfc.section.2.4.2">Literal Header Field Representation</a>
+</li>
+</ul></ul><li>3.   <a href="#rfc.section.3">Use in HTTP/QUIC</a>
+</li>
+<li>4.   <a href="#rfc.section.4">Performance Considerations</a>
+</li>
+<li>5.   <a href="#rfc.section.5">Security Considerations</a>
+</li>
+<li>6.   <a href="#rfc.section.6">IANA Considerations</a>
+</li>
+<li>7.   <a href="#rfc.section.7">Acknowledgements</a>
+</li>
+<li>8.   <a href="#rfc.references">Normative References</a>
+</li>
+<li><a href="#rfc.authors">Author's Address</a>
+</li>
 
 
   </ul>
 
-  <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#problems" id="problems">Introduction</a></h1>
+  <h1 id="rfc.section.1">
+<a href="#rfc.section.1">1.</a> <a href="#problems" id="problems">Introduction</a>
+</h1>
 <p id="rfc.section.1.p.1">HPACK has a number of features that were intended to provide performance advantages to HTTP/2, but which don&#8217;t live well in an out-of-order environment such as that provided by QUIC.</p>
 <p id="rfc.section.1.p.2">The largest challenge is the fact that elements are referenced by a very fluid index. Not only is the index implicit when an item is added to the header table, the index will change without notice as other items are added to the header table. Static entries occupy the first 61 values, followed by dynamic entries. A newly-added dynamic entry would cause older dynamic entries to be evicted, and the retained items are then renumbered beginning with 62. This means that, without processing all preceding header sets, no index into the dynamic table can be interpreted, and the index of a given entry cannot be predicted.</p>
 <p id="rfc.section.1.p.3">Any solution to the above will almost certainly fall afoul of the memory constraints the decompressor imposes. The automatic eviction of entries is done based on the compressor&#8217;s declared dynamic table size, which MUST be less than the maximum permitted by the decompressor (and relayed using an HTTP/2 SETTINGS value).</p>
 <p id="rfc.section.1.p.4">Further, streams in QUIC are lossy in the presence of stream resets.  While HTTP/2 (via TCP) guarantees the delivery of all previously-sent data on a stream even if that stream is reset, QUIC does not retransmit lost frames if a stream has been reset, and may discard data which has not yet been delivered to the application.</p>
 <p id="rfc.section.1.p.5">Previous versions of QPACK were small deltas of HPACK to introduce order-resiliency. This version departs from HPACK more substantially to add resilience against reset message streams.</p>
 <p id="rfc.section.1.p.6">In the following sections, this document proposes a new version of HPACK which makes different trade-offs, enabling partial out-of-order interpretation and bounded memory consumption with minimal head-of-line blocking. None of the proposed improvements to HPACK (strongly-typed fields, binary compression of common header syntax) are currently included, but certainly could be.</p>
-<h1 id="rfc.section.1.1"><a href="#rfc.section.1.1">1.1.</a> <a href="#Terminology" id="Terminology">Terminology</a></h1>
-<p id="rfc.section.1.1.p.1">In this document, the key words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;REQUIRED&#8221;, &#8220;SHALL&#8221;, &#8220;SHALL NOT&#8221;, &#8220;SHOULD&#8221;, &#8220;SHOULD NOT&#8221;, &#8220;RECOMMENDED&#8221;, &#8220;MAY&#8221;, and &#8220;OPTIONAL&#8221; are to be interpreted as described in BCP 14, <a href="#RFC2119">[RFC2119]</a> and indicate requirement levels for compliant implementations.</p>
-<h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#QPACK" id="QPACK">QPACK</a></h1>
-<h1 id="rfc.section.2.1"><a href="#rfc.section.2.1">2.1.</a> <a href="#basic-model" id="basic-model">Basic model</a></h1>
+<h1 id="rfc.section.1.1">
+<a href="#rfc.section.1.1">1.1.</a> <a href="#Terminology" id="Terminology">Terminology</a>
+</h1>
+<p id="rfc.section.1.1.p.1">In this document, the key words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;REQUIRED&#8221;, &#8220;SHALL&#8221;, &#8220;SHALL NOT&#8221;, &#8220;SHOULD&#8221;, &#8220;SHOULD NOT&#8221;, &#8220;RECOMMENDED&#8221;, &#8220;MAY&#8221;, and &#8220;OPTIONAL&#8221; are to be interpreted as described in BCP 14, <a href="#RFC2119" class="xref">[RFC2119]</a> and indicate requirement levels for compliant implementations.</p>
+<h1 id="rfc.section.2">
+<a href="#rfc.section.2">2.</a> <a href="#QPACK" id="QPACK">QPACK</a>
+</h1>
+<h1 id="rfc.section.2.1">
+<a href="#rfc.section.2.1">2.1.</a> <a href="#basic-model" id="basic-model">Basic model</a>
+</h1>
 <p id="rfc.section.2.1.p.1">HPACK combines header table modification and message header emission in a single sequence of coded bytes.  QPACK bifurcates these into two channels:</p>
-<p/>
+<p></p>
 
 <ul>
-  <li>A connection-wide series of table update instructions sent on a dedicated headers stream</li>
-  <li>Non-modifying instructions which use the current header table state to encode message headers</li>
+<li>A connection-wide series of table update instructions sent on a dedicated headers stream</li>
+<li>Non-modifying instructions which use the current header table state to encode message headers</li>
 </ul>
 <p id="rfc.section.2.1.p.3">Because the per-message instructions introduce no changes to the header table state, no state is lost if these instructions are discarded due to a stream reset.</p>
-<h1 id="rfc.section.2.2"><a href="#rfc.section.2.2">2.2.</a> <a href="#changes-to-static-and-dynamic-tables" id="changes-to-static-and-dynamic-tables">Changes to Static and Dynamic Tables</a></h1>
-<p id="rfc.section.2.2.p.1">QPACK uses two tables for associating header fields to indexes. The static table is unchanged from <a href="#RFC7541">[RFC7541]</a>.</p>
+<h1 id="rfc.section.2.2">
+<a href="#rfc.section.2.2">2.2.</a> <a href="#changes-to-static-and-dynamic-tables" id="changes-to-static-and-dynamic-tables">Changes to Static and Dynamic Tables</a>
+</h1>
+<p id="rfc.section.2.2.p.1">QPACK uses two tables for associating header fields to indexes. The static table is unchanged from <a href="#RFC7541" class="xref">[RFC7541]</a>.</p>
 <p id="rfc.section.2.2.p.2">The dynamic table is a map from index to header field. Indices are arbitrary numbers greater than the last index of the static table and less than 2^27. Each insert instruction will specify the index being modified. While any index MAY be chosen for a new entry, smaller numbers will yield better compression performance.</p>
 <p id="rfc.section.2.2.p.3">The dynamic table is still constrained to the size specified by the decoder. An attempt to add a header to the dynamic table which causes it to exceed the maximum size MUST be treated as an error by a decoder.  To enable encoders to reclaim space, encoders can delete entries in the dynamic table, but can only reuse the index or the space after receiving confirmation of a successful deletion.</p>
 <p id="rfc.section.2.2.p.4">Because it is possible for QPACK frames to arrive which reference indices which have not yet been defined, such frames MUST wait until another frame has arrived and defined the index. In order to guard against malicious peers, implementations SHOULD impose a time limit and treat expiration of the timer as a decoding error. However, if the implementation chooses not to abort the connection, the remainder of the header block MUST be decoded and the output discarded.</p>
-<h1 id="rfc.section.2.2.1"><a href="#rfc.section.2.2.1">2.2.1.</a> <a href="#changes-to-header-table-size" id="changes-to-header-table-size">Changes to Header Table Size</a></h1>
+<h1 id="rfc.section.2.2.1">
+<a href="#rfc.section.2.2.1">2.2.1.</a> <a href="#changes-to-header-table-size" id="changes-to-header-table-size">Changes to Header Table Size</a>
+</h1>
 <p id="rfc.section.2.2.1.p.1">HTTP/QUIC prohibits mid-stream changes of settings.  As a result, only one table size change is possible:  From the value a client assumes during the 0-RTT flight to the actual value included in the server&#8217;s SETTINGS frame.  The assumed value is required to be either a server&#8217;s previous value or zero.  A server whose configuration has recently changed MAY overlook inadvertent violations of its maximum table size during the first round-trip.</p>
 <p id="rfc.section.2.2.1.p.2">In the case that the value has increased, either from zero to a non-zero value or from the cached value to a higher value, no action is required by the client.  The encoder can simply begin using the additional space.  In the case that the value has decreased, the encoder MUST immediately emit delete instructions which, upon completion, would bring the table within the required size.</p>
 <p id="rfc.section.2.2.1.p.3">Regardless of changes to header table size, the encoder MUST NOT add entries to the table which would result in a size greater than the maximum permitted.  This can imply that no additions are permitted while waiting for these delete instructions to complete.</p>
-<h1 id="rfc.section.2.2.2"><a href="#rfc.section.2.2.2">2.2.2.</a> <a href="#dynamic-table-state-synchronization" id="dynamic-table-state-synchronization">Dynamic Table State Synchronization</a></h1>
+<h1 id="rfc.section.2.2.2">
+<a href="#rfc.section.2.2.2">2.2.2.</a> <a href="#dynamic-table-state-synchronization" id="dynamic-table-state-synchronization">Dynamic Table State Synchronization</a>
+</h1>
 <p id="rfc.section.2.2.2.p.1">In order to ensure table consistency, all modifications of the header table occur on a dedicated control stream.  Message control streams contain only indexed and literal header entries.</p>
 <p id="rfc.section.2.2.2.p.2">No entries are automatically evicted from the dynamic table. Size management is purely the responsibility of the encoder, which MUST NOT exceed the declared memory size of the decoder.</p>
 <p id="rfc.section.2.2.2.p.3">The encoder SHOULD track the following information about each entry in the table:</p>
-<p/>
+<p></p>
 
 <ul>
-  <li>The list of recently-active streams which reference the entry in a trailer block, if any</li>
-  <li>The list of recently-active streams which reference the entry in a non-trailer block, if any</li>
+<li>The list of recently-active streams which reference the entry in a trailer block, if any</li>
+<li>The list of recently-active streams which reference the entry in a non-trailer block, if any</li>
 </ul>
 <p id="rfc.section.2.2.2.p.5">&#8220;Recently-active&#8221; streams are those which are still open or were closed less than a reasonable number of RTTs ago.  An implementation MAY vary its definition of &#8220;recent&#8221; to trade off memory consumption and timely completion of deletes.</p>
 <p id="rfc.section.2.2.2.p.6">The encoder MUST consider memory as committed beginning when the indexed entry is assigned.</p>
 <p id="rfc.section.2.2.2.p.7">When the encoder wishes to delete an inserted value, it flows through the following set of states:</p>
-<p/>
+<p></p>
 
 <ol>
-  <li><strong>Delete requested.</strong>  The encoder emits a delete instruction indicating which streams might have referenced the entry.  The encoder MUST NOT reference the entry in any subsequent frame until this state machine has completed and MUST continue to include the entry in its calculation of consumed memory.</li>
-  <li><strong>Delete pending.</strong>  The decoder receives the delete instruction and checks the current state of its incoming streams (see <a href="#delete-validation">Section 2.3.2.2</a>).  If more references might arrive, it stores the streams still needed and waits for them to complete.</li>
-  <li><strong>Delete acknowledged.</strong>  The decoder has received all QPACK frames which reference the deleted value, and can safely delete the entry.  The decoder SHOULD promptly emit a Delete-Ack instruction on the header management stream.</li>
-  <li><strong>Delete completed.</strong>  When the encoder receives a Delete-Ack instruction acknowledging the delete, it no longer counts the size of the deleted entry against the table size and MAY emit insert instructions for the field with a new value.</li>
+<li>
+<strong>Delete requested.</strong>  The encoder emits a delete instruction indicating which streams might have referenced the entry.  The encoder MUST NOT reference the entry in any subsequent frame until this state machine has completed and MUST continue to include the entry in its calculation of consumed memory.</li>
+<li>
+<strong>Delete pending.</strong>  The decoder receives the delete instruction and checks the current state of its incoming streams (see <a href="#delete-validation" class="xref">Section 2.3.2.2</a>).  If more references might arrive, it stores the streams still needed and waits for them to complete.</li>
+<li>
+<strong>Delete acknowledged.</strong>  The decoder has received all QPACK frames which reference the deleted value, and can safely delete the entry.  The decoder SHOULD promptly emit a Delete-Ack instruction on the header management stream.</li>
+<li>
+<strong>Delete completed.</strong>  When the encoder receives a Delete-Ack instruction acknowledging the delete, it no longer counts the size of the deleted entry against the table size and MAY emit insert instructions for the field with a new value.</li>
 </ol>
-<h1 id="rfc.section.2.3"><a href="#rfc.section.2.3">2.3.</a> <a href="#format-of-header-management-stream" id="format-of-header-management-stream">Format of Header Management stream</a></h1>
+<h1 id="rfc.section.2.3">
+<a href="#rfc.section.2.3">2.3.</a> <a href="#format-of-header-management-stream" id="format-of-header-management-stream">Format of Header Management stream</a>
+</h1>
 <p id="rfc.section.2.3.p.1">The header management stream contains a series of QPACK instructions with no message boundaries.  Data on this stream SHOULD be processed as soon as it arrives.</p>
 <p id="rfc.section.2.3.p.2">This section describes the instructions which are possible on the Header Management stream.</p>
-<h1 id="rfc.section.2.3.1"><a href="#rfc.section.2.3.1">2.3.1.</a> <a href="#insert" id="insert">Insert</a></h1>
+<h1 id="rfc.section.2.3.1">
+<a href="#rfc.section.2.3.1">2.3.1.</a> <a href="#insert" id="insert">Insert</a>
+</h1>
 <p id="rfc.section.2.3.1.p.1">An addition to the header table starts with the &#8216;1&#8217; one-bit pattern, followed by the new index of the header represented as an integer with a 7-bit prefix.  This value is always greater than the number of entries in the static table.</p>
-<p id="rfc.section.2.3.1.p.2">If the header field name matches the header field name of an entry stored in the static table or the dynamic table, the header field name can be represented using the index of that entry. In this case, the index of the entry is represented as an integer with an 8-bit prefix (see Section 5.1 of <a href="#RFC7541">[RFC7541]</a>).  This value is always non-zero.</p>
+<p id="rfc.section.2.3.1.p.2">If the header field name matches the header field name of an entry stored in the static table or the dynamic table, the header field name can be represented using the index of that entry. In this case, the index of the entry is represented as an integer with an 8-bit prefix (see Section 5.1 of <a href="#RFC7541" class="xref">[RFC7541]</a>).  This value is always non-zero.</p>
 <pre>
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
@@ -455,7 +490,7 @@ address {
    +-------------------------------+
 </pre>
 <p class="figure">Insert Header Field -- Indexed Name</p>
-<p id="rfc.section.2.3.1.p.3">Otherwise, the header field name is represented as a string literal (see Section 5.2 of <a href="#RFC7541">[RFC7541]</a>). A value 0 is used in place of the 8-bit index, followed by the header field name.</p>
+<p id="rfc.section.2.3.1.p.3">Otherwise, the header field name is represented as a string literal (see Section 5.2 of <a href="#RFC7541" class="xref">[RFC7541]</a>). A value 0 is used in place of the 8-bit index, followed by the header field name.</p>
 <pre>
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
@@ -473,9 +508,11 @@ address {
    +-------------------------------+
 </pre>
 <p class="figure">Insert Header Field -- New Name</p>
-<p id="rfc.section.2.3.1.p.4">Either form of header field name representation is followed by the header field value represented as a string literal (see Section 5.2 of <a href="#RFC7541">[RFC7541]</a>).</p>
+<p id="rfc.section.2.3.1.p.4">Either form of header field name representation is followed by the header field value represented as a string literal (see Section 5.2 of <a href="#RFC7541" class="xref">[RFC7541]</a>).</p>
 <p id="rfc.section.2.3.1.p.5">An encoder MUST NOT attempt to place a value at an index not known to be vacant.  A decoder MUST treat the attempt to insert into an occupied slot as a fatal error.</p>
-<h1 id="rfc.section.2.3.2"><a href="#rfc.section.2.3.2">2.3.2.</a> <a href="#delete" id="delete">Delete</a></h1>
+<h1 id="rfc.section.2.3.2">
+<a href="#rfc.section.2.3.2">2.3.2.</a> <a href="#delete" id="delete">Delete</a>
+</h1>
 <p id="rfc.section.2.3.2.p.1">A deletion from the header table starts with the &#8216;00&#8217; two bit pattern, followed by the index of the affected entry represented as an integer with a 6-bit prefix.  This value is always greater than the number of entries in the static table.</p>
 <p id="rfc.section.2.3.2.p.2">A delete instruction then encodes a series of stream IDs which might have contained references to the entry in question.</p>
 <pre>
@@ -490,7 +527,9 @@ address {
 </pre>
 <p class="figure">Delete Instruction</p>
 <p id="rfc.section.2.3.2.p.3">Both the Non-Trailer List and Trailer List are Stream ID Lists (see below) encoding a list of streams which might have referenced the entry either in non-trailer or trailer blocks.</p>
-<h1 id="rfc.section.2.3.2.1"><a href="#rfc.section.2.3.2.1">2.3.2.1.</a> <a href="#stream-id-list" id="stream-id-list">Stream ID List</a></h1>
+<h1 id="rfc.section.2.3.2.1">
+<a href="#rfc.section.2.3.2.1">2.3.2.1.</a> <a href="#stream-id-list" id="stream-id-list">Stream ID List</a>
+</h1>
 <p id="rfc.section.2.3.2.1.p.1">A Stream ID List encodes a sequence of stream IDs in two parts:  First, a Horizon value indicates the first non-occurrence about which data is maintained.  If data is maintained from the beginning of the connection, the Horizon is zero.  This allows senders to succinctly express both old state which has been discarded and large regions where many or all streams contain references.</p>
 <p id="rfc.section.2.3.2.1.p.2">Following the horizon, a sequence of deltas indicates all streams since the Horizon on which a value has been used.</p>
 <p id="rfc.section.2.3.2.1.p.3">In the simplest case, a Stream ID List might be a horizon value followed by one zero byte.  This indicates an absolute cut-off after which the entry is guaranteed not to be referenced.</p>
@@ -512,29 +551,42 @@ address {
 </pre>
 <p class="figure">Stream ID List</p>
 <p id="rfc.section.2.3.2.1.p.4">The field are as follows:</p>
-<p/>
+<p></p>
 
 <dl>
-  <dt>Horizon:</dt>
-  <dd style="margin-left: 8">The ID of the first stream for which the sender retains state which does not reference the deleted entry in the indicated block</dd>
-  <dt>NumEntries:</dt>
-  <dd style="margin-left: 8">The number of streams greater than the Horizon which might reference the entry and are listed in the remainder of the instruction</dd>
-  <dt>Delta1..N:</dt>
-  <dd style="margin-left: 8">A sequence of streams greater than the Horizon which might reference the entry, encoded as the difference in stream number from the previously-listed stream.  This field is repeated NumEntries times.</dd>
+<dt>Horizon:</dt>
+<dd style="margin-left: 8">The ID of the first stream for which the sender retains state which does not reference the deleted entry in the indicated block</dd>
+<dt>NumEntries:</dt>
+<dd style="margin-left: 8">The number of streams greater than the Horizon which might reference the entry and are listed in the remainder of the instruction</dd>
+<dt>Delta1..N:</dt>
+<dd style="margin-left: 8">A sequence of streams greater than the Horizon which might reference the entry, encoded as the difference in stream number from the previously-listed stream.  This field is repeated NumEntries times.</dd>
 </dl>
-<h1 id="rfc.section.2.3.2.2"><a href="#rfc.section.2.3.2.2">2.3.2.2.</a> <a href="#delete-validation" id="delete-validation">Delete Validation</a></h1>
+<h1 id="rfc.section.2.3.2.2">
+<a href="#rfc.section.2.3.2.2">2.3.2.2.</a> <a href="#delete-validation" id="delete-validation">Delete Validation</a>
+</h1>
 <p id="rfc.section.2.3.2.2.p.1">In order to safely delete an entry, a decoder MUST ensure that all outstanding references have arrived and been processed.  Because no data is available about stream IDs less than the Horizon, a decoder MUST assume that any earlier stream ID might have contained a reference to the value in question.</p>
 <p id="rfc.section.2.3.2.2.p.2">A decoder can ensure all outstanding references have been processed by verifying that the following statements are true:</p>
-<p/>
+<p></p>
 
 <ul>
-  <li>In the Non-Trailer Block, all streams less than the Horizon and all streams explicitly listed are in one of two states: <ul><li>closed</li><li>headers completely processed</li></ul></li>
-  <li>In the Trailer Block, all streams less than the Horizon and all streams explicitly listed are in one of three states: <ul><li>closed</li><li>headers completely processed AND no trailers are expected</li><li>trailers completely processed</li></ul></li>
+<li>In the Non-Trailer Block, all streams less than the Horizon and all streams explicitly listed are in one of two states: <ul>
+<li>closed</li>
+<li>headers completely processed</li>
+</ul>
+</li>
+<li>In the Trailer Block, all streams less than the Horizon and all streams explicitly listed are in one of three states: <ul>
+<li>closed</li>
+<li>headers completely processed AND no trailers are expected</li>
+<li>trailers completely processed</li>
+</ul>
+</li>
 </ul>
 <p id="rfc.section.2.3.2.2.p.4">An implementation MAY omit the &#8220;trailers completely processed&#8221; case, since the stream is expected to close immediately after receipt of the trailers block.</p>
 <p id="rfc.section.2.3.2.2.p.5">If these conditions are not met upon receipt of a Delete instruction, a decoder MUST wait to emit a Delete-Ack instruction until the outstanding streams have reached an appropriate state.</p>
 <p id="rfc.section.2.3.2.2.p.6">Note that a decoder MAY condense the list of specified streams by increasing the Horizon value and discarding those explicitly-listed stream IDs which are less than the new Horizon it has chosen.  This delays delete completion, but reduces the amount of state to be tracked by the decoder without changing the correctness of the requirements above.</p>
-<h1 id="rfc.section.2.3.3"><a href="#rfc.section.2.3.3">2.3.3.</a> <a href="#delete-ack" id="delete-ack">Delete-Ack</a></h1>
+<h1 id="rfc.section.2.3.3">
+<a href="#rfc.section.2.3.3">2.3.3.</a> <a href="#delete-ack" id="delete-ack">Delete-Ack</a>
+</h1>
 <p id="rfc.section.2.3.3.p.1">Confirmation that a delete has completed is expressed by an instruction which starts with the &#8216;01&#8217; two-bit pattern, followed by the index of the affected entry represented as an integer with a 6-bit prefix. This value is always greater than the number of entries in the static table.</p>
 <p id="rfc.section.2.3.3.p.2">Note that unlike all other instructions, this instruction refers to the receiver&#8217;s dynamic table, not the sender&#8217;s.</p>
 <pre>
@@ -544,11 +596,15 @@ address {
    +---+---+-----------------------+
 </pre>
 <p class="figure">Delete-Ack Instruction</p>
-<p id="rfc.section.2.3.3.p.3">This instruction MUST NOT be sent before the conditions described in <a href="#delete-validation">Section 2.3.2.2</a> have been satisfied, and SHOULD be sent as soon as possible once they are.</p>
-<h1 id="rfc.section.2.4"><a href="#rfc.section.2.4">2.4.</a> <a href="#format-of-encoded-headers-on-message-streams" id="format-of-encoded-headers-on-message-streams">Format of Encoded Headers on Message Streams</a></h1>
+<p id="rfc.section.2.3.3.p.3">This instruction MUST NOT be sent before the conditions described in <a href="#delete-validation" class="xref">Section 2.3.2.2</a> have been satisfied, and SHOULD be sent as soon as possible once they are.</p>
+<h1 id="rfc.section.2.4">
+<a href="#rfc.section.2.4">2.4.</a> <a href="#format-of-encoded-headers-on-message-streams" id="format-of-encoded-headers-on-message-streams">Format of Encoded Headers on Message Streams</a>
+</h1>
 <p id="rfc.section.2.4.p.1">Frames which carry HTTP message headers encode them using the following instructions:</p>
-<h1 id="rfc.section.2.4.1"><a href="#rfc.section.2.4.1">2.4.1.</a> <a href="#indexed-header-field-representation" id="indexed-header-field-representation">Indexed Header Field Representation</a></h1>
-<p id="rfc.section.2.4.1.p.1">An indexed header field representation identifies an entry in either the static table or the dynamic table and causes that header field to be added to the decoded header list, as described in Section 3.2 of <a href="#RFC7541">[RFC7541]</a>.</p>
+<h1 id="rfc.section.2.4.1">
+<a href="#rfc.section.2.4.1">2.4.1.</a> <a href="#indexed-header-field-representation" id="indexed-header-field-representation">Indexed Header Field Representation</a>
+</h1>
+<p id="rfc.section.2.4.1.p.1">An indexed header field representation identifies an entry in either the static table or the dynamic table and causes that header field to be added to the decoded header list, as described in Section 3.2 of <a href="#RFC7541" class="xref">[RFC7541]</a>.</p>
 <pre>
   0   1   2   3   4   5   6   7
 +---+---+---+---+---+---+---+---+
@@ -556,12 +612,14 @@ address {
 +---+---------------------------+
 </pre>
 <p class="figure">Indexed Header Field</p>
-<p id="rfc.section.2.4.1.p.2">An indexed header field starts with the &#8216;1&#8217; 1-bit pattern, followed by the index of the matching header field, represented as an integer with a 7-bit prefix (see Section 5.1 of <a href="#RFC7541">[RFC7541]</a>).</p>
+<p id="rfc.section.2.4.1.p.2">An indexed header field starts with the &#8216;1&#8217; 1-bit pattern, followed by the index of the matching header field, represented as an integer with a 7-bit prefix (see Section 5.1 of <a href="#RFC7541" class="xref">[RFC7541]</a>).</p>
 <p id="rfc.section.2.4.1.p.3">The index value of 0 is not used.  It MUST be treated as a decoding error if found in an indexed header field representation.</p>
-<h1 id="rfc.section.2.4.2"><a href="#rfc.section.2.4.2">2.4.2.</a> <a href="#literal-header-field-representation" id="literal-header-field-representation">Literal Header Field Representation</a></h1>
+<h1 id="rfc.section.2.4.2">
+<a href="#rfc.section.2.4.2">2.4.2.</a> <a href="#literal-header-field-representation" id="literal-header-field-representation">Literal Header Field Representation</a>
+</h1>
 <p id="rfc.section.2.4.2.p.1">A literal header field representation starts with the &#8216;0&#8217; 1-bit pattern and causes a header field to be added the decoded header list.</p>
-<p id="rfc.section.2.4.2.p.2">The second bit, &#8216;N&#8217;, indicates whether an intermediary is permitted to add this header to the dynamic header table on subsequent hops. When the &#8216;N&#8217; bit is set, the encoded header MUST always be encoded with this specific literal representation. In particular, when a peer sends a header field that it received represented as a literal header field with the &#8216;N&#8217; bit set, it MUST use the same representation to forward this header field.  This bit is intended for protecting header field values that are not to be put at risk by compressing them (see Section 7.1 of <a href="#RFC7541">[RFC7541]</a> for more details).</p>
-<p id="rfc.section.2.4.2.p.3">If the header field name matches the header field name of an entry stored in the static table or the dynamic table, the header field name can be represented using the index of that entry. In this case, the index of the entry is represented as an integer with a 6-bit prefix (see Section 5.1 of <a href="#RFC7541">[RFC7541]</a>).  This value is always non-zero.</p>
+<p id="rfc.section.2.4.2.p.2">The second bit, &#8216;N&#8217;, indicates whether an intermediary is permitted to add this header to the dynamic header table on subsequent hops. When the &#8216;N&#8217; bit is set, the encoded header MUST always be encoded with this specific literal representation. In particular, when a peer sends a header field that it received represented as a literal header field with the &#8216;N&#8217; bit set, it MUST use the same representation to forward this header field.  This bit is intended for protecting header field values that are not to be put at risk by compressing them (see Section 7.1 of <a href="#RFC7541" class="xref">[RFC7541]</a> for more details).</p>
+<p id="rfc.section.2.4.2.p.3">If the header field name matches the header field name of an entry stored in the static table or the dynamic table, the header field name can be represented using the index of that entry. In this case, the index of the entry is represented as an integer with a 6-bit prefix (see Section 5.1 of <a href="#RFC7541" class="xref">[RFC7541]</a>).  This value is always non-zero.</p>
 <pre>
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
@@ -573,7 +631,7 @@ address {
    +-------------------------------+
 </pre>
 <p class="figure">Literal Header Field -- Indexed Name</p>
-<p id="rfc.section.2.4.2.p.4">Otherwise, the header field name is represented as a string literal (see Section 5.2 of <a href="#RFC7541">[RFC7541]</a>). A value 0 is used in place of the 6-bit index, followed by the header field name.</p>
+<p id="rfc.section.2.4.2.p.4">Otherwise, the header field name is represented as a string literal (see Section 5.2 of <a href="#RFC7541" class="xref">[RFC7541]</a>). A value 0 is used in place of the 6-bit index, followed by the header field name.</p>
 <pre>
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
@@ -590,75 +648,77 @@ address {
 </pre>
 <p class="figure">Literal Header Field -- Literal Name</p>
 <p id="rfc.section.2.4.2.p.5">Either form of header field name representation is followed by the header field value represented as a string literal (see Section 5.2).</p>
-<h1 id="rfc.section.3"><a href="#rfc.section.3">3.</a> <a href="#use-in-httpquic" id="use-in-httpquic">Use in HTTP/QUIC</a></h1>
-<p id="rfc.section.3.p.1">HTTP/QUIC <a href="#I-D.ietf-quic-http">[I-D.ietf-quic-http]</a> currently retains the HPACK encoder/decoder from HTTP/2, using a Sequence number to enforce ordering. Using QPACK instead would entail the following changes:</p>
-<p/>
+<h1 id="rfc.section.3">
+<a href="#rfc.section.3">3.</a> <a href="#use-in-httpquic" id="use-in-httpquic">Use in HTTP/QUIC</a>
+</h1>
+<p id="rfc.section.3.p.1">HTTP/QUIC <a href="#I-D.ietf-quic-http" class="xref">[I-D.ietf-quic-http]</a> currently retains the HPACK encoder/decoder from HTTP/2, using a Sequence number to enforce ordering. Using QPACK instead would entail the following changes:</p>
+<p></p>
 
 <ul>
-  <li>The Sequence field is removed from HEADERS frames (Section 5.2.2) and PUSH_PROMISE frames (Section 5.2.6).</li>
-  <li>Header Block Fragments consist of QPACK data instead of HPACK data.</li>
-  <li>An additional control stream is reserved for header table updates. Alternately, this could be carried by HEADERS frames on the connection control stream.</li>
+<li>The Sequence field is removed from HEADERS frames (Section 5.2.2) and PUSH_PROMISE frames (Section 5.2.6).</li>
+<li>Header Block Fragments consist of QPACK data instead of HPACK data.</li>
+<li>An additional control stream is reserved for header table updates. Alternately, this could be carried by HEADERS frames on the connection control stream.</li>
 </ul>
 <p id="rfc.section.3.p.3">A HEADERS or PUSH_PROMISE frame MAY contain an arbitrary number of QPACK instructions, but QPACK instructions SHOULD NOT cross a boundary between successive HEADERS frames.  A partial HEADERS or PUSH_PROMISE frame MAY be processed upon arrival and the resulting partial header set emitted or buffered according to implementation requirements.</p>
-<h1 id="rfc.section.4"><a href="#rfc.section.4">4.</a> <a href="#performance-considerations" id="performance-considerations">Performance Considerations</a></h1>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#performance-considerations" id="performance-considerations">Performance Considerations</a>
+</h1>
 <p id="rfc.section.4.p.1">While QPACK is designed to minimize head-of-line blocking between streams on header decoding, there are some situations in which lost or delayed packets can still impact the performance of header compression.</p>
 <p id="rfc.section.4.p.2">References to indexed entries will block if the frame containing the entry definition is lost or delayed. Encoders MAY choose to trade off compression efficiency and avoid blocking by using literal instructions rather than referencing the dynamic table until the insertion is believed to be complete.</p>
 <p id="rfc.section.4.p.3">Since it is possible to insert header values without emitting them on a stream, an encoder MAY proactively insert header values which it believes will be needed on future requests.</p>
 <p id="rfc.section.4.p.4">Delayed frames which prevent deletes from completing can prevent the encoder from adding any new entries due to the maximum table size. This does not block the encoder from continuing to make requests, but could sharply limit compression performance. Encoders would be well-served to delete entries in advance of encountering the table maximum. Decoders SHOULD be prompt about emitting Delete-Ack instructions to enable the encoder to recover the table space.</p>
-<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
+<h1 id="rfc.section.5">
+<a href="#rfc.section.5">5.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
+</h1>
 <p id="rfc.section.5.p.1">A malicious encoder might attempt to consume a large amount of space on the decoder by opening the maximum number of streams, adding entries to the table, then  sending delete instructions enumerating many streams in a Stream ID List.</p>
 <p id="rfc.section.5.p.2">To guard against such attacks, a decoder SHOULD bound its state tracking by generalizing the list of streams to be tracked.  This is most easily achieved by advancing the Horizon to a later value and discarding explicit Stream IDs to track, but can also be accomplished by eliding explicit streams in ranges.  This does not cause any loss of consistency for deletes, but could delay completion and reduce performance if done aggressively.</p>
-<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
+<h1 id="rfc.section.6">
+<a href="#rfc.section.6">6.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
+</h1>
 <p id="rfc.section.6.p.1">This document currently makes no request of IANA, and might not need to.</p>
-<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#ack" id="ack">Acknowledgements</a></h1>
-<p id="rfc.section.7.p.1">This draft draws heavily on the text of <a href="#RFC7541">[RFC7541]</a>. The indirect input of those authors is gratefully acknowledged, as well as ideas gleefully stolen from:</p>
-<p/>
+<h1 id="rfc.section.7">
+<a href="#rfc.section.7">7.</a> <a href="#ack" id="ack">Acknowledgements</a>
+</h1>
+<p id="rfc.section.7.p.1">This draft draws heavily on the text of <a href="#RFC7541" class="xref">[RFC7541]</a>. The indirect input of those authors is gratefully acknowledged, as well as ideas gleefully stolen from:</p>
+<p></p>
 
 <ul>
-  <li>Jana Iyengar</li>
-  <li>Patrick McManus</li>
-  <li>Martin Thomson</li>
-  <li>Charles &#8216;Buck&#8217; Krasic</li>
-  <li>Kyle Rose</li>
+<li>Jana Iyengar</li>
+<li>Patrick McManus</li>
+<li>Martin Thomson</li>
+<li>Charles &#8216;Buck&#8217; Krasic</li>
+<li>Kyle Rose</li>
 </ul>
-<h1 id="rfc.references"><a href="#rfc.references">8.</a> Normative References</h1>
-<table>
-  <tbody>
-    <tr>
-      <td class="reference">
-        <b id="I-D.ietf-quic-http">[I-D.ietf-quic-http]</b>
-      </td>
-      <td class="top"><a>Bishop, M.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-quic-http-01">Hypertext Transfer Protocol (HTTP) over QUIC</a>", Internet-Draft draft-ietf-quic-http-01, January 2017.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="I-D.ietf-quic-transport">[I-D.ietf-quic-transport]</b>
-      </td>
-      <td class="top"><a>Iyengar, J.</a> and <a>M. Thomson</a>, "<a href="http://tools.ietf.org/html/draft-ietf-quic-transport-01">QUIC: A UDP-Based Multiplexed and Secure Transport</a>", Internet-Draft draft-ietf-quic-transport-01, January 2017.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC2119">[RFC2119]</b>
-      </td>
-      <td class="top"><a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC7540">[RFC7540]</b>
-      </td>
-      <td class="top"><a>Belshe, M.</a>, <a>Peon, R.</a> and <a>M. Thomson</a>, "<a href="http://tools.ietf.org/html/rfc7540">Hypertext Transfer Protocol Version 2 (HTTP/2)</a>", RFC 7540, DOI 10.17487/RFC7540, May 2015.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC7541">[RFC7541]</b>
-      </td>
-      <td class="top"><a>Peon, R.</a> and <a>H. Ruellan</a>, "<a href="http://tools.ietf.org/html/rfc7541">HPACK: Header Compression for HTTP/2</a>", RFC 7541, DOI 10.17487/RFC7541, May 2015.</td>
-    </tr>
-  </tbody>
-</table>
-<h1 id="rfc.authors">
-  <a href="#rfc.authors">Author's Address</a>
-</h1>
+<h1 id="rfc.references">
+<a href="#rfc.references">8.</a> Normative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="I-D.ietf-quic-http">[I-D.ietf-quic-http]</b></td>
+<td class="top">
+<a>Bishop, M.</a>, "<a href="http://tools.ietf.org/html/draft-ietf-quic-http-04">Hypertext Transfer Protocol (HTTP) over QUIC</a>", Internet-Draft draft-ietf-quic-http-04, June 2017.</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.ietf-quic-transport">[I-D.ietf-quic-transport]</b></td>
+<td class="top">
+<a>Iyengar, J.</a> and <a>M. Thomson</a>, "<a href="http://tools.ietf.org/html/draft-ietf-quic-transport-04">QUIC: A UDP-Based Multiplexed and Secure Transport</a>", Internet-Draft draft-ietf-quic-transport-04, June 2017.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC2119">[RFC2119]</b></td>
+<td class="top">
+<a>Bradner, S.</a>, "<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7540">[RFC7540]</b></td>
+<td class="top">
+<a>Belshe, M.</a>, <a>Peon, R.</a> and <a>M. Thomson</a>, "<a href="http://tools.ietf.org/html/rfc7540">Hypertext Transfer Protocol Version 2 (HTTP/2)</a>", RFC 7540, DOI 10.17487/RFC7540, May 2015.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7541">[RFC7541]</b></td>
+<td class="top">
+<a>Peon, R.</a> and <a>H. Ruellan</a>, "<a href="http://tools.ietf.org/html/rfc7541">HPACK: Header Compression for HTTP/2</a>", RFC 7541, DOI 10.17487/RFC7541, May 2015.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.authors"><a href="#rfc.authors">Author's Address</a></h1>
 <div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">

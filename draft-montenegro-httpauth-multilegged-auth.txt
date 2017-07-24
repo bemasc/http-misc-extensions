@@ -5,7 +5,7 @@
 Hypertext Transfer Protocol Authentication                 G. Montenegro
 Internet-Draft                                                 M. Bishop
 Intended status: Informational                                 Microsoft
-Expires: August 13, 2017                                February 9, 2017
+Expires: January 25, 2018                                  July 24, 2017
 
 
             Multilegged Authentication for HTTP Multiplexing
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 13, 2017.
+   This Internet-Draft will expire on January 25, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Montenegro & Bishop      Expires August 13, 2017                [Page 1]
+Montenegro & Bishop     Expires January 25, 2018                [Page 1]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Montenegro & Bishop      Expires August 13, 2017                [Page 2]
+Montenegro & Bishop     Expires January 25, 2018                [Page 2]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
    that subsequent requests can be correlated because they occur in
@@ -165,9 +165,9 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
 
 
-Montenegro & Bishop      Expires August 13, 2017                [Page 3]
+Montenegro & Bishop     Expires January 25, 2018                [Page 3]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
 2.  Multilegged Authentication in HTTP/1.X
@@ -221,9 +221,9 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
 
 
-Montenegro & Bishop      Expires August 13, 2017                [Page 4]
+Montenegro & Bishop     Expires January 25, 2018                [Page 4]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
    On a multiplexed protocol, the request/response pairs 0/1, 2/3, and
@@ -277,9 +277,9 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
 
 
-Montenegro & Bishop      Expires August 13, 2017                [Page 5]
+Montenegro & Bishop     Expires January 25, 2018                [Page 5]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
    1.  Server sends HTTP 401 response because the resource requested
@@ -333,9 +333,9 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
 
 
-Montenegro & Bishop      Expires August 13, 2017                [Page 6]
+Montenegro & Bishop     Expires January 25, 2018                [Page 6]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
    If connection-based multilegged authentication succeeds a second time
@@ -389,9 +389,9 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
 
 
-Montenegro & Bishop      Expires August 13, 2017                [Page 7]
+Montenegro & Bishop     Expires January 25, 2018                [Page 7]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
 3.3.  The Persistent-Auth Response Header
@@ -445,9 +445,9 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
 
 
-Montenegro & Bishop      Expires August 13, 2017                [Page 8]
+Montenegro & Bishop     Expires January 25, 2018                [Page 8]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
    When the proxy speaks only HTTP/1.1, no multiplexing will occur and
@@ -501,9 +501,9 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
 
 
-Montenegro & Bishop      Expires August 13, 2017                [Page 9]
+Montenegro & Bishop     Expires January 25, 2018                [Page 9]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
 5.  Authentication and multi-host sessions
@@ -553,13 +553,13 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
    HTTP header fields are registered within the "Message Headers"
    registry maintained at http://www.iana.org/assignments/message-
-   headers/ .
+   headers/.
 
 
 
-Montenegro & Bishop      Expires August 13, 2017               [Page 10]
+Montenegro & Bishop     Expires January 25, 2018               [Page 10]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
    This document defines the following HTTP header fields in the
@@ -603,7 +603,7 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
    [I-D.ietf-quic-http]
               Bishop, M., "Hypertext Transfer Protocol (HTTP) over
-              QUIC", draft-ietf-quic-http-01 (work in progress), January
+              QUIC", draft-ietf-quic-http-04 (work in progress), June
               2017.
 
    [RFC2743]  Linn, J., "Generic Security Service Application Program
@@ -613,9 +613,9 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
 
 
-Montenegro & Bishop      Expires August 13, 2017               [Page 11]
+Montenegro & Bishop     Expires January 25, 2018               [Page 11]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
    [RFC3864]  Klyne, G., Nottingham, M., and J. Mogul, "Registration
@@ -669,9 +669,9 @@ Authors' Addresses
 
 
 
-Montenegro & Bishop      Expires August 13, 2017               [Page 12]
+Montenegro & Bishop     Expires January 25, 2018               [Page 12]
 
-Internet-Draft            HTTP Multilegged Auth            February 2017
+Internet-Draft            HTTP Multilegged Auth                July 2017
 
 
    Mike Bishop
@@ -725,4 +725,4 @@ Internet-Draft            HTTP Multilegged Auth            February 2017
 
 
 
-Montenegro & Bishop      Expires August 13, 2017               [Page 13]
+Montenegro & Bishop     Expires January 25, 2018               [Page 13]
