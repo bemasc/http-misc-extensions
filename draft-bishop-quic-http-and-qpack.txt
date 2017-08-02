@@ -4,8 +4,8 @@
 
 QUIC Working Group                                             M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                           July 24, 2017
-Expires: January 25, 2018
+Intended status: Standards Track                          August 2, 2017
+Expires: February 3, 2018
 
 
                     Header Compression for HTTP/QUIC
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 25, 2018.
+   This Internet-Draft will expire on February 3, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                  Expires January 25, 2018                [Page 1]
+Bishop                  Expires February 3, 2018                [Page 1]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                  Expires January 25, 2018                [Page 2]
+Bishop                  Expires February 3, 2018                [Page 2]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
    size, which MUST be less than the maximum permitted by the
@@ -165,9 +165,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018                [Page 3]
+Bishop                  Expires February 3, 2018                [Page 3]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
 2.2.  Changes to Static and Dynamic Tables
@@ -221,9 +221,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018                [Page 4]
+Bishop                  Expires February 3, 2018                [Page 4]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
 2.2.2.  Dynamic Table State Synchronization
@@ -277,9 +277,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018                [Page 5]
+Bishop                  Expires February 3, 2018                [Page 5]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
        size of the deleted entry against the table size and MAY emit
@@ -333,9 +333,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018                [Page 6]
+Bishop                  Expires February 3, 2018                [Page 6]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
         0   1   2   3   4   5   6   7
@@ -389,9 +389,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018                [Page 7]
+Bishop                  Expires February 3, 2018                [Page 7]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
    Both the Non-Trailer List and Trailer List are Stream ID Lists (see
@@ -445,9 +445,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018                [Page 8]
+Bishop                  Expires February 3, 2018                [Page 8]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
    Delta1..N:  A sequence of streams greater than the Horizon which
@@ -501,9 +501,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018                [Page 9]
+Bishop                  Expires February 3, 2018                [Page 9]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
 2.3.3.  Delete-Ack
@@ -557,9 +557,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018               [Page 10]
+Bishop                  Expires February 3, 2018               [Page 10]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
 2.4.2.  Literal Header Field Representation
@@ -613,9 +613,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018               [Page 11]
+Bishop                  Expires February 3, 2018               [Page 11]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
         0   1   2   3   4   5   6   7
@@ -669,9 +669,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018               [Page 12]
+Bishop                  Expires February 3, 2018               [Page 12]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
    References to indexed entries will block if the frame containing the
@@ -725,9 +725,9 @@ Internet-Draft                    QPACK                        July 2017
 
 
 
-Bishop                  Expires January 25, 2018               [Page 13]
+Bishop                  Expires February 3, 2018               [Page 13]
 
-Internet-Draft                    QPACK                        July 2017
+Internet-Draft                    QPACK                      August 2017
 
 
    o  Martin Thomson
@@ -781,4 +781,4 @@ Author's Address
 
 
 
-Bishop                  Expires January 25, 2018               [Page 14]
+Bishop                  Expires February 3, 2018               [Page 14]

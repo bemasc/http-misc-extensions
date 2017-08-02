@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                           July 24, 2017
-Expires: January 25, 2018
+Intended status: Standards Track                          August 2, 2017
+Expires: February 3, 2018
 
 
                        ALTSVC Frame in HTTP/QUIC
@@ -33,7 +33,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 25, 2018.
+   This Internet-Draft will expire on February 3, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                  Expires January 25, 2018                [Page 1]
+Bishop                  Expires February 3, 2018                [Page 1]
 
-Internet-Draft             ALTSVC in HTTP/QUIC                 July 2017
+Internet-Draft             ALTSVC in HTTP/QUIC               August 2017
 
 
 Table of Contents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                  Expires January 25, 2018                [Page 2]
+Bishop                  Expires February 3, 2018                [Page 2]
 
-Internet-Draft             ALTSVC in HTTP/QUIC                 July 2017
+Internet-Draft             ALTSVC in HTTP/QUIC               August 2017
 
 
 4.  IANA Considerations
@@ -165,4 +165,4 @@ Author's Address
 
 
 
-Bishop                  Expires January 25, 2018                [Page 3]
+Bishop                  Expires February 3, 2018                [Page 3]

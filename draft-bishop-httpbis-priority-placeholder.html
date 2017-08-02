@@ -279,10 +279,15 @@ address {
 <link href="#rfc.section.1.1" rel="Chapter" title="1.1 Notational Conventions">
 <link href="#rfc.section.2" rel="Chapter" title="2 The Priority Placeholder Extension">
 <link href="#rfc.section.2.1" rel="Chapter" title="2.1 Priority Placeholder Setting">
-<link href="#rfc.section.2.2" rel="Chapter" title="2.2 PRIORITY Frame Modifications">
+<link href="#rfc.section.2.1.1" rel="Chapter" title="2.1.1 Mid-session updates">
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Frame Modifications">
+<link href="#rfc.section.2.2.1" rel="Chapter" title="2.2.1 Existing Frame Types">
+<link href="#rfc.section.2.2.2" rel="Chapter" title="2.2.2 PLACEHOLDER_PRIORITY Frame">
 <link href="#rfc.section.2.3" rel="Chapter" title="2.3 Priority Management Logic">
 <link href="#rfc.section.3" rel="Chapter" title="3 Security Considerations">
 <link href="#rfc.section.4" rel="Chapter" title="4 IANA Considerations">
+<link href="#rfc.section.4.1" rel="Chapter" title="4.1 SETTINGS_PLACEHOLDERS Setting">
+<link href="#rfc.section.4.2" rel="Chapter" title="4.2 PLACEHOLDER_PRIORITY Frame">
 <link href="#rfc.references" rel="Chapter" title="5 References">
 <link href="#rfc.references.1" rel="Chapter" title="5.1 Normative References">
 <link href="#rfc.references.2" rel="Chapter" title="5.2 Informative References">
@@ -293,8 +298,8 @@ address {
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Bishop, M." />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-httpbis-priority-placeholders-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-7-24" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-httpbis-priority-placeholder-latest" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-8-2" />
   <meta name="dct.abstract" content="" />
   <meta name="description" content="" />
 
@@ -315,10 +320,10 @@ address {
 </tr>
 <tr>
 <td class="left">Intended status: Standards Track</td>
-<td class="right">July 24, 2017</td>
+<td class="right">August 2, 2017</td>
 </tr>
 <tr>
-<td class="left">Expires: January 25, 2018</td>
+<td class="left">Expires: February 3, 2018</td>
 <td class="right"></td>
 </tr>
 
@@ -327,7 +332,7 @@ address {
   </table>
 
   <p class="title">Priority Placeholders in HTTP/2<br />
-  <span class="filename">draft-bishop-httpbis-priority-placeholders-latest</span></p>
+  <span class="filename">draft-bishop-httpbis-priority-placeholder-latest</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p><a href="#RFC7540" class="xref">[RFC7540]</a> defines HTTP/2, including a method for communicating priorities.  Some implementations have begun using closed streams as placeholders when constructing their priority tree, but this has unbounded state commitments and interacts poorly with HTTP/QUIC (<a href="#I-D.ietf-quic-http" class="xref">[I-D.ietf-quic-http]</a>).  This document proposes an extension to the HTTP/2 priority scheme for both protocols.</p>
@@ -335,7 +340,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 25, 2018.</p>
+<p>This Internet-Draft will expire on February 3, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (http://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -353,15 +358,25 @@ address {
 </li>
 <ul><li>2.1.   <a href="#rfc.section.2.1">Priority Placeholder Setting</a>
 </li>
-<li>2.2.   <a href="#rfc.section.2.2">PRIORITY Frame Modifications</a>
+<ul><li>2.1.1.   <a href="#rfc.section.2.1.1">Mid-session updates</a>
 </li>
-<li>2.3.   <a href="#rfc.section.2.3">Priority Management Logic</a>
+</ul><li>2.2.   <a href="#rfc.section.2.2">Frame Modifications</a>
+</li>
+<ul><li>2.2.1.   <a href="#rfc.section.2.2.1">Existing Frame Types</a>
+</li>
+<li>2.2.2.   <a href="#rfc.section.2.2.2">PLACEHOLDER_PRIORITY Frame</a>
+</li>
+</ul><li>2.3.   <a href="#rfc.section.2.3">Priority Management Logic</a>
 </li>
 </ul><li>3.   <a href="#rfc.section.3">Security Considerations</a>
 </li>
 <li>4.   <a href="#rfc.section.4">IANA Considerations</a>
 </li>
-<li>5.   <a href="#rfc.references">References</a>
+<ul><li>4.1.   <a href="#rfc.section.4.1">SETTINGS_PLACEHOLDERS Setting</a>
+</li>
+<li>4.2.   <a href="#rfc.section.4.2">PLACEHOLDER_PRIORITY Frame</a>
+</li>
+</ul><li>5.   <a href="#rfc.references">References</a>
 </li>
 <ul><li>5.1.   <a href="#rfc.references.1">Normative References</a>
 </li>
@@ -385,24 +400,137 @@ address {
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#the-priority-placeholder-extension" id="the-priority-placeholder-extension">The Priority Placeholder Extension</a>
 </h1>
-<p id="rfc.section.2.p.1">This extension consists of an additional setting <a href="#setting" class="xref">Section 2.1</a>, new flags on the PRIORITY frame <a href="#frame" class="xref">Section 2.2</a>, and modified state management logic on the server <a href="#logic" class="xref">Section 2.3</a>.</p>
+<p id="rfc.section.2.p.1">This extension consists of an additional setting <a href="#setting" class="xref">Section 2.1</a>, changes to the set of HTTP/2 frames <a href="#frames" class="xref">Section 2.2</a>, and modified state management logic on the server <a href="#logic" class="xref">Section 2.3</a>.</p>
 <h1 id="rfc.section.2.1">
 <a href="#rfc.section.2.1">2.1.</a> <a href="#setting" id="setting">Priority Placeholder Setting</a>
 </h1>
-<h1 id="rfc.section.2.2">
-<a href="#rfc.section.2.2">2.2.</a> <a href="#frame" id="frame">PRIORITY Frame Modifications</a>
+<p id="rfc.section.2.1.p.1">An HTTP/2 peer that supports Priority Placeholders indicates this using the HTTP/2 <samp>SETTINGS_PLACEHOLDERS</samp> (0xSETTING-TBD) setting.</p>
+<p id="rfc.section.2.1.p.2">When a value for the <samp>SETTINGS_PLACEHOLDERS</samp> setting is not set, this indicates that the peer does not support the extension, and other protocol elements in this document MUST NOT be used.  A client that supports this extension SHOULD set this value to 0 (0x00).</p>
+<p id="rfc.section.2.1.p.3">A server which supports this extension MUST set this value to a non-zero number indicating the number of placeholders it is willing to make available to the client, which MUST be at most 2^31-1.  Clients MUST NOT use the protocol elements in this document unless the server has indicated support by setting a non-zero value.</p>
+<h1 id="rfc.section.2.1.1">
+<a href="#rfc.section.2.1.1">2.1.1.</a> <a href="#mid-session-updates" id="mid-session-updates">Mid-session updates</a>
 </h1>
+<p id="rfc.section.2.1.1.p.1">HTTP/2 permits settings to change during the course of a connection.  This setting can be freely increased at any time without consequence, and servers SHOULD NOT reduce the value during the lifetime of a connection.</p>
+<p id="rfc.section.2.1.1.p.2">If a client receives a reduction in the number of permitted placeholders, it MUST assume that all placeholders over the new limit have been pruned from the tree and SHOULD immediately issue PRIORITY and PLACEHOLDER_PRIORITY frames as necessary to rebuild the priority tree as desired.  Once the SETTINGS frame has been acknowledged, servers should treat the excess placeholders as inactive and prune them following the same logic in <a href="#logic" class="xref">Section 2.3</a>.</p>
+<h1 id="rfc.section.2.2">
+<a href="#rfc.section.2.2">2.2.</a> <a href="#frames" id="frames">Frame Modifications</a>
+</h1>
+<h1 id="rfc.section.2.2.1">
+<a href="#rfc.section.2.2.1">2.2.1.</a> <a href="#existing-frame-types" id="existing-frame-types">Existing Frame Types</a>
+</h1>
+<p id="rfc.section.2.2.1.p.1">When client and server have opted in to this extension, the HTTP/2 PRIORITY frame and HEADERS frame contain one additional flag:</p>
+<p></p>
+
+<dl>
+<dt>DEPENDENT_ON_PLACEHOLDER (0x2):</dt>
+<dd style="margin-left: 8">When set, bit 1 indicates that the value in the Stream Dependency field is a Placeholder ID rather than a Stream ID.</dd>
+</dl>
+<p id="rfc.section.2.2.1.p.3">In HEADERS, this flag MUST NOT be set if the PRIORITY flag is not set.</p>
+<h1 id="rfc.section.2.2.2">
+<a href="#rfc.section.2.2.2">2.2.2.</a> <a href="#placeholderpriority-frame" id="placeholderpriority-frame">PLACEHOLDER_PRIORITY Frame</a>
+</h1>
+<p id="rfc.section.2.2.2.p.1">The PLACEHOLDER_PRIORITY (type=0xFRAME-TBD) frame specifies the sender-advised priority of a placeholder. It MUST be sent only on Stream 0.  The semantics of the Stream Dependency, Weight, and E flag are the same as in the HTTP/2 PRIORITY frame.</p>
+<p id="rfc.section.2.2.2.p.2">The flags defined are:</p>
+<p></p>
+
+<dl>
+<dt>E (0x01):</dt>
+<dd style="margin-left: 8">Indicates that the stream dependency is exclusive (see <a href="#RFC7540" class="xref">[RFC7540]</a>, Section 5.3).</dd>
+<dt>DEPENDENT_ON_PLACEHOLDER (0x2):</dt>
+<dd style="margin-left: 8">When set, bit 1 indicates that the value in the Stream Dependency field is a Placeholder ID rather than a Stream ID.</dd>
+</dl>
+<div id="rfc.figure.1"></div>
+<div id="fig-priority"></div>
+<pre>
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |0|                    Placeholder ID (31)                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |0|                  Stream Dependency (31)                     |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |   Weight (8)  |
+   +-+-+-+-+-+-+-+-+
+</pre>
+<p class="figure">Figure 1: PRIORITY frame payload</p>
+<p id="rfc.section.2.2.2.p.4">The PLACEHOLDER_PRIORITY frame payload has the following fields:</p>
+<p></p>
+
+<dl>
+<dt>Prioritized Stream:</dt>
+<dd style="margin-left: 8">A 31-bit stream identifier for the request stream whose priority is being updated.</dd>
+<dt>Stream Dependency:</dt>
+<dd style="margin-left: 8">A 31-bit stream or placeholder identifier for the request stream that this stream depends on (see <a href="#RFC7540" class="xref">[RFC7540]</a>, Section 5.3).</dd>
+<dt>Weight:</dt>
+<dd style="margin-left: 8">An unsigned 8-bit integer representing a priority weight for the stream (see <a href="#RFC7540" class="xref">[RFC7540]</a>, Section 5.3). Add one to the value to obtain a weight between 1 and 256.</dd>
+</dl>
+<p id="rfc.section.2.2.2.p.6">A PLACEHOLDER_PRIORITY frame MUST have a payload length of nine octets.  A PLACEHOLDER_PRIORITY frame of any other length MUST be treated as a connection error of type PROTOCOL_ERROR if the sender has advertised support for this extension, and ignored otherwise.</p>
 <h1 id="rfc.section.2.3">
 <a href="#rfc.section.2.3">2.3.</a> <a href="#logic" id="logic">Priority Management Logic</a>
 </h1>
+<p id="rfc.section.2.3.p.1">This extension provides a mechanism for servers to limit how many additional IDs which do not refer to an active request will be used to maintain priority state.  Because the server commits to maintain these inactive IDs, clients can use them with confidence that the server will not have discarded the state without warning.</p>
+<p id="rfc.section.2.3.p.2">In exchange, the server knows it can aggressively prune inactive regions from the priority tree, because placeholders will be used to &#8220;root&#8221; any persistent structure of the tree which the client cares about retaining.  For prioritization purposes, a node in the tree is considered &#8220;inactive&#8221; when the corresponding stream has been closed for at least two round-trip times (using any reasonable estimate available on the server).  This delay helps mitigate race conditions where the server has pruned a node the client believed was still active and used as a Stream Dependency.</p>
+<p id="rfc.section.2.3.p.3">Specifically, the server MAY at any time:</p>
+<p></p>
+
+<ul>
+<li>Identify and discard branches of the tree containing only inactive nodes (i.e. a node with only other inactive nodes as descendants, along with those descendants)</li>
+<li>Identify and condense interior regions of the tree containing only inactive nodes, allocating weight appropriately</li>
+</ul>
+<div id="rfc.figure.2"></div>
+<div id="fig-pruning"></div>
+<pre>
+    x                x                 x
+    |                |                 |
+    P                P                 P
+   / \               |                 |
+  I   I     ==&gt;      I      ==&gt;        A
+     / \             |                 |
+    A   I            A                 A
+    |                |
+    A                A
+</pre>
+<p class="figure">Figure 2: Example of Priority Tree Pruning</p>
+<p id="rfc.section.2.3.p.5">In the example in <a href="#fig-pruning" class="xref">Figure 2</a>, <samp>P</samp> represents a Placeholder, <samp>A</samp> represents an active node, and <samp>I</samp> represents an inactive node.  In the first step, the server discards two inactive branches (each a single node).  In the second step, the server condenses an interior inactive node.  Note that these transformations will result in no change in the resources allocated to a particular active stream.</p>
+<p id="rfc.section.2.3.p.6">Clients MUST assume the server is actively performing such pruning and MUST NOT declare a dependency on a stream it knows to have been closed.</p>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#security" id="security">Security Considerations</a>
 </h1>
-<p id="rfc.section.3.p.1">TBD.</p>
+<p id="rfc.section.3.p.1">This extension is believed to improve security relative to <a href="#RFC7540" class="xref">[RFC7540]</a>, as it helps to constrain a previously unbounded state commitment.</p>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#iana" id="iana">IANA Considerations</a>
 </h1>
-<p id="rfc.section.4.p.1">TBD.</p>
+<p id="rfc.section.4.p.1">This document registers one new frame type and one new setting.</p>
+<h1 id="rfc.section.4.1">
+<a href="#rfc.section.4.1">4.1.</a> <a href="#settingsplaceholders-setting" id="settingsplaceholders-setting">SETTINGS_PLACEHOLDERS Setting</a>
+</h1>
+<p id="rfc.section.4.1.p.1">The <samp>SETTINGS_PLACEHOLDERS</samp> setting is registered in the &#8220;HTTP/2 Settings&#8221; registry established in <a href="#RFC7540" class="xref">[RFC7540]</a>.</p>
+<p></p>
+
+<dl>
+<dt>Name:</dt>
+<dd style="margin-left: 8">SETTINGS_PLACEHOLDERS</dd>
+<dt>Code:</dt>
+<dd style="margin-left: 8">0xSETTING-TBD</dd>
+<dt>Initial Value:</dt>
+<dd style="margin-left: 8">not set</dd>
+<dt>Specification:</dt>
+<dd style="margin-left: 8">This document.</dd>
+</dl>
+<h1 id="rfc.section.4.2">
+<a href="#rfc.section.4.2">4.2.</a> <a href="#placeholderpriority-frame-1" id="placeholderpriority-frame-1">PLACEHOLDER_PRIORITY Frame</a>
+</h1>
+<p id="rfc.section.4.2.p.1">The <samp>PLACEHOLDER_PRIORITY</samp> frame is registered in the &#8220;HTTP/2 Frames&#8221; registry established in <a href="#RFC7540" class="xref">[RFC7540]</a>.</p>
+<p></p>
+
+<dl>
+<dt>Name:</dt>
+<dd style="margin-left: 8">PLACEHOLDER_PRIORITY</dd>
+<dt>Code:</dt>
+<dd style="margin-left: 8">0xFRAME-TBD</dd>
+<dt>Specification:</dt>
+<dd style="margin-left: 8">This document.</dd>
+</dl>
 <h1 id="rfc.references">
 <a href="#rfc.references">5.</a> References</h1>
 <h1 id="rfc.references.1">
