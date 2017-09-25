@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Informational                           August 14, 2017
-Expires: February 15, 2018
+Intended status: Informational                        September 25, 2017
+Expires: March 29, 2018
 
 
                    HTTP/2 Extended SETTINGS Extension
@@ -32,14 +32,14 @@ Status of This Memo
    Internet-Drafts are working documents of the Internet Engineering
    Task Force (IETF).  Note that other groups may also distribute
    working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at http://datatracker.ietf.org/drafts/current/.
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
 
    Internet-Drafts are draft documents valid for a maximum of six months
    and may be updated, replaced, or obsoleted by other documents at any
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 15, 2018.
+   This Internet-Draft will expire on March 29, 2018.
 
 Copyright Notice
 
@@ -48,14 +48,14 @@ Copyright Notice
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
-   (http://trustee.ietf.org/license-info) in effect on the date of
+   (https://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
 
 
 
-Bishop                  Expires February 15, 2018               [Page 1]
+Bishop                   Expires March 29, 2018                 [Page 1]
 
-Internet-Draft              EXTENDED_SETTINGS                August 2017
+Internet-Draft              EXTENDED_SETTINGS             September 2017
 
 
    carefully, as they describe your rights and restrictions with respect
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                  Expires February 15, 2018               [Page 2]
+Bishop                   Expires March 29, 2018                 [Page 2]
 
-Internet-Draft              EXTENDED_SETTINGS                August 2017
+Internet-Draft              EXTENDED_SETTINGS             September 2017
 
 
    Each extension could define its own SETTINGS-equivalent frame to
@@ -165,9 +165,9 @@ Internet-Draft              EXTENDED_SETTINGS                August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 3]
+Bishop                   Expires March 29, 2018                 [Page 3]
 
-Internet-Draft              EXTENDED_SETTINGS                August 2017
+Internet-Draft              EXTENDED_SETTINGS             September 2017
 
 
    Each parameter in an EXTENDED_SETTINGS frame replaces any existing
@@ -221,9 +221,9 @@ Internet-Draft              EXTENDED_SETTINGS                August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 4]
+Bishop                   Expires March 29, 2018                 [Page 4]
 
-Internet-Draft              EXTENDED_SETTINGS                August 2017
+Internet-Draft              EXTENDED_SETTINGS             September 2017
 
 
    An implementation MUST ignore the contents for any EXTENDED_SETTINGS
@@ -277,9 +277,9 @@ Internet-Draft              EXTENDED_SETTINGS                August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 5]
+Bishop                   Expires March 29, 2018                 [Page 5]
 
-Internet-Draft              EXTENDED_SETTINGS                August 2017
+Internet-Draft              EXTENDED_SETTINGS             September 2017
 
 
    details about how the contents can be parsed and stored, and SHOULD
@@ -333,9 +333,9 @@ Internet-Draft              EXTENDED_SETTINGS                August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 6]
+Bishop                   Expires March 29, 2018                 [Page 6]
 
-Internet-Draft              EXTENDED_SETTINGS                August 2017
+Internet-Draft              EXTENDED_SETTINGS             September 2017
 
 
 6.3.  New HTTP/2 Frames
@@ -360,12 +360,12 @@ Internet-Draft              EXTENDED_SETTINGS                August 2017
    [RFC5226]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
               IANA Considerations Section in RFCs", RFC 5226,
               DOI 10.17487/RFC5226, May 2008,
-              <http://www.rfc-editor.org/info/rfc5226>.
+              <https://www.rfc-editor.org/info/rfc5226>.
 
    [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
               Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
               DOI 10.17487/RFC7540, May 2015,
-              <http://www.rfc-editor.org/info/rfc7540>.
+              <https://www.rfc-editor.org/info/rfc7540>.
 
 7.2.  Informative References
 
@@ -377,8 +377,8 @@ Internet-Draft              EXTENDED_SETTINGS                August 2017
 
    [I-D.ietf-httpbis-origin-frame]
               Nottingham, M. and E. Nygren, "The ORIGIN HTTP/2 Frame",
-              draft-ietf-httpbis-origin-frame-03 (work in progress),
-              April 2017.
+              draft-ietf-httpbis-origin-frame-04 (work in progress),
+              August 2017.
 
    [MS-HTTP2E]
               "Hypertext Transfer Protocol Version 2 (HTTP/2)
@@ -389,14 +389,14 @@ Internet-Draft              EXTENDED_SETTINGS                August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 7]
+Bishop                   Expires March 29, 2018                 [Page 7]
 
-Internet-Draft              EXTENDED_SETTINGS                August 2017
+Internet-Draft              EXTENDED_SETTINGS             September 2017
 
 
    [RFC7838]  Nottingham, M., McManus, P., and J. Reschke, "HTTP
               Alternative Services", RFC 7838, DOI 10.17487/RFC7838,
-              April 2016, <http://www.rfc-editor.org/info/rfc7838>.
+              April 2016, <https://www.rfc-editor.org/info/rfc7838>.
 
 Author's Address
 
@@ -445,4 +445,4 @@ Author's Address
 
 
 
-Bishop                  Expires February 15, 2018               [Page 8]
+Bishop                   Expires March 29, 2018                 [Page 8]

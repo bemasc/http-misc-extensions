@@ -4,8 +4,8 @@
 
 QUIC Working Group                                             M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                         August 14, 2017
-Expires: February 15, 2018
+Intended status: Standards Track                      September 25, 2017
+Expires: March 29, 2018
 
 
                     Header Compression for HTTP/QUIC
@@ -28,14 +28,14 @@ Status of This Memo
    Internet-Drafts are working documents of the Internet Engineering
    Task Force (IETF).  Note that other groups may also distribute
    working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at http://datatracker.ietf.org/drafts/current/.
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
 
    Internet-Drafts are draft documents valid for a maximum of six months
    and may be updated, replaced, or obsoleted by other documents at any
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 15, 2018.
+   This Internet-Draft will expire on March 29, 2018.
 
 Copyright Notice
 
@@ -44,7 +44,7 @@ Copyright Notice
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
-   (http://trustee.ietf.org/license-info) in effect on the date of
+   (https://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                  Expires February 15, 2018               [Page 1]
+Bishop                   Expires March 29, 2018                 [Page 1]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -78,12 +78,14 @@ Table of Contents
        2.4.1.  Indexed Header Field Representation . . . . . . . . .  10
        2.4.2.  Literal Header Field Representation . . . . . . . . .  11
    3.  Use in HTTP/QUIC  . . . . . . . . . . . . . . . . . . . . . .  12
-   4.  Performance Considerations  . . . . . . . . . . . . . . . . .  12
-   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
-   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  13
-   7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  13
-   8.  Normative References  . . . . . . . . . . . . . . . . . . . .  14
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  14
+   4.  Implementation trade-offs . . . . . . . . . . . . . . . . . .  12
+     4.1.  Compression Efficiency versus Blocking Avoidance  . . . .  13
+     4.2.  Timely Delete Completion versus State Commitment  . . . .  13
+   5.  Security Considerations . . . . . . . . . . . . . . . . . . .  14
+   6.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
+   7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
+   8.  Normative References  . . . . . . . . . . . . . . . . . . . .  15
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  15
 
 1.  Introduction
 
@@ -104,16 +106,15 @@ Table of Contents
 
    Any solution to the above will almost certainly fall afoul of the
    memory constraints the decompressor imposes.  The automatic eviction
-   of entries is done based on the compressor's declared dynamic table
 
 
 
-
-Bishop                  Expires February 15, 2018               [Page 2]
+Bishop                   Expires March 29, 2018                 [Page 2]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
+   of entries is done based on the compressor's declared dynamic table
    size, which MUST be less than the maximum permitted by the
    decompressor (and relayed using an HTTP/2 SETTINGS value).
 
@@ -160,15 +161,17 @@ Internet-Draft                    QPACK                      August 2017
    header table state, no state is lost if these instructions are
    discarded due to a stream reset.  Because the updates to the header
    table supply their own order controls (the delete logic), they can be
+
+
+
+
+Bishop                   Expires March 29, 2018                 [Page 3]
+
+Internet-Draft                    QPACK                   September 2017
+
+
    processed in any order and therefore delivered as messages using
    unidirectional QUIC streams.
-
-
-
-Bishop                  Expires February 15, 2018               [Page 3]
-
-Internet-Draft                    QPACK                      August 2017
-
 
 2.2.  Changes to Static and Dynamic Tables
 
@@ -218,12 +221,9 @@ Internet-Draft                    QPACK                      August 2017
 
 
 
-
-
-
-Bishop                  Expires February 15, 2018               [Page 4]
+Bishop                   Expires March 29, 2018                 [Page 4]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
 2.2.2.  Dynamic Table State Synchronization
@@ -277,9 +277,9 @@ Internet-Draft                    QPACK                      August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 5]
+Bishop                   Expires March 29, 2018                 [Page 5]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
    4.  *Delete completed.* When the encoder receives a Delete-Ack
@@ -333,9 +333,9 @@ Internet-Draft                    QPACK                      August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 6]
+Bishop                   Expires March 29, 2018                 [Page 6]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
         0   1   2   3   4   5   6   7
@@ -389,9 +389,9 @@ Internet-Draft                    QPACK                      August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 7]
+Bishop                   Expires March 29, 2018                 [Page 7]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
    Both the Non-Trailer List and Trailer List are Stream ID Lists (see
@@ -445,9 +445,9 @@ Internet-Draft                    QPACK                      August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 8]
+Bishop                   Expires March 29, 2018                 [Page 8]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
    NumEntries:  The number of streams greater than the Horizon which
@@ -501,9 +501,9 @@ Internet-Draft                    QPACK                      August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 9]
+Bishop                   Expires March 29, 2018                 [Page 9]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
    tracked by the decoder without changing the correctness of the
@@ -557,9 +557,9 @@ Internet-Draft                    QPACK                      August 2017
 
 
 
-Bishop                  Expires February 15, 2018              [Page 10]
+Bishop                   Expires March 29, 2018                [Page 10]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
    The index value of 0 is not used.  It MUST be treated as a decoding
@@ -613,9 +613,9 @@ Internet-Draft                    QPACK                      August 2017
 
 
 
-Bishop                  Expires February 15, 2018              [Page 11]
+Bishop                   Expires March 29, 2018                [Page 11]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
 
         0   1   2   3   4   5   6   7
@@ -660,19 +660,21 @@ Internet-Draft                    QPACK                      August 2017
    partial header set emitted or buffered according to implementation
    requirements.
 
-4.  Performance Considerations
+4.  Implementation trade-offs
 
-   While QPACK is designed to minimize head-of-line blocking between
-   streams on header decoding, there are some situations in which lost
-   or delayed packets can still impact the performance of header
-   compression.
+   This document specifies a means for the encoder to express the
+   choices it made while encoding, but intentionally does not mandate
+   what those choices should be.  In this section, potential areas for
+   implementation tuning are explored.
 
 
 
-Bishop                  Expires February 15, 2018              [Page 12]
+Bishop                   Expires March 29, 2018                [Page 12]
 
-Internet-Draft                    QPACK                      August 2017
+Internet-Draft                    QPACK                   September 2017
 
+
+4.1.  Compression Efficiency versus Blocking Avoidance
 
    References to indexed entries will block if the frame containing the
    entry definition is lost or delayed.  Encoders MAY choose to trade
@@ -680,11 +682,37 @@ Internet-Draft                    QPACK                      August 2017
    instructions rather than referencing the dynamic table until the
    insertion is believed to be complete.
 
-   Since it is possible to insert header values without emitting them on
-   a stream, an encoder MAY proactively insert header values which it
-   believes will be needed on future requests.
+   The most efficient compression algorithm will reference a table entry
+   whenever it exists in the table, but risks blocking when subject to
+   packet loss or reordering.  The most conservative algorithm will
+   always emit literals to guarantee that no blocking will ever occur.
+   Most implementations will choose a balance between these two
+   extremes.
 
-   Delayed frames which prevent deletes from completing can prevent the
+   Better efficiency while being similarly conservative can be achieved
+   by permitting references to table entries only once these entries are
+   confirmed to be present in the table.  More optimization can be
+   achieved when the reference is known to be in the same packet as the
+   definition.
+
+   Increases in efficiency can be achieved by assuming greater risk of
+   blocking - implementations might choose a particular balance, or
+   adjust their aggressiveness based on observed network
+   characteristics.
+
+   Since it is possible to insert header values without emitting them on
+   a stream, an encoder MAY also proactively insert header values which
+   it believes will be needed on future requests, at the cost of reduced
+   compression efficiency for incorrect predictions.
+
+   The ability to split updates to the header table into discrete
+   messages reduces the possibility for head-of-line blocking within the
+   table update streams.  Implementations SHOULD limit the size of table
+   update messages to avoid head-of-line blocking within these messages.
+
+4.2.  Timely Delete Completion versus State Commitment
+
+   Anything which prevent deletes from completing can prevent the
    encoder from adding any new entries due to the maximum table size.
    This does not block the encoder from continuing to make requests, but
    could sharply limit compression performance.  Encoders would be well-
@@ -692,10 +720,35 @@ Internet-Draft                    QPACK                      August 2017
    maximum.  Decoders SHOULD be prompt about emitting Delete-Ack
    instructions to enable the encoder to recover the table space.
 
-   The ability to split updates to the header table into discrete
-   messages reduces the possibility for head-of-line blocking within the
-   table update streams.  Implementations SHOULD limit the size of table
-   update messages to avoid head-of-line blocking within these messages.
+   The encoder can enable deletes to complete more quickly by
+   maintaining a complete history of which streams have referenced any
+
+
+
+Bishop                   Expires March 29, 2018                [Page 13]
+
+Internet-Draft                    QPACK                   September 2017
+
+
+   given table entry and providing this list as part of the delete
+   instruction.  The encoder can also choose to maintain less state by
+   advancing the Horizon value (see Section 2.3.2.1).  This value
+   indicates the starting point of the provided history, and can be
+   advanced arbitrarily far to discard history.  This comes at the
+   potential cost of a decoder taking longer to acknowledge that entries
+   have been removed, but this cost is zero if all previous requests are
+   known to have completed.  Therefore, this history can be pruned
+   without performance impact by removing entries where all data is
+   known to have been successfully delivered and interpreted, if some
+   transport coordination is employed.
+
+   An encoder which chooses to maintain no history would simply supply a
+   Horizon value of a stream which has not yet been used, meaning that
+   deletes cannot complete until all currently-active requests have
+   completed.
+
+   A decoder can perform the same trade-off in the event the encoder's
+   supplied history is more state than it wishes to track.
 
 5.  Security Considerations
 
@@ -723,14 +776,15 @@ Internet-Draft                    QPACK                      August 2017
    input of those authors is gratefully acknowledged, as well as ideas
    gleefully stolen from:
 
-
-
-Bishop                  Expires February 15, 2018              [Page 13]
-
-Internet-Draft                    QPACK                      August 2017
-
-
    o  Jana Iyengar
+
+
+
+
+Bishop                   Expires March 29, 2018                [Page 14]
+
+Internet-Draft                    QPACK                   September 2017
+
 
    o  Patrick McManus
 
@@ -744,27 +798,27 @@ Internet-Draft                    QPACK                      August 2017
 
    [I-D.ietf-quic-http]
               Bishop, M., "Hypertext Transfer Protocol (HTTP) over
-              QUIC", draft-ietf-quic-http-04 (work in progress), June
-              2017.
+              QUIC", draft-ietf-quic-http-06 (work in progress),
+              September 2017.
 
    [I-D.ietf-quic-transport]
               Iyengar, J. and M. Thomson, "QUIC: A UDP-Based Multiplexed
-              and Secure Transport", draft-ietf-quic-transport-04 (work
-              in progress), June 2017.
+              and Secure Transport", draft-ietf-quic-transport-06 (work
+              in progress), September 2017.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
+              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
               Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
               DOI 10.17487/RFC7540, May 2015,
-              <http://www.rfc-editor.org/info/rfc7540>.
+              <https://www.rfc-editor.org/info/rfc7540>.
 
    [RFC7541]  Peon, R. and H. Ruellan, "HPACK: Header Compression for
               HTTP/2", RFC 7541, DOI 10.17487/RFC7541, May 2015,
-              <http://www.rfc-editor.org/info/rfc7541>.
+              <https://www.rfc-editor.org/info/rfc7541>.
 
 Author's Address
 
@@ -781,4 +835,6 @@ Author's Address
 
 
 
-Bishop                  Expires February 15, 2018              [Page 14]
+
+
+Bishop                   Expires March 29, 2018                [Page 15]

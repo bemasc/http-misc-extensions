@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                         August 14, 2017
-Expires: February 15, 2018
+Intended status: Standards Track                      September 25, 2017
+Expires: March 29, 2018
 
 
                     Priority Placeholders in HTTP/2
@@ -28,14 +28,14 @@ Status of This Memo
    Internet-Drafts are working documents of the Internet Engineering
    Task Force (IETF).  Note that other groups may also distribute
    working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at http://datatracker.ietf.org/drafts/current/.
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
 
    Internet-Drafts are draft documents valid for a maximum of six months
    and may be updated, replaced, or obsoleted by other documents at any
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 15, 2018.
+   This Internet-Draft will expire on March 29, 2018.
 
 Copyright Notice
 
@@ -44,7 +44,7 @@ Copyright Notice
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents
-   (http://trustee.ietf.org/license-info) in effect on the date of
+   (https://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                  Expires February 15, 2018               [Page 1]
+Bishop                   Expires March 29, 2018                 [Page 1]
 
-Internet-Draft           Placeholders in HTTP/2              August 2017
+Internet-Draft           Placeholders in HTTP/2           September 2017
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                  Expires February 15, 2018               [Page 2]
+Bishop                   Expires March 29, 2018                 [Page 2]
 
-Internet-Draft           Placeholders in HTTP/2              August 2017
+Internet-Draft           Placeholders in HTTP/2           September 2017
 
 
 1.1.  Notational Conventions
@@ -165,9 +165,9 @@ Internet-Draft           Placeholders in HTTP/2              August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 3]
+Bishop                   Expires March 29, 2018                 [Page 3]
 
-Internet-Draft           Placeholders in HTTP/2              August 2017
+Internet-Draft           Placeholders in HTTP/2           September 2017
 
 
 2.2.1.  Existing Frame Types
@@ -221,9 +221,9 @@ Internet-Draft           Placeholders in HTTP/2              August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 4]
+Bishop                   Expires March 29, 2018                 [Page 4]
 
-Internet-Draft           Placeholders in HTTP/2              August 2017
+Internet-Draft           Placeholders in HTTP/2           September 2017
 
 
    Weight:  An unsigned 8-bit integer representing a priority weight for
@@ -277,9 +277,9 @@ Internet-Draft           Placeholders in HTTP/2              August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 5]
+Bishop                   Expires March 29, 2018                 [Page 5]
 
-Internet-Draft           Placeholders in HTTP/2              August 2017
+Internet-Draft           Placeholders in HTTP/2           September 2017
 
 
    In the example in Figure 2, "P" represents a Placeholder, "A"
@@ -333,9 +333,9 @@ Internet-Draft           Placeholders in HTTP/2              August 2017
 
 
 
-Bishop                  Expires February 15, 2018               [Page 6]
+Bishop                   Expires March 29, 2018                 [Page 6]
 
-Internet-Draft           Placeholders in HTTP/2              August 2017
+Internet-Draft           Placeholders in HTTP/2           September 2017
 
 
 5.  References
@@ -345,19 +345,19 @@ Internet-Draft           Placeholders in HTTP/2              August 2017
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
-              <http://www.rfc-editor.org/info/rfc2119>.
+              <https://www.rfc-editor.org/info/rfc2119>.
 
    [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
               Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
               DOI 10.17487/RFC7540, May 2015,
-              <http://www.rfc-editor.org/info/rfc7540>.
+              <https://www.rfc-editor.org/info/rfc7540>.
 
 5.2.  Informative References
 
    [I-D.ietf-quic-http]
               Bishop, M., "Hypertext Transfer Protocol (HTTP) over
-              QUIC", draft-ietf-quic-http-04 (work in progress), June
-              2017.
+              QUIC", draft-ietf-quic-http-06 (work in progress),
+              September 2017.
 
 Author's Address
 
@@ -389,4 +389,4 @@ Author's Address
 
 
 
-Bishop                  Expires February 15, 2018               [Page 7]
+Bishop                   Expires March 29, 2018                 [Page 7]
