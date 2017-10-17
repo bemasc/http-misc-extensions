@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                 Microsoft
-Intended status: Standards Track                      September 25, 2017
-Expires: March 29, 2018
+Intended status: Standards Track                        October 17, 2017
+Expires: April 20, 2018
 
 
                        ALTSVC Frame in HTTP/QUIC
@@ -33,7 +33,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 29, 2018.
+   This Internet-Draft will expire on April 20, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                   Expires March 29, 2018                 [Page 1]
+Bishop                   Expires April 20, 2018                 [Page 1]
 
-Internet-Draft             ALTSVC in HTTP/QUIC            September 2017
+Internet-Draft             ALTSVC in HTTP/QUIC              October 2017
 
 
 Table of Contents
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                   Expires March 29, 2018                 [Page 2]
+Bishop                   Expires April 20, 2018                 [Page 2]
 
-Internet-Draft             ALTSVC in HTTP/QUIC            September 2017
+Internet-Draft             ALTSVC in HTTP/QUIC              October 2017
 
 
 4.  IANA Considerations
@@ -131,8 +131,8 @@ Internet-Draft             ALTSVC in HTTP/QUIC            September 2017
 
    [I-D.ietf-quic-http]
               Bishop, M., "Hypertext Transfer Protocol (HTTP) over
-              QUIC", draft-ietf-quic-http-06 (work in progress),
-              September 2017.
+              QUIC", draft-ietf-quic-http-07 (work in progress), October
+              2017.
 
    [RFC7838]  Nottingham, M., McManus, P., and J. Reschke, "HTTP
               Alternative Services", RFC 7838, DOI 10.17487/RFC7838,
@@ -165,4 +165,4 @@ Author's Address
 
 
 
-Bishop                   Expires March 29, 2018                 [Page 3]
+Bishop                   Expires April 20, 2018                 [Page 3]
