@@ -3,9 +3,9 @@
 
 
 HTTPbis                                                        M. Bishop
-Internet-Draft                                                 Microsoft
-Intended status: Standards Track                        October 17, 2017
-Expires: April 20, 2018
+Internet-Draft                                                    Akamai
+Intended status: Standards Track                        November 7, 2017
+Expires: May 11, 2018
 
 
                        ALTSVC Frame in HTTP/QUIC
@@ -33,7 +33,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 20, 2018.
+   This Internet-Draft will expire on May 11, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 1]
+Bishop                    Expires May 11, 2018                  [Page 1]
 
-Internet-Draft             ALTSVC in HTTP/QUIC              October 2017
+Internet-Draft             ALTSVC in HTTP/QUIC             November 2017
 
 
 Table of Contents
@@ -67,6 +67,7 @@ Table of Contents
    5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   3
      5.1.  Normative References  . . . . . . . . . . . . . . . . . .   3
      5.2.  Informative References  . . . . . . . . . . . . . . . . .   3
+   Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .   3
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   3
 
 1.  Introduction
@@ -108,10 +109,9 @@ Table of Contents
 
 
 
-
-Bishop                   Expires April 20, 2018                 [Page 2]
+Bishop                    Expires May 11, 2018                  [Page 2]
 
-Internet-Draft             ALTSVC in HTTP/QUIC              October 2017
+Internet-Draft             ALTSVC in HTTP/QUIC             November 2017
 
 
 4.  IANA Considerations
@@ -145,14 +145,17 @@ Internet-Draft             ALTSVC in HTTP/QUIC              October 2017
               DOI 10.17487/RFC7540, May 2015,
               <https://www.rfc-editor.org/info/rfc7540>.
 
+Appendix A.  Acknowledgements
+
+   A substantial portion of Mike's work on this draft was supported by
+   Microsoft during his employment there.
+
 Author's Address
 
    Mike Bishop
-   Microsoft
+   Akamai
 
-   Email: michael.bishop@microsoft.com
-
-
+   Email: mbishop@evequefou.be
 
 
 
@@ -162,7 +165,4 @@ Author's Address
 
 
 
-
-
-
-Bishop                   Expires April 20, 2018                 [Page 3]
+Bishop                    Expires May 11, 2018                  [Page 3]

@@ -3,9 +3,9 @@
 
 
 QUIC Working Group                                             M. Bishop
-Internet-Draft                                                 Microsoft
-Intended status: Standards Track                        October 17, 2017
-Expires: April 20, 2018
+Internet-Draft                                                    Akamai
+Intended status: Standards Track                        November 7, 2017
+Expires: May 11, 2018
 
 
                     Header Compression for HTTP/QUIC
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 20, 2018.
+   This Internet-Draft will expire on May 11, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 1]
+Bishop                    Expires May 11, 2018                  [Page 1]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 2]
+Bishop                    Expires May 11, 2018                  [Page 2]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    of entries is done based on the compressor's declared dynamic table
@@ -165,9 +165,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 3]
+Bishop                    Expires May 11, 2018                  [Page 3]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    processed in any order and therefore delivered as messages using
@@ -221,9 +221,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 4]
+Bishop                    Expires May 11, 2018                  [Page 4]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    maximum permitted.  This can imply that no additions are permitted
@@ -277,9 +277,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 5]
+Bishop                    Expires May 11, 2018                  [Page 5]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
        entry.  The decoder SHOULD promptly emit a Delete-Ack instruction
@@ -333,9 +333,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 6]
+Bishop                    Expires May 11, 2018                  [Page 6]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    Otherwise, the header field name is represented as a string literal
@@ -389,9 +389,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 7]
+Bishop                    Expires May 11, 2018                  [Page 7]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    Both the Non-Trailer List and Trailer List are Stream ID Lists (see
@@ -445,9 +445,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 8]
+Bishop                    Expires May 11, 2018                  [Page 8]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    NumEntries:  The number of streams greater than the Horizon which
@@ -501,9 +501,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                 [Page 9]
+Bishop                    Expires May 11, 2018                  [Page 9]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    tracked by the decoder without changing the correctness of the
@@ -557,9 +557,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                [Page 10]
+Bishop                    Expires May 11, 2018                 [Page 10]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    The index value of 0 is not used.  It MUST be treated as a decoding
@@ -613,9 +613,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                [Page 11]
+Bishop                    Expires May 11, 2018                 [Page 11]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
         0   1   2   3   4   5   6   7
@@ -669,9 +669,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                [Page 12]
+Bishop                    Expires May 11, 2018                 [Page 12]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    what those choices should be.  In this section, potential areas for
@@ -725,9 +725,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                [Page 13]
+Bishop                    Expires May 11, 2018                 [Page 13]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    The encoder can enable deletes to complete more quickly by
@@ -781,9 +781,9 @@ Internet-Draft                    QPACK                     October 2017
 
 
 
-Bishop                   Expires April 20, 2018                [Page 14]
+Bishop                    Expires May 11, 2018                 [Page 14]
 
-Internet-Draft                    QPACK                     October 2017
+Internet-Draft                    QPACK                    November 2017
 
 
    o  Jana Iyengar
@@ -795,6 +795,9 @@ Internet-Draft                    QPACK                     October 2017
    o  Charles 'Buck' Krasic
 
    o  Kyle Rose
+
+   A substantial portion of Mike's work on this draft was supported by
+   Microsoft during his employment there.
 
 8.  Normative References
 
@@ -825,16 +828,13 @@ Internet-Draft                    QPACK                     October 2017
 Author's Address
 
    Mike Bishop
-   Microsoft
+   Akamai
 
-   Email: michael.bishop@microsoft.com
-
-
+   Email: mbishop@evequefou.be
 
 
 
 
 
 
-
-Bishop                   Expires April 20, 2018                [Page 15]
+Bishop                    Expires May 11, 2018                 [Page 15]
