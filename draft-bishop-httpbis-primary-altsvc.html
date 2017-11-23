@@ -398,7 +398,7 @@ address {
 sni = uri-host
 </pre>
 <p><samp>uri-host</samp> is defined as <samp>host</samp> in Section 3.2.2 of <a href="#RFC3986" class="xref">[RFC3986]</a>.</p>
-<p id="rfc.section.2.p.4">When processing such an alternative, clients SHOULD present the hostname given in the <samp>sni</samp> parameter in the SNI extension during the TLS handshake.  The client MAY choose not to validate this certificate for authenticity according to <a href="#RFC2818" class="xref">[RFC2818]</a>, but MUST NOT make requests to the origin corresponding to this certificate unless the certificate has been successfully validated.</p>
+<p id="rfc.section.2.p.4">When processing such an alternative, clients SHOULD present the hostname given in the <samp>sni</samp> parameter in the SNI extension during the TLS handshake.  The client MAY choose not to validate the certificate in the handshake for authenticity according to <a href="#RFC2818" class="xref">[RFC2818]</a>, but MUST NOT make requests to any origin corresponding to this certificate unless the certificate has been successfully validated.</p>
 <p id="rfc.section.2.p.5">Immediately upon connecting, the client SHOULD send a <samp>CERTIFICATE_REQUEST</samp> frame including an SNI extension indicating the origin which published the alternative service.  If no corresponding <samp>CERTIFICATE</samp> frame is presented by the server after a reasonable timeout, or if the server&#8217;s SETTINGS frame does not include the <samp>SETTINGS_HTTP_CERT_AUTH</samp> setting, the client MUST consider the alternative connection to have failed.</p>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
