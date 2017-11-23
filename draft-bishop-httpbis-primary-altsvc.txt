@@ -8,7 +8,7 @@ Intended status: Standards Track                       November 23, 2017
 Expires: May 27, 2018
 
 
-                    The "Primary" Alt-Svc Parameter
+                      The "SNI" Alt-Svc Parameter
                draft-bishop-httpbis-primary-altsvc-latest
 
 Abstract
@@ -55,7 +55,7 @@ Copyright Notice
 
 Bishop                    Expires May 27, 2018                  [Page 1]
 
-Internet-Draft               Primary Alt-Svc               November 2017
+Internet-Draft                 SNI Alt-Svc                 November 2017
 
 
    to this document.  Code Components extracted from this document must
@@ -68,12 +68,12 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
      1.1.  Usage . . . . . . . . . . . . . . . . . . . . . . . . . .   2
      1.2.  Notational Conventions  . . . . . . . . . . . . . . . . .   3
-   2.  The "primary" Alt-Svc Extension . . . . . . . . . . . . . . .   3
+   2.  The "sni" Alt-Svc Extension . . . . . . . . . . . . . . . . .   3
    3.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
    4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
-   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   4
-     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   4
-     5.2.  Informative References  . . . . . . . . . . . . . . . . .   5
+   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
+     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
+     5.2.  Informative References  . . . . . . . . . . . . . . . . .   6
      5.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
    Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .   6
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   6
@@ -93,9 +93,9 @@ Table of Contents
    [TLS13], the server is not afforded such privacy considerations.
 
    [SNIEncryption] discusses some solutions in Section 3, HTTP Co-
-   Tenancy Fronting, but notes both discoverability and security issues
-   with that approach.  This document provides a mechanism to address
-   both limitations.
+   Tenancy Fronting, but notes both discoverability and server
+   authentication issues with that approach.  This document provides a
+   mechanism to address both limitations.
 
 1.1.  Usage
 
@@ -111,7 +111,7 @@ Table of Contents
 
 Bishop                    Expires May 27, 2018                  [Page 2]
 
-Internet-Draft               Primary Alt-Svc               November 2017
+Internet-Draft                 SNI Alt-Svc                 November 2017
 
 
    is under control of and valid for the whole origin ... established
@@ -138,38 +138,44 @@ Internet-Draft               Primary Alt-Svc               November 2017
    14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
+   The key words "MUST (BUT WE KNOW YOU WON'T)", "SHOULD CONSIDER",
+   "REALLY SHOULD NOT", "OUGHT TO", "WOULD PROBABLY", "MAY WISH TO",
+   "COULD", "POSSIBLE", and "MIGHT" in this document are to be
+   interpreted as described in [RFC6919].
+
    Field definitions are given in Augmented Backus-Naur Form (ABNF), as
    defined in [RFC5234].
 
-2.  The "primary" Alt-Svc Extension
+2.  The "sni" Alt-Svc Extension
 
    When an origin wishes to nominate a "fronting server", it includes
-   the "primary" parameter in its alternative service entry.
+   the "sni" parameter in its alternative service entry.
 
    Syntax:
 
-   primary = uri-host
+   sni = uri-host
 
    "uri-host" is defined as "host" in Section 3.2.2 of [RFC3986].
 
    When processing such an alternative, clients SHOULD present the
-   hostname given in the "primary" parameter in the SNI extension during
-   the TLS handshake.  The client MAY validate this certificate for
-   authenticity according to [RFC2818], but MUST NOT make requests to
-   the origin corresponding to this certificate if the certificate has
-   not been successfully validated.
+   hostname given in the "sni" parameter in the SNI extension during the
+   TLS handshake.  The client MAY choose not to validate this
+   certificate for authenticity according to [RFC2818], but MUST NOT
 
-   Immediately upon connecting, the client SHOULD send a
-   "CERTIFICATE_REQUEST" frame including an SNI extension indicating the
-   origin which published the alternative service.  If no corresponding
 
 
 
 Bishop                    Expires May 27, 2018                  [Page 3]
 
-Internet-Draft               Primary Alt-Svc               November 2017
+Internet-Draft                 SNI Alt-Svc                 November 2017
 
 
+   make requests to the origin corresponding to this certificate unless
+   the certificate has been successfully validated.
+
+   Immediately upon connecting, the client SHOULD send a
+   "CERTIFICATE_REQUEST" frame including an SNI extension indicating the
+   origin which published the alternative service.  If no corresponding
    "CERTIFICATE" frame is presented by the server after a reasonable
    timeout, or if the server's SETTINGS frame does not include the
    "SETTINGS_HTTP_CERT_AUTH" setting, the client MUST consider the
@@ -178,9 +184,9 @@ Internet-Draft               Primary Alt-Svc               November 2017
 3.  Security Considerations
 
    [AltSvc] permits clients to ignore unrecognized parameters.  As a
-   result, servers publishing records with the "primary" parameter
-   cannot be assured that clients will not include their origin in the
-   SNI header when connecting to the nominated alternative.
+   result, servers publishing records with the "sni" parameter cannot be
+   assured that clients will not include their origin in the SNI header
+   when connecting to the nominated alternative.
 
    If, for security reasons, an origin wishes its identity never to be
    disclosed when the alternative is being used, an alternative
@@ -195,6 +201,14 @@ Internet-Draft               Primary Alt-Svc               November 2017
    retrieved confidentially, such as via DNS in combination with
    [RFC7858] or [DoH].
 
+   However, servers which publish Alt-Svc records over unencrypted
+   channels (HTTP connections without TLS) or channels without client
+   authorization (DNS, or publicly accessible HTTP resources) enable
+   active observers to build a map of fronting servers by collecting
+   Alt-Svc advertisements.  Servers SHOULD CONSIDER this trade-off in
+   deciding when and how to make Alt-Svc records available to
+   unauthenticated parties.
+
 4.  IANA Considerations
 
    The "Hypertext Transfer Protocol (HTTP) Alt-Svc Parameter Registry"
@@ -204,7 +218,15 @@ Internet-Draft               Primary Alt-Svc               November 2017
 
    This document registers the following parameter:
 
-   Name:  "primary"
+
+
+
+Bishop                    Expires May 27, 2018                  [Page 4]
+
+Internet-Draft                 SNI Alt-Svc                 November 2017
+
+
+   Name:  "sni"
 
    Specification:  This document
 
@@ -215,16 +237,6 @@ Internet-Draft               Primary Alt-Svc               November 2017
    [AltSvc]   Nottingham, M., McManus, P., and J. Reschke, "HTTP
               Alternative Services", RFC 7838, DOI 10.17487/RFC7838,
               April 2016, <https://www.rfc-editor.org/info/rfc7838>.
-
-
-
-
-
-
-Bishop                    Expires May 27, 2018                  [Page 4]
-
-Internet-Draft               Primary Alt-Svc               November 2017
-
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -245,6 +257,11 @@ Internet-Draft               Primary Alt-Svc               November 2017
               DOI 10.17487/RFC5234, January 2008,
               <https://www.rfc-editor.org/info/rfc5234>.
 
+   [RFC6919]  Barnes, R., Kent, S., and E. Rescorla, "Further Key Words
+              for Use in RFCs to Indicate Requirement Levels", RFC 6919,
+              DOI 10.17487/RFC6919, April 2013,
+              <https://www.rfc-editor.org/info/rfc6919>.
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
@@ -254,6 +271,16 @@ Internet-Draft               Primary Alt-Svc               November 2017
               Certificate Authentication in HTTP/2", draft-bishop-
               httpbis-http2-additional-certs-05 (work in progress),
               October 2017.
+
+
+
+
+
+
+Bishop                    Expires May 27, 2018                  [Page 5]
+
+Internet-Draft                 SNI Alt-Svc                 November 2017
+
 
    [SNI]      Eastlake 3rd, D., "Transport Layer Security (TLS)
               Extensions: Extension Definitions", RFC 6066,
@@ -274,13 +301,6 @@ Internet-Draft               Primary Alt-Svc               November 2017
    [DoH]      Hoffman, P. and P. McManus, "DNS Queries over HTTPS",
               draft-ietf-doh-dns-over-https-01 (work in progress),
               October 2017.
-
-
-
-Bishop                    Expires May 27, 2018                  [Page 5]
-
-Internet-Draft               Primary Alt-Svc               November 2017
-
 
    [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
               and P. Hoffman, "Specification for DNS over Transport
@@ -306,26 +326,6 @@ Author's Address
    Akamai
 
    Email: mbishop@evequefou.be
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
