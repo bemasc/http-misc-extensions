@@ -4,8 +4,8 @@
 
 QUIC Working Group                                             M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                       November 22, 2017
-Expires: May 26, 2018
+Intended status: Standards Track                       November 23, 2017
+Expires: May 27, 2018
 
 
                     Header Compression for HTTP/QUIC
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 26, 2018.
+   This Internet-Draft will expire on May 27, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                    Expires May 26, 2018                  [Page 1]
+Bishop                    Expires May 27, 2018                  [Page 1]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bishop                    Expires May 26, 2018                  [Page 2]
+Bishop                    Expires May 27, 2018                  [Page 2]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -165,7 +165,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                  [Page 3]
+Bishop                    Expires May 27, 2018                  [Page 3]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -221,7 +221,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                  [Page 4]
+Bishop                    Expires May 27, 2018                  [Page 4]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -277,7 +277,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                  [Page 5]
+Bishop                    Expires May 27, 2018                  [Page 5]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -333,7 +333,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                  [Page 6]
+Bishop                    Expires May 27, 2018                  [Page 6]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -389,7 +389,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                  [Page 7]
+Bishop                    Expires May 27, 2018                  [Page 7]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -445,7 +445,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                  [Page 8]
+Bishop                    Expires May 27, 2018                  [Page 8]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -501,7 +501,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                  [Page 9]
+Bishop                    Expires May 27, 2018                  [Page 9]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -557,7 +557,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                 [Page 10]
+Bishop                    Expires May 27, 2018                 [Page 10]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -613,7 +613,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                 [Page 11]
+Bishop                    Expires May 27, 2018                 [Page 11]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -669,7 +669,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                 [Page 12]
+Bishop                    Expires May 27, 2018                 [Page 12]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -725,7 +725,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                 [Page 13]
+Bishop                    Expires May 27, 2018                 [Page 13]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -781,7 +781,7 @@ Internet-Draft                    QPACK                    November 2017
 
 
 
-Bishop                    Expires May 26, 2018                 [Page 14]
+Bishop                    Expires May 27, 2018                 [Page 14]
 
 Internet-Draft                    QPACK                    November 2017
 
@@ -837,4 +837,4 @@ Author's Address
 
 
 
-Bishop                    Expires May 26, 2018                 [Page 15]
+Bishop                    Expires May 27, 2018                 [Page 15]
