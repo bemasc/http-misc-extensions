@@ -314,7 +314,7 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
 5.3.  URIs
 
-   [1] http://www.iana.org/assignments/http-alt-svc- parameters
+   [1] http://www.iana.org/assignments/http-alt-svc-parameters
 
 Appendix A.  Acknowledgements
 
