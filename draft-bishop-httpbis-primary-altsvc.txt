@@ -123,7 +123,7 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
    The extension described in Section 2 enables an origin to declare
    that reasonable assurances should be obtained, not by requesting the
-   desired hostname in the SNI header, but by requesting it via
+   desired hostname in the TLS handshake, but by requesting it via
    [SecondaryCerts].  The validation checks from [RFC2818] are applied
    to this certificate.
 
@@ -186,12 +186,10 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
    [AltSvc] permits clients to ignore unrecognized parameters.  As a
    result, servers publishing records with the "sni" parameter cannot be
    assured that clients will not include their origin in the SNI header
-   when connecting to the nominated alternative.
-
-   If, for security reasons, an origin wishes its identity never to be
-   disclosed when the alternative is being used, an alternative
-   mechanism would be required to ascertain client support before
-   generating the Alt-Svc record.
+   when connecting to the nominated alternative.  If, for security
+   reasons, an origin wishes its identity never to be disclosed when the
+   alternative is being used, an alternative mechanism would be required
+   to ascertain client support before generating the Alt-Svc record.
 
    Clients will need to connect directly to the origin at least once in
    order to receive the Alt-Svc entry via an HTTP header or "ALTSVC"
@@ -218,6 +216,8 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
    This document registers the following parameter:
 
+   Name:  "sni"
+
 
 
 
@@ -225,8 +225,6 @@ Bishop                    Expires May 27, 2018                  [Page 4]
 
 Internet-Draft                 SNI Alt-Svc                 November 2017
 
-
-   Name:  "sni"
 
    Specification:  This document
 
@@ -272,8 +270,10 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
               httpbis-http2-additional-certs-05 (work in progress),
               October 2017.
 
-
-
+   [SNI]      Eastlake 3rd, D., "Transport Layer Security (TLS)
+              Extensions: Extension Definitions", RFC 6066,
+              DOI 10.17487/RFC6066, January 2011,
+              <https://www.rfc-editor.org/info/rfc6066>.
 
 
 
@@ -281,11 +281,6 @@ Bishop                    Expires May 27, 2018                  [Page 5]
 
 Internet-Draft                 SNI Alt-Svc                 November 2017
 
-
-   [SNI]      Eastlake 3rd, D., "Transport Layer Security (TLS)
-              Extensions: Extension Definitions", RFC 6066,
-              DOI 10.17487/RFC6066, January 2011,
-              <https://www.rfc-editor.org/info/rfc6066>.
 
    [TLS12]    Dierks, T. and E. Rescorla, "The Transport Layer Security
               (TLS) Protocol Version 1.2", RFC 5246,
@@ -326,6 +321,11 @@ Author's Address
    Akamai
 
    Email: mbishop@evequefou.be
+
+
+
+
+
 
 
 
