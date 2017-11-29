@@ -33,6 +33,7 @@
   ul.toc {
     top: 80px;
     overflow: auto;
+    overscroll-behavior: contain;
   }
 
   body {
@@ -292,8 +293,8 @@ address {
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Bishop, M." />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-httpbis-primary-altsvc-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-11-23" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-httpbis-sni-altsvc-latest" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-11-29" />
   <meta name="dct.abstract" content="HTTP Alternative Services " />
   <meta name="description" content="HTTP Alternative Services " />
 
@@ -314,10 +315,10 @@ address {
 </tr>
 <tr>
 <td class="left">Intended status: Standards Track</td>
-<td class="right">November 23, 2017</td>
+<td class="right">November 29, 2017</td>
 </tr>
 <tr>
-<td class="left">Expires: May 27, 2018</td>
+<td class="left">Expires: June 2, 2018</td>
 <td class="right"></td>
 </tr>
 
@@ -326,16 +327,16 @@ address {
   </table>
 
   <p class="title">The "SNI" Alt-Svc Parameter<br />
-  <span class="filename">draft-bishop-httpbis-primary-altsvc-latest</span></p>
+  <span class="filename">draft-bishop-httpbis-sni-altsvc-latest</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
-<p>HTTP Alternative Services <a href="#AltSvc" class="xref">[AltSvc]</a> provide a mechanism for an origin to declare that its content is accessible via some other combination of host, port, and protocol.  In the process of using such an alternative, an observer can identify that the client is requesting resources from a particular hostname.</p>
+<p>HTTP Alternative Services <a href="#AltSvc" class="xref">[AltSvc]</a> provides a mechanism for an origin to declare that its content is accessible via some other combination of host, port, and protocol.  In the process of using such an alternative, an observer can identify that the client is requesting resources from a particular hostname.</p>
 <p>This document extends HTTP Alternative Services, in combination with Secondary Certificate Authentication (<a href="#SecondaryCerts" class="xref">[SecondaryCerts]</a>), to enable clients not to disclose the origin to which they intend to connect.</p>
 <h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on May 27, 2018.</p>
+<p>This Internet-Draft will expire on June 2, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -395,9 +396,9 @@ address {
 <p id="rfc.section.2.p.1">When an origin wishes to nominate a &#8220;fronting server&#8221;, it includes the <samp>sni</samp> parameter in its alternative service entry.</p>
 <p id="rfc.section.2.p.2">Syntax:</p>
 <pre>
-sni = uri-host
+sni = host
 </pre>
-<p><samp>uri-host</samp> is defined as <samp>host</samp> in Section 3.2.2 of <a href="#RFC3986" class="xref">[RFC3986]</a>.</p>
+<p><samp>host</samp> is defined in Section 3.2.2 of <a href="#RFC3986" class="xref">[RFC3986]</a>.</p>
 <p id="rfc.section.2.p.4">When processing such an alternative, clients SHOULD present the hostname given in the <samp>sni</samp> parameter in the SNI extension during the TLS handshake.  The client MAY choose not to validate the certificate in the handshake for authenticity according to <a href="#RFC2818" class="xref">[RFC2818]</a>, but MUST NOT make requests to any origin corresponding to this certificate unless the certificate has been successfully validated.</p>
 <p id="rfc.section.2.p.5">Immediately upon connecting, the client SHOULD send a <samp>CERTIFICATE_REQUEST</samp> frame including an SNI extension indicating the origin which published the alternative service.  If no corresponding <samp>CERTIFICATE</samp> frame is presented by the server after a reasonable timeout, or if the server&#8217;s SETTINGS frame does not include the <samp>SETTINGS_HTTP_CERT_AUTH</samp> setting, the client MUST consider the alternative connection to have failed.</p>
 <h1 id="rfc.section.3">
@@ -477,7 +478,7 @@ sni = uri-host
 <tr>
 <td class="reference"><b id="TLS13">[TLS13]</b></td>
 <td class="top">
-<a>Rescorla, E.</a>, "<a href="https://tools.ietf.org/html/draft-ietf-tls-tls13-21">The Transport Layer Security (TLS) Protocol Version 1.3</a>", Internet-Draft draft-ietf-tls-tls13-21, July 2017.</td>
+<a>Rescorla, E.</a>, "<a href="https://tools.ietf.org/html/draft-ietf-tls-tls13-22">The Transport Layer Security (TLS) Protocol Version 1.3</a>", Internet-Draft draft-ietf-tls-tls13-22, November 2017.</td>
 </tr>
 </tbody></table>
 <h1 id="rfc.references.2">
@@ -486,7 +487,7 @@ sni = uri-host
 <tr>
 <td class="reference"><b id="DoH">[DoH]</b></td>
 <td class="top">
-<a>Hoffman, P.</a> and <a>P. McManus</a>, "<a href="https://tools.ietf.org/html/draft-ietf-doh-dns-over-https-01">DNS Queries over HTTPS</a>", Internet-Draft draft-ietf-doh-dns-over-https-01, October 2017.</td>
+<a>Hoffman, P.</a> and <a>P. McManus</a>, "<a href="https://tools.ietf.org/html/draft-ietf-doh-dns-over-https-02">DNS Queries over HTTPS</a>", Internet-Draft draft-ietf-doh-dns-over-https-02, November 2017.</td>
 </tr>
 <tr>
 <td class="reference"><b id="RFC7858">[RFC7858]</b></td>

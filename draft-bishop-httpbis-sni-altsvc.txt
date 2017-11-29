@@ -4,16 +4,16 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                       November 23, 2017
-Expires: May 27, 2018
+Intended status: Standards Track                       November 29, 2017
+Expires: June 2, 2018
 
 
                       The "SNI" Alt-Svc Parameter
-               draft-bishop-httpbis-primary-altsvc-latest
+                 draft-bishop-httpbis-sni-altsvc-latest
 
 Abstract
 
-   HTTP Alternative Services [AltSvc] provide a mechanism for an origin
+   HTTP Alternative Services [AltSvc] provides a mechanism for an origin
    to declare that its content is accessible via some other combination
    of host, port, and protocol.  In the process of using such an
    alternative, an observer can identify that the client is requesting
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 27, 2018.
+   This Internet-Draft will expire on June 2, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                    Expires May 27, 2018                  [Page 1]
+Bishop                    Expires June 2, 2018                  [Page 1]
 
 Internet-Draft                 SNI Alt-Svc                 November 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bishop                    Expires May 27, 2018                  [Page 2]
+Bishop                    Expires June 2, 2018                  [Page 2]
 
 Internet-Draft                 SNI Alt-Svc                 November 2017
 
@@ -153,9 +153,9 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
    Syntax:
 
-   sni = uri-host
+   sni = host
 
-   "uri-host" is defined as "host" in Section 3.2.2 of [RFC3986].
+   "host" is defined in Section 3.2.2 of [RFC3986].
 
    When processing such an alternative, clients SHOULD present the
    hostname given in the "sni" parameter in the SNI extension during the
@@ -165,7 +165,7 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
 
 
-Bishop                    Expires May 27, 2018                  [Page 3]
+Bishop                    Expires June 2, 2018                  [Page 3]
 
 Internet-Draft                 SNI Alt-Svc                 November 2017
 
@@ -221,7 +221,7 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
 
 
-Bishop                    Expires May 27, 2018                  [Page 4]
+Bishop                    Expires June 2, 2018                  [Page 4]
 
 Internet-Draft                 SNI Alt-Svc                 November 2017
 
@@ -277,7 +277,7 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
 
 
-Bishop                    Expires May 27, 2018                  [Page 5]
+Bishop                    Expires June 2, 2018                  [Page 5]
 
 Internet-Draft                 SNI Alt-Svc                 November 2017
 
@@ -288,14 +288,14 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
               <https://www.rfc-editor.org/info/rfc5246>.
 
    [TLS13]    Rescorla, E., "The Transport Layer Security (TLS) Protocol
-              Version 1.3", draft-ietf-tls-tls13-21 (work in progress),
-              July 2017.
+              Version 1.3", draft-ietf-tls-tls13-22 (work in progress),
+              November 2017.
 
 5.2.  Informative References
 
    [DoH]      Hoffman, P. and P. McManus, "DNS Queries over HTTPS",
-              draft-ietf-doh-dns-over-https-01 (work in progress),
-              October 2017.
+              draft-ietf-doh-dns-over-https-02 (work in progress),
+              November 2017.
 
    [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
               and P. Hoffman, "Specification for DNS over Transport
@@ -333,4 +333,4 @@ Author's Address
 
 
 
-Bishop                    Expires May 27, 2018                  [Page 6]
+Bishop                    Expires June 2, 2018                  [Page 6]
