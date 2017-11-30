@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                       November 29, 2017
-Expires: June 2, 2018
+Intended status: Standards Track                       November 30, 2017
+Expires: June 3, 2018
 
 
                       The "SNI" Alt-Svc Parameter
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 2, 2018.
+   This Internet-Draft will expire on June 3, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                    Expires June 2, 2018                  [Page 1]
+Bishop                    Expires June 3, 2018                  [Page 1]
 
 Internet-Draft                 SNI Alt-Svc                 November 2017
 
@@ -66,17 +66,17 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-     1.1.  Usage . . . . . . . . . . . . . . . . . . . . . . . . . .   2
+     1.1.  Usage . . . . . . . . . . . . . . . . . . . . . . . . . .   3
      1.2.  Notational Conventions  . . . . . . . . . . . . . . . . .   3
    2.  The "sni" Alt-Svc Extension . . . . . . . . . . . . . . . . .   3
    3.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
-   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
+   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
    5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
      5.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
      5.2.  Informative References  . . . . . . . . . . . . . . . . .   6
      5.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
    Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .   6
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   6
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   7
 
 1.  Introduction
 
@@ -92,10 +92,27 @@ Table of Contents
    immediately after the handshake (in TLS 1.2) or by using TLS 1.3
    [TLS13], the server is not afforded such privacy considerations.
 
-   [SNIEncryption] discusses some solutions in Section 3, HTTP Co-
-   Tenancy Fronting, but notes both discoverability and server
-   authentication issues with that approach.  This document provides a
-   mechanism to address both limitations.
+   Servers may also have wildcard certificates which do not enumerate
+   specific subdomains, but clients will disclose the first subdomain
+   used on a connection via the SNI extension when establishing the
+   connection.
+
+   [SNIEncryption] discusses a potential solution to these issues in
+   Section 3, HTTP Co-Tenancy Fronting, but notes both discoverability
+   and server authentication issues with that approach.  This document
+   provides a mechanism to address both limitations.
+
+
+
+
+
+
+
+
+Bishop                    Expires June 3, 2018                  [Page 2]
+
+Internet-Draft                 SNI Alt-Svc                 November 2017
+
 
 1.1.  Usage
 
@@ -106,14 +123,6 @@ Table of Contents
    and the security properties of the alternative service protocol are
    desirable, as compared to the existing connection."  However, the
    client "MUST have reasonable assurances that the alternative service
-
-
-
-Bishop                    Expires June 2, 2018                  [Page 2]
-
-Internet-Draft                 SNI Alt-Svc                 November 2017
-
-
    is under control of and valid for the whole origin ... established
    through use of a TLS-based protocol with the certificate checks
    defined in [RFC2818]."  This causes the origin to be disclosed in the
@@ -153,29 +162,30 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
    Syntax:
 
+
+
+
+Bishop                    Expires June 3, 2018                  [Page 3]
+
+Internet-Draft                 SNI Alt-Svc                 November 2017
+
+
    sni = host
 
    "host" is defined in Section 3.2.2 of [RFC3986].
 
    When processing such an alternative, clients SHOULD present the
    hostname given in the "sni" parameter in the SNI extension during the
-   TLS handshake.  The client MAY choose not to validate the certificate
-   in the handshake for authenticity according to [RFC2818], but MUST
+   TLS handshake.  If the resulting certificate is also for the origin
+   which published the alternative service, the client MUST validate the
+   certificate in the handshake for authenticity according to [RFC2818].
 
-
-
-
-Bishop                    Expires June 2, 2018                  [Page 3]
-
-Internet-Draft                 SNI Alt-Svc                 November 2017
-
-
-   NOT make requests to any origin corresponding to this certificate
-   unless the certificate has been successfully validated.
-
-   Immediately upon connecting, the client SHOULD send a
-   "CERTIFICATE_REQUEST" frame including an SNI extension indicating the
-   origin which published the alternative service.  If no corresponding
+   Otherwise, the client MAY choose not to validate the certificate, but
+   MUST NOT make requests to any origin corresponding to this
+   certificate unless the certificate has been successfully validated.
+   In this case, the client SHOULD send a "CERTIFICATE_REQUEST" frame
+   including an SNI extension indicating the origin which published the
+   alternative service immediately upon connecting.  If no corresponding
    "CERTIFICATE" frame is presented by the server after a reasonable
    timeout, or if the server's SETTINGS frame does not include the
    "SETTINGS_HTTP_CERT_AUTH" setting, the client MUST consider the
@@ -207,6 +217,15 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
    deciding when and how to make Alt-Svc records available to
    unauthenticated parties.
 
+
+
+
+
+Bishop                    Expires June 3, 2018                  [Page 4]
+
+Internet-Draft                 SNI Alt-Svc                 November 2017
+
+
 4.  IANA Considerations
 
    The "Hypertext Transfer Protocol (HTTP) Alt-Svc Parameter Registry"
@@ -217,14 +236,6 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
    This document registers the following parameter:
 
    Name:  "sni"
-
-
-
-
-Bishop                    Expires June 2, 2018                  [Page 4]
-
-Internet-Draft                 SNI Alt-Svc                 November 2017
-
 
    Specification:  This document
 
@@ -264,6 +275,13 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
+
+
+Bishop                    Expires June 3, 2018                  [Page 5]
+
+Internet-Draft                 SNI Alt-Svc                 November 2017
+
+
    [SecondaryCerts]
               Bishop, M., Sullivan, N., and M. Thomson, "Secondary
               Certificate Authentication in HTTP/2", draft-bishop-
@@ -274,13 +292,6 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
               Extensions: Extension Definitions", RFC 6066,
               DOI 10.17487/RFC6066, January 2011,
               <https://www.rfc-editor.org/info/rfc6066>.
-
-
-
-Bishop                    Expires June 2, 2018                  [Page 5]
-
-Internet-Draft                 SNI Alt-Svc                 November 2017
-
 
    [TLS12]    Dierks, T. and E. Rescorla, "The Transport Layer Security
               (TLS) Protocol Version 1.2", RFC 5246,
@@ -315,6 +326,18 @@ Appendix A.  Acknowledgements
 
    Conversations with Benjamin Schwartz helped to flesh out this idea.
 
+
+
+
+
+
+
+
+Bishop                    Expires June 3, 2018                  [Page 6]
+
+Internet-Draft                 SNI Alt-Svc                 November 2017
+
+
 Author's Address
 
    Mike Bishop
@@ -333,4 +356,37 @@ Author's Address
 
 
 
-Bishop                    Expires June 2, 2018                  [Page 6]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bishop                    Expires June 3, 2018                  [Page 7]

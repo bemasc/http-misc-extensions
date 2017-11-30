@@ -294,7 +294,7 @@ address {
 
   <meta name="dct.creator" content="Bishop, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-httpbis-sni-altsvc-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-11-29" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-11-30" />
   <meta name="dct.abstract" content="HTTP Alternative Services " />
   <meta name="description" content="HTTP Alternative Services " />
 
@@ -315,10 +315,10 @@ address {
 </tr>
 <tr>
 <td class="left">Intended status: Standards Track</td>
-<td class="right">November 29, 2017</td>
+<td class="right">November 30, 2017</td>
 </tr>
 <tr>
-<td class="left">Expires: June 2, 2018</td>
+<td class="left">Expires: June 3, 2018</td>
 <td class="right"></td>
 </tr>
 
@@ -336,7 +336,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on June 2, 2018.</p>
+<p>This Internet-Draft will expire on June 3, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -377,7 +377,8 @@ address {
 </h1>
 <p id="rfc.section.1.p.1">Confidentiality and authentication during communication are primary goals of using TLS to secure traffic on the Internet.  However, due to the nature of TLS, certain information is inherently not confidential &#8211; notably, the hostname and the corresponding certificate of the origin to which the client is connecting are transferred unencrypted in the Server Name Indication extension <a href="#SNI" class="xref">[SNI]</a> and the server&#8217;s Certificate message <a href="#TLS12" class="xref">[TLS12]</a>.</p>
 <p id="rfc.section.1.p.2">While the client identity can be obscured by using TLS renegotiation immediately after the handshake (in TLS 1.2) or by using TLS 1.3 <a href="#TLS13" class="xref">[TLS13]</a>, the server is not afforded such privacy considerations.</p>
-<p><a href="#SNIEncryption" class="xref">[SNIEncryption]</a> discusses some solutions in Section 3, HTTP Co-Tenancy Fronting, but notes both discoverability and server authentication issues with that approach. This document provides a mechanism to address both limitations.</p>
+<p id="rfc.section.1.p.3">Servers may also have wildcard certificates which do not enumerate specific subdomains, but clients will disclose the first subdomain used on a connection via the SNI extension when establishing the connection.</p>
+<p><a href="#SNIEncryption" class="xref">[SNIEncryption]</a> discusses a potential solution to these issues in Section 3, HTTP Co-Tenancy Fronting, but notes both discoverability and server authentication issues with that approach. This document provides a mechanism to address both limitations.</p>
 <h1 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> <a href="#usage" id="usage">Usage</a>
 </h1>
@@ -399,8 +400,8 @@ address {
 sni = host
 </pre>
 <p><samp>host</samp> is defined in Section 3.2.2 of <a href="#RFC3986" class="xref">[RFC3986]</a>.</p>
-<p id="rfc.section.2.p.4">When processing such an alternative, clients SHOULD present the hostname given in the <samp>sni</samp> parameter in the SNI extension during the TLS handshake.  The client MAY choose not to validate the certificate in the handshake for authenticity according to <a href="#RFC2818" class="xref">[RFC2818]</a>, but MUST NOT make requests to any origin corresponding to this certificate unless the certificate has been successfully validated.</p>
-<p id="rfc.section.2.p.5">Immediately upon connecting, the client SHOULD send a <samp>CERTIFICATE_REQUEST</samp> frame including an SNI extension indicating the origin which published the alternative service.  If no corresponding <samp>CERTIFICATE</samp> frame is presented by the server after a reasonable timeout, or if the server&#8217;s SETTINGS frame does not include the <samp>SETTINGS_HTTP_CERT_AUTH</samp> setting, the client MUST consider the alternative connection to have failed.</p>
+<p id="rfc.section.2.p.4">When processing such an alternative, clients SHOULD present the hostname given in the <samp>sni</samp> parameter in the SNI extension during the TLS handshake.  If the resulting certificate is also for the origin which published the alternative service, the client MUST validate the certificate in the handshake for authenticity according to <a href="#RFC2818" class="xref">[RFC2818]</a>.</p>
+<p id="rfc.section.2.p.5">Otherwise, the client MAY choose not to validate the certificate, but MUST NOT make requests to any origin corresponding to this certificate unless the certificate has been successfully validated.  In this case, the client SHOULD send a <samp>CERTIFICATE_REQUEST</samp> frame including an SNI extension indicating the origin which published the alternative service immediately upon connecting.  If no corresponding <samp>CERTIFICATE</samp> frame is presented by the server after a reasonable timeout, or if the server&#8217;s SETTINGS frame does not include the <samp>SETTINGS_HTTP_CERT_AUTH</samp> setting, the client MUST consider the alternative connection to have failed.</p>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
