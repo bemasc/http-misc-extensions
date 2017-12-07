@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                       November 30, 2017
-Expires: June 3, 2018
+Intended status: Standards Track                        December 7, 2017
+Expires: June 10, 2018
 
 
                       The "SNI" Alt-Svc Parameter
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 3, 2018.
+   This Internet-Draft will expire on June 10, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                    Expires June 3, 2018                  [Page 1]
+Bishop                    Expires June 10, 2018                 [Page 1]
 
-Internet-Draft                 SNI Alt-Svc                 November 2017
+Internet-Draft                 SNI Alt-Svc                 December 2017
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                    Expires June 3, 2018                  [Page 2]
+Bishop                    Expires June 10, 2018                 [Page 2]
 
-Internet-Draft                 SNI Alt-Svc                 November 2017
+Internet-Draft                 SNI Alt-Svc                 December 2017
 
 
 1.1.  Usage
@@ -165,9 +165,9 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
 
 
-Bishop                    Expires June 3, 2018                  [Page 3]
+Bishop                    Expires June 10, 2018                 [Page 3]
 
-Internet-Draft                 SNI Alt-Svc                 November 2017
+Internet-Draft                 SNI Alt-Svc                 December 2017
 
 
    sni = host
@@ -221,9 +221,9 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
 
 
-Bishop                    Expires June 3, 2018                  [Page 4]
+Bishop                    Expires June 10, 2018                 [Page 4]
 
-Internet-Draft                 SNI Alt-Svc                 November 2017
+Internet-Draft                 SNI Alt-Svc                 December 2017
 
 
 4.  IANA Considerations
@@ -277,9 +277,9 @@ Internet-Draft                 SNI Alt-Svc                 November 2017
 
 
 
-Bishop                    Expires June 3, 2018                  [Page 5]
+Bishop                    Expires June 10, 2018                 [Page 5]
 
-Internet-Draft                 SNI Alt-Svc                 November 2017
+Internet-Draft                 SNI Alt-Svc                 December 2017
 
 
    [SecondaryCerts]
@@ -333,9 +333,9 @@ Appendix A.  Acknowledgements
 
 
 
-Bishop                    Expires June 3, 2018                  [Page 6]
+Bishop                    Expires June 10, 2018                 [Page 6]
 
-Internet-Draft                 SNI Alt-Svc                 November 2017
+Internet-Draft                 SNI Alt-Svc                 December 2017
 
 
 Author's Address
@@ -389,4 +389,4 @@ Author's Address
 
 
 
-Bishop                    Expires June 3, 2018                  [Page 7]
+Bishop                    Expires June 10, 2018                 [Page 7]
