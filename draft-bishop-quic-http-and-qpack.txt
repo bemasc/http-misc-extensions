@@ -87,7 +87,7 @@ Table of Contents
      4.1.  SETTING_QPACK_BLOCKING_PERMITTED  . . . . . . . . . . . .  14
      4.2.  SETTING_QPACK_INITIAL_CHECKPOINT  . . . . . . . . . . . .  14
    5.  Implementation trade-offs . . . . . . . . . . . . . . . . . .  14
-     5.1.  Compression Efficiency versus Blocking Avoidance  . . . .  15
+     5.1.  Compression Efficiency versus Blocking Avoidance  . . . .  14
      5.2.  Timely State Transitions versus Decoder Complexity  . . .  15
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  16
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
@@ -714,13 +714,13 @@ Internet-Draft                    QPACK                    December 2017
    decoder from HTTP/2, using a Sequence number to enforce ordering.
    Using QPACK instead would entail the following changes:
 
-   o  The Sequence field is removed from HEADERS frames (Section 5.2.2)
-      and PUSH_PROMISE frames (Section 5.2.6).
+   o  Header Blocks consist of QPACK data instead of HPACK data
 
-   o  Header Block Fragments consist of QPACK data instead of HPACK
-      data.
+   o  Just as unidirectional push streams have a stream header
+      identifying their Push ID, a header will need to be added to
+      differentiate checkpoint streams from pushes
 
-
+   o  Stream 2 is reserved for the Feedback Stream
 
 
 
@@ -729,12 +729,6 @@ Bishop                    Expires June 10, 2018                [Page 13]
 
 Internet-Draft                    QPACK                    December 2017
 
-
-   o  Just as unidirectional push streams have a stream header
-      identifying their Push ID, a header will need to be added to
-      differentiate checkpoint streams from pushes.
-
-   o  Stream 2 is reserved for the Feedback Stream
 
    A HEADERS or PUSH_PROMISE frame MAY contain an arbitrary number of
    QPACK instructions, but QPACK instructions SHOULD NOT cross a
@@ -778,6 +772,12 @@ Internet-Draft                    QPACK                    December 2017
    what those choices should be.  In this section, potential areas for
    implementation tuning are explored.
 
+5.1.  Compression Efficiency versus Blocking Avoidance
+
+   If blocking references are permitted, they will block if the frame
+   containing the entry definition is lost or delayed.  Encoders MAY
+   choose to trade off compression efficiency and avoid blocking by
+
 
 
 
@@ -786,11 +786,6 @@ Bishop                    Expires June 10, 2018                [Page 14]
 Internet-Draft                    QPACK                    December 2017
 
 
-5.1.  Compression Efficiency versus Blocking Avoidance
-
-   If blocking references are permitted, they will block if the frame
-   containing the entry definition is lost or delayed.  Encoders MAY
-   choose to trade off compression efficiency and avoid blocking by
    using literal instructions rather than referencing the dynamic table
    until the insertion is believed to be complete.
 
@@ -833,6 +828,11 @@ Internet-Draft                    QPACK                    December 2017
    about emitting STREAM_DONE and ACK_DROP instructions to enable the
    encoder to recover the table space.
 
+   Similarly, for decoders which prohibit blocking references, delaying
+   the transition of a checkpoint from PENDING to LIVE will degrade
+   compression performance.  Decoders SHOULD consume checkpoint data and
+   emit ACK_FLUSH frames as promptly as possible.
+
 
 
 
@@ -841,11 +841,6 @@ Bishop                    Expires June 10, 2018                [Page 15]
 
 Internet-Draft                    QPACK                    December 2017
 
-
-   Similarly, for decoders which prohibit blocking references, delaying
-   the transition of a checkpoint from PENDING to LIVE will degrade
-   compression performance.  Decoders SHOULD consume checkpoint data and
-   emit ACK_FLUSH frames as promptly as possible.
 
 6.  Security Considerations
 
@@ -890,6 +885,11 @@ Internet-Draft                    QPACK                    December 2017
       did not permit it
 
    Specification:  Section 2.2.1
+
+
+
+
+
 
 
 
