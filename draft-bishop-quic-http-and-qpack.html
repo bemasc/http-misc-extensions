@@ -301,7 +301,7 @@ address {
 <link href="#rfc.section.4.2" rel="Chapter" title="4.2 SETTING_QPACK_INITIAL_CHECKPOINT">
 <link href="#rfc.section.5" rel="Chapter" title="5 Implementation trade-offs">
 <link href="#rfc.section.5.1" rel="Chapter" title="5.1 Compression Efficiency versus Blocking Avoidance">
-<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Timely Delete Completion versus State Commitment">
+<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Timely State Transitions versus Decoder Complexity">
 <link href="#rfc.section.6" rel="Chapter" title="6 Security Considerations">
 <link href="#rfc.section.7" rel="Chapter" title="7 IANA Considerations">
 <link href="#rfc.section.7.1" rel="Chapter" title="7.1 Settings">
@@ -419,7 +419,7 @@ address {
 </li>
 <ul><li>5.1.   <a href="#rfc.section.5.1">Compression Efficiency versus Blocking Avoidance</a>
 </li>
-<li>5.2.   <a href="#rfc.section.5.2">Timely Delete Completion versus State Commitment</a>
+<li>5.2.   <a href="#rfc.section.5.2">Timely State Transitions versus Decoder Complexity</a>
 </li>
 </ul><li>6.   <a href="#rfc.section.6">Security Considerations</a>
 </li>
@@ -450,8 +450,8 @@ address {
 <p id="rfc.section.1.p.2">The largest challenge is the fact that elements are referenced by a very fluid index. Not only is the index implicit when an item is added to the header table, the index will change without notice as other items are added to the header table. Static entries occupy the first 61 values, followed by dynamic entries. A newly-added dynamic entry would cause older dynamic entries to be evicted, and the retained items are then renumbered beginning with 62. This means that, without processing all preceding header sets, no index into the dynamic table can be interpreted, and the index of a given entry cannot be predicted.</p>
 <p id="rfc.section.1.p.3">Any solution to the above will almost certainly fall afoul of the memory constraints the decompressor imposes. The automatic eviction of entries is done based on the compressor&#8217;s declared dynamic table size, which MUST be less than the maximum permitted by the decompressor (and relayed using an HTTP/2 SETTINGS value).</p>
 <p id="rfc.section.1.p.4">Further, streams in QUIC are lossy in the presence of stream resets.  While HTTP/2 (via TCP) guarantees the delivery of all previously-sent data on a stream even if that stream is reset, QUIC does not retransmit lost frames if a stream has been reset, and may discard data which has not yet been delivered to the application.</p>
-<p id="rfc.section.1.p.5">Early versions of QPACK were small deltas of HPACK to introduce order-resiliency. This version departs from HPACK more substantially to add resilience against reset message streams.</p>
-<p id="rfc.section.1.p.6">In the following sections, this document proposes a new version of HPACK which makes different trade-offs, enabling partial out-of-order interpretation and bounded memory consumption with minimal head-of-line blocking. None of the proposed improvements to HPACK (strongly-typed fields, binary compression of common header syntax) are currently included, but certainly could be.</p>
+<p id="rfc.section.1.p.5">Early versions of QPACK were small deltas of HPACK to introduce order-resiliency. Recent versions depart from HPACK more substantially to add resilience against reset message streams and reduce the impact of head-of-line blocking.</p>
+<p id="rfc.section.1.p.6">In the following sections, this document proposes a successor to HPACK which makes different trade-offs, enabling partial out-of-order interpretation and bounded memory consumption with minimal head-of-line blocking. None of the proposed improvements to HPACK (strongly-typed fields, binary compression of common header syntax) are currently included, but certainly could be.</p>
 <h1 id="rfc.section.1.1">
 <a href="#rfc.section.1.1">1.1.</a> <a href="#Terminology" id="Terminology">Terminology</a>
 </h1>
@@ -467,13 +467,13 @@ address {
 <li>Connection-wide feedback on stream and checkpoint state on a single non-request stream</li>
 <li>Non-modifying instructions which use the current header table state to encode message headers on request streams</li>
 </ul>
-<p id="rfc.section.2.p.3">Because the per-message instructions introduce no changes to the header table state, no state is lost if these instructions are discarded due to a stream reset.  Because the updates to the header table supply their own order controls (the delete logic), they can be processed in any order and therefore delivered as messages using unidirectional QUIC streams.</p>
+<p id="rfc.section.2.p.3">Because the per-message instructions introduce no changes to the header table state, no state is lost if these instructions are discarded due to a stream reset.  Because the updates to the header table supply their own order controls (the checkpoint logic), they can be processed in any order and therefore delivered as messages using unidirectional QUIC streams.</p>
 <h1 id="rfc.section.2.1">
 <a href="#rfc.section.2.1">2.1.</a> <a href="#changes-to-static-and-dynamic-tables" id="changes-to-static-and-dynamic-tables">Changes to Static and Dynamic Tables</a>
 </h1>
 <p id="rfc.section.2.1.p.1">QPACK uses two tables for associating header fields to indexes. The static table is unchanged from <a href="#RFC7541" class="xref">[RFC7541]</a>. Unlike in <a href="#RFC7541" class="xref">[RFC7541]</a>, the tables are not concatenated, but are referenced separately.</p>
 <p id="rfc.section.2.1.p.2">The dynamic table is a map from index to header field. Indices are arbitrary numbers between 1 and 2^27. Each insert instruction will specify the index being modified. While any index MAY be chosen for a new entry, smaller numbers will yield better compression performance.</p>
-<p id="rfc.section.2.1.p.3">Because it is possible for QPACK frames to arrive which reference indices which have not yet been defined, such frames MUST wait until another frame has arrived and defined the index. In order to guard against malicious peers, implementations SHOULD impose a time limit and treat expiration of the timer as a decoding error.</p>
+<p id="rfc.section.2.1.p.3">With decoder consent (see <a href="#setting-block" class="xref">Section 4.1</a>), it is possible for QPACK instructions to arrive which reference indices which have not yet been defined.  Such instructions MUST wait until the index definition has arrived. In order to guard against malicious peers, implementations supporting blocking SHOULD impose a time limit and treat expiration of the timer as a decoding error.</p>
 <h1 id="rfc.section.2.1.1">
 <a href="#rfc.section.2.1.1">2.1.1.</a> <a href="#checkpoints" id="checkpoints">Dynamic Table State Synchronization</a>
 </h1>
@@ -481,12 +481,17 @@ address {
 <p id="rfc.section.2.1.1.p.2">No entries are automatically evicted from the dynamic table. Size management is purely the responsibility of the encoder, which MUST NOT exceed the declared memory size of the decoder.</p>
 <p id="rfc.section.2.1.1.p.3">To simplify state management in the dynamic table, <em>checkpoints</em> are introduced.  A checkpoint is used to track entries added to the dynamic table and streams that reference those entries, rather than maintaining the full state of which streams reference which table entries.</p>
 <p id="rfc.section.2.1.1.p.4">Checkpoints are unordered and have an identifier which MUST be unique among checkpoints which have not been dropped.  Each checkpoint has a unidirectional stream which begins with its identifier and contains a series of updates associated with that checkpoint.  These updates SHOULD be processed as they arrive; it is not necessary (and might not be desirable) to wait for all instructions associated with a checkpoint to arrive before beginning to process it.</p>
-<p id="rfc.section.2.1.1.p.5">The encoder typically has at least one checkpoint in the NEW state.  Flushing a checkpoint is a two-step operation.  First, the checkpoint&#8217;s management stream is closed. At that time, the encoder&#8217;s NEW checkpoint becomes PENDING.  The decoder moves its NEW checkpoint directly to LIVE and responds with an ACK_FLUSH message on the feedback stream.  When the encoder receives this message, its PENDING checkpoint becomes LIVE.</p>
-<p id="rfc.section.2.1.1.p.6">Unused entries are evicted indirectly, by dropping checkpoints. Before a checkpoint can be dropped, its state is changed to DYING.  Changing a checkpoint&#8217;s state to DYING allows the checkpoint to age out.  The encoder can change a DYING checkpoint to DEAD (sending a DROP instruction) when it is no longer referenced by any outstanding header blocks, and remove it once the drop has been acknowledged by an ACK_DROP message.</p>
-<p id="rfc.section.2.1.1.p.7">The feedback stream is used to notify the encoder that the peer is done decoding HTTP headers for a stream using the HEADERS_DONE message.  The encoder uses this information to track which checkpoints can be dropped.</p>
-<p id="rfc.section.2.1.1.p.8">The encoder sends the DROP command to the decoder when it drops a checkpoint; the decoder responds with an ACK_DROP message.  When a checkpoint is dropped, the table entries it references are checked: if an entry is no longer referenced by any checkpoint, the entry is evicted.</p>
-<p id="rfc.section.2.1.1.p.9">Dropping a checkpoint and the entries associated with it is not limited to just the oldest checkpoint; any DYING checkpoint &#8211; as long as state transition rules are followed &#8211; may be dropped.  This flexibility permits the encoder to use a number of strategies for entry eviction.</p>
-<p id="rfc.section.2.1.1.p.10">As long as the maximum dynamic table size is observed, new checkpoints can be created; no upper limit on the number of checkpoints is specified.  A well-balanced spread of checkpoints permits the encoder to recycle entries effectively.</p>
+<p id="rfc.section.2.1.1.p.5">The feedback stream is used to relay state transitions to the peer. For example, when a decoder is done processing a header block, it signals this using the HEADERS_DONE message.  The encoder uses this information to track which checkpoints can be dropped.</p>
+<h1 id="rfc.section.2.1.1.1">
+<a href="#rfc.section.2.1.1.1">2.1.1.1.</a> <a href="#checkpoint-lifecycle" id="checkpoint-lifecycle">Checkpoint Lifecycle</a>
+</h1>
+<p id="rfc.section.2.1.1.1.p.1">A checkpoint is created by opening a new checkpoint stream.  This places the checkpoint in the NEW state for both encoder and decoder.  The encoder typically has at least one checkpoint in the NEW state.</p>
+<p id="rfc.section.2.1.1.1.p.2">Flushing a checkpoint is a two-step operation.  First, the checkpoint stream is closed. At that time, the encoder&#8217;s NEW checkpoint becomes PENDING.  The decoder moves its NEW checkpoint directly to LIVE and responds with an ACK_FLUSH message on the feedback stream.  When the encoder receives this message, its PENDING checkpoint becomes LIVE.</p>
+<p id="rfc.section.2.1.1.1.p.3">Unused entries are evicted indirectly, by dropping checkpoints. Before a checkpoint can be dropped, its state is changed to DYING.  Changing a checkpoint&#8217;s state to DYING allows the checkpoint to age out.  This is a strictly internal state on the encoder, and not visible to the decoder. A DYING checkpoint can be returned to LIVE at the encoder&#8217;s discretion if necessary.</p>
+<p id="rfc.section.2.1.1.1.p.4">The encoder can change a DYING checkpoint to DEAD (sending a DROP instruction) when it is no longer referenced by any outstanding header blocks. The encoder sends the DROP command to the decoder when it declares a checkpoint DEAD; the decoder drops the corresponding checkpoint and responds with an ACK_DROP message.  The encoder drops the DEAD checkpoint upon receipt of the ACK_DROP message.</p>
+<p id="rfc.section.2.1.1.1.p.5">When a checkpoint is dropped, the table entries it references are checked: if an entry is no longer referenced by any checkpoint, the entry is evicted.</p>
+<p id="rfc.section.2.1.1.1.p.6">Dropping a checkpoint and the entries associated with it is not limited to just the oldest checkpoint; any DYING checkpoint &#8211; as long as state transition rules are followed &#8211; may be dropped.  This flexibility permits the encoder to use a number of strategies for entry eviction.</p>
+<p id="rfc.section.2.1.1.1.p.7">As long as the maximum dynamic table size is observed, new checkpoints can be created; no upper limit on the number of checkpoints is specified.  A well-balanced spread of checkpoints permits the encoder to recycle entries effectively.</p>
 <h1 id="rfc.section.2.2">
 <a href="#rfc.section.2.2">2.2.</a> <a href="#encoding-constraints" id="encoding-constraints">Encoding Constraints</a>
 </h1>
@@ -499,9 +504,9 @@ address {
 
 <ul>
 <li>A stream error of type <samp>ERROR_QPACK_INVALID_REFERENCE</samp> if on a request stream</li>
-<li>A connection error of type <samp>ERROR_INVALID_REFERENCE</samp> if on a checkpoint stream</li>
+<li>A connection error of type <samp>ERROR_QPACK_INVALID_REFERENCE</samp> if on a checkpoint stream</li>
 </ul>
-<p id="rfc.section.2.2.1.p.4">Since DYING is a purely internal state to the encoder, a DYING checkpoint can be returned to LIVE with no peer-visible change.  Thus, references to DYING checkpoints are possible, but usually inadvisable.  Table entries contained only in a DEAD checkpoint can never be referenced.</p>
+<p id="rfc.section.2.2.1.p.4">References to DYING checkpoints are possible by returning the checkpoint to LIVE, but this is usually inadvisable.  Table entries contained only in a DEAD checkpoint can never be referenced.</p>
 <h1 id="rfc.section.2.2.2">
 <a href="#rfc.section.2.2.2">2.2.2.</a> <a href="#header-table-size" id="header-table-size">Header Table Size</a>
 </h1>
@@ -727,9 +732,10 @@ address {
 <p id="rfc.section.5.1.p.5">Since it is possible to insert header values without emitting them on a stream, an encoder MAY also proactively insert header values which it believes will be needed on future requests, at the cost of reduced compression efficiency for incorrect predictions.</p>
 <p id="rfc.section.5.1.p.6">The ability to split updates to the header table into discrete messages reduces the possibility for head-of-line blocking within the table update streams.  Implementations SHOULD limit the size of table update messages to avoid head-of-line blocking within these messages.</p>
 <h1 id="rfc.section.5.2">
-<a href="#rfc.section.5.2">5.2.</a> <a href="#timely-delete-completion-versus-state-commitment" id="timely-delete-completion-versus-state-commitment">Timely Delete Completion versus State Commitment</a>
+<a href="#rfc.section.5.2">5.2.</a> <a href="#timely-state-transitions-versus-decoder-complexity" id="timely-state-transitions-versus-decoder-complexity">Timely State Transitions versus Decoder Complexity</a>
 </h1>
-<p id="rfc.section.5.2.p.1">Anything which prevent checkpoints from expiring can prevent the encoder from adding any new entries due to the maximum table size. This does not block the encoder from continuing to make requests, but could sharply limit compression performance. Encoders would be well-served to begin moving checkpoint to DYING in advance of encountering the table maximum. Decoders SHOULD be prompt about emitting STREAM_DONE and ACK_DROP instructions to enable the encoder to recover the table space.</p>
+<p id="rfc.section.5.2.p.1">Anything which prevent checkpoints from transitioning from DYING to DEAD can prevent the encoder from adding any new entries due to the maximum table size.  This does not block the encoder from continuing to make requests, but could sharply limit compression performance. Encoders would be well-served to begin moving checkpoint to DYING in advance of encountering the table maximum.  Decoders SHOULD be prompt about emitting STREAM_DONE and ACK_DROP instructions to enable the encoder to recover the table space.</p>
+<p id="rfc.section.5.2.p.2">Similarly, for decoders which prohibit blocking references, delaying the transition of a checkpoint from PENDING to LIVE will degrade compression performance.  Decoders SHOULD consume checkpoint data and emit ACK_FLUSH frames as promptly as possible.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
@@ -791,6 +797,7 @@ address {
 <li>Martin Thomson</li>
 <li>Charles &#8216;Buck&#8217; Krasic</li>
 <li>Kyle Rose</li>
+<li>Alan Frindell</li>
 </ul>
 <p id="rfc.section.8.p.3">A substantial portion of Mike&#8217;s work on this draft was supported by Microsoft during his employment there.</p>
 <h1 id="rfc.references">

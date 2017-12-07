@@ -72,10 +72,10 @@ Table of Contents
        2.2.1.  Permitted References  . . . . . . . . . . . . . . . .   6
        2.2.2.  Header Table Size . . . . . . . . . . . . . . . . . .   6
    3.  Wire Format . . . . . . . . . . . . . . . . . . . . . . . . .   7
-     3.1.  Feedback Stream . . . . . . . . . . . . . . . . . . . . .   7
+     3.1.  Feedback Stream . . . . . . . . . . . . . . . . . . . . .   8
        3.1.1.  HEADERS_DONE  . . . . . . . . . . . . . . . . . . . .   8
        3.1.2.  ACK_FLUSH . . . . . . . . . . . . . . . . . . . . . .   8
-       3.1.3.  DROP  . . . . . . . . . . . . . . . . . . . . . . . .   8
+       3.1.3.  DROP  . . . . . . . . . . . . . . . . . . . . . . . .   9
        3.1.4.  ACK_DROP  . . . . . . . . . . . . . . . . . . . . . .   9
      3.2.  Checkpoint Streams  . . . . . . . . . . . . . . . . . . .   9
        3.2.1.  INSERT  . . . . . . . . . . . . . . . . . . . . . . .  10
@@ -88,7 +88,7 @@ Table of Contents
      4.2.  SETTING_QPACK_INITIAL_CHECKPOINT  . . . . . . . . . . . .  14
    5.  Implementation trade-offs . . . . . . . . . . . . . . . . . .  14
      5.1.  Compression Efficiency versus Blocking Avoidance  . . . .  15
-     5.2.  Timely Delete Completion versus State Commitment  . . . .  15
+     5.2.  Timely State Transitions versus Decoder Complexity  . . .  15
    6.  Security Considerations . . . . . . . . . . . . . . . . . . .  16
    7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
      7.1.  Settings  . . . . . . . . . . . . . . . . . . . . . . . .  16
@@ -138,10 +138,11 @@ Internet-Draft                    QPACK                    December 2017
    data which has not yet been delivered to the application.
 
    Early versions of QPACK were small deltas of HPACK to introduce
-   order-resiliency.  This version departs from HPACK more substantially
-   to add resilience against reset message streams.
+   order-resiliency.  Recent versions depart from HPACK more
+   substantially to add resilience against reset message streams and
+   reduce the impact of head-of-line blocking.
 
-   In the following sections, this document proposes a new version of
+   In the following sections, this document proposes a successor to
    HPACK which makes different trade-offs, enabling partial out-of-order
    interpretation and bounded memory consumption with minimal head-of-
    line blocking.  None of the proposed improvements to HPACK (strongly-
@@ -164,7 +165,6 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-
 Bishop                    Expires June 10, 2018                 [Page 3]
 
 Internet-Draft                    QPACK                    December 2017
@@ -182,9 +182,9 @@ Internet-Draft                    QPACK                    December 2017
    Because the per-message instructions introduce no changes to the
    header table state, no state is lost if these instructions are
    discarded due to a stream reset.  Because the updates to the header
-   table supply their own order controls (the delete logic), they can be
-   processed in any order and therefore delivered as messages using
-   unidirectional QUIC streams.
+   table supply their own order controls (the checkpoint logic), they
+   can be processed in any order and therefore delivered as messages
+   using unidirectional QUIC streams.
 
 2.1.  Changes to Static and Dynamic Tables
 
@@ -198,11 +198,12 @@ Internet-Draft                    QPACK                    December 2017
    a new entry, smaller numbers will yield better compression
    performance.
 
-   Because it is possible for QPACK frames to arrive which reference
-   indices which have not yet been defined, such frames MUST wait until
-   another frame has arrived and defined the index.  In order to guard
-   against malicious peers, implementations SHOULD impose a time limit
-   and treat expiration of the timer as a decoding error.
+   With decoder consent (see Section 4.1), it is possible for QPACK
+   instructions to arrive which reference indices which have not yet
+   been defined.  Such instructions MUST wait until the index definition
+   has arrived.  In order to guard against malicious peers,
+   implementations supporting blocking SHOULD impose a time limit and
+   treat expiration of the timer as a decoding error.
 
 2.1.1.  Dynamic Table State Synchronization
 
@@ -217,7 +218,6 @@ Internet-Draft                    QPACK                    December 2017
    To simplify state management in the dynamic table, _checkpoints_ are
    introduced.  A checkpoint is used to track entries added to the
    dynamic table and streams that reference those entries, rather than
-
 
 
 
@@ -237,32 +237,50 @@ Internet-Draft                    QPACK                    December 2017
    not be desirable) to wait for all instructions associated with a
    checkpoint to arrive before beginning to process it.
 
+   The feedback stream is used to relay state transitions to the peer.
+   For example, when a decoder is done processing a header block, it
+   signals this using the HEADERS_DONE message.  The encoder uses this
+   information to track which checkpoints can be dropped.
+
+2.1.1.1.  Checkpoint Lifecycle
+
+   A checkpoint is created by opening a new checkpoint stream.  This
+   places the checkpoint in the NEW state for both encoder and decoder.
    The encoder typically has at least one checkpoint in the NEW state.
-   Flushing a checkpoint is a two-step operation.  First, the
-   checkpoint's management stream is closed.  At that time, the
-   encoder's NEW checkpoint becomes PENDING.  The decoder moves its NEW
-   checkpoint directly to LIVE and responds with an ACK_FLUSH message on
-   the feedback stream.  When the encoder receives this message, its
-   PENDING checkpoint becomes LIVE.
+
+   Flushing a checkpoint is a two-step operation.  First, the checkpoint
+   stream is closed.  At that time, the encoder's NEW checkpoint becomes
+   PENDING.  The decoder moves its NEW checkpoint directly to LIVE and
+   responds with an ACK_FLUSH message on the feedback stream.  When the
+   encoder receives this message, its PENDING checkpoint becomes LIVE.
 
    Unused entries are evicted indirectly, by dropping checkpoints.
    Before a checkpoint can be dropped, its state is changed to DYING.
    Changing a checkpoint's state to DYING allows the checkpoint to age
-   out.  The encoder can change a DYING checkpoint to DEAD (sending a
-   DROP instruction) when it is no longer referenced by any outstanding
-   header blocks, and remove it once the drop has been acknowledged by
-   an ACK_DROP message.
+   out.  This is a strictly internal state on the encoder, and not
+   visible to the decoder.  A DYING checkpoint can be returned to LIVE
+   at the encoder's discretion if necessary.
 
-   The feedback stream is used to notify the encoder that the peer is
-   done decoding HTTP headers for a stream using the HEADERS_DONE
-   message.  The encoder uses this information to track which
-   checkpoints can be dropped.
+   The encoder can change a DYING checkpoint to DEAD (sending a DROP
+   instruction) when it is no longer referenced by any outstanding
+   header blocks.  The encoder sends the DROP command to the decoder
+   when it declares a checkpoint DEAD; the decoder drops the
+   corresponding checkpoint and responds with an ACK_DROP message.  The
+   encoder drops the DEAD checkpoint upon receipt of the ACK_DROP
+   message.
 
-   The encoder sends the DROP command to the decoder when it drops a
-   checkpoint; the decoder responds with an ACK_DROP message.  When a
-   checkpoint is dropped, the table entries it references are checked:
-   if an entry is no longer referenced by any checkpoint, the entry is
-   evicted.
+   When a checkpoint is dropped, the table entries it references are
+   checked: if an entry is no longer referenced by any checkpoint, the
+   entry is evicted.
+
+
+
+
+
+Bishop                    Expires June 10, 2018                 [Page 5]
+
+Internet-Draft                    QPACK                    December 2017
+
 
    Dropping a checkpoint and the entries associated with it is not
    limited to just the oldest checkpoint; any DYING checkpoint - as long
@@ -274,13 +292,6 @@ Internet-Draft                    QPACK                    December 2017
    checkpoints can be created; no upper limit on the number of
    checkpoints is specified.  A well-balanced spread of checkpoints
    permits the encoder to recycle entries effectively.
-
-
-
-Bishop                    Expires June 10, 2018                 [Page 5]
-
-Internet-Draft                    QPACK                    December 2017
-
 
 2.2.  Encoding Constraints
 
@@ -300,14 +311,12 @@ Internet-Draft                    QPACK                    December 2017
    o  A stream error of type "ERROR_QPACK_INVALID_REFERENCE" if on a
       request stream
 
-   o  A connection error of type "ERROR_INVALID_REFERENCE" if on a
+   o  A connection error of type "ERROR_QPACK_INVALID_REFERENCE" if on a
       checkpoint stream
 
-   Since DYING is a purely internal state to the encoder, a DYING
-   checkpoint can be returned to LIVE with no peer-visible change.
-   Thus, references to DYING checkpoints are possible, but usually
-   inadvisable.  Table entries contained only in a DEAD checkpoint can
-   never be referenced.
+   References to DYING checkpoints are possible by returning the
+   checkpoint to LIVE, but this is usually inadvisable.  Table entries
+   contained only in a DEAD checkpoint can never be referenced.
 
 2.2.2.  Header Table Size
 
@@ -322,6 +331,13 @@ Internet-Draft                    QPACK                    December 2017
 
    o  The size of each entry is calculated as in HPACK
 
+
+
+Bishop                    Expires June 10, 2018                 [Page 6]
+
+Internet-Draft                    QPACK                    December 2017
+
+
    o  Each checkpoint that has not been removed, regardless of state,
       consumes 64 bytes
 
@@ -330,14 +346,6 @@ Internet-Draft                    QPACK                    December 2017
    HTTP/QUIC prohibits mid-stream changes of settings.  As a result,
    only one table size change is possible: From the value a client
    assumes during the 0-RTT flight to the actual value included in the
-
-
-
-Bishop                    Expires June 10, 2018                 [Page 6]
-
-Internet-Draft                    QPACK                    December 2017
-
-
    server's SETTINGS frame.  The assumed value is required to be either
    a server's previous value or zero.  A server whose configuration has
    recently changed MAY overlook inadvertent violations of its maximum
@@ -374,15 +382,7 @@ Internet-Draft                    QPACK                    December 2017
    This section describes the instructions which are possible on each
    stream type.
 
-3.1.  Feedback Stream
 
-   Stream 1, the first server-initiated bidirectional stream, is used as
-   the feedback stream, since the client does not need to begin sending
-   data on this stream until it has received data from the server.
-
-   This stream is critical to the HTTP/QUIC connection, and carries a
-   stream of the instructions defined in this section.  Data on this
-   stream SHOULD be processed as soon as it arrives.
 
 
 
@@ -393,6 +393,16 @@ Bishop                    Expires June 10, 2018                 [Page 7]
 
 Internet-Draft                    QPACK                    December 2017
 
+
+3.1.  Feedback Stream
+
+   Stream 1, the first server-initiated bidirectional stream, is used as
+   the feedback stream, since the client does not need to begin sending
+   data on this stream until it has received data from the server.
+
+   This stream is critical to the HTTP/QUIC connection, and carries a
+   stream of the instructions defined in this section.  Data on this
+   stream SHOULD be processed as soon as it arrives.
 
 3.1.1.  HEADERS_DONE
 
@@ -433,6 +443,13 @@ Internet-Draft                    QPACK                    December 2017
 
                            ACK_FLUSH instruction
 
+
+
+Bishop                    Expires June 10, 2018                 [Page 8]
+
+Internet-Draft                    QPACK                    December 2017
+
+
 3.1.3.  DROP
 
    When an encoder has received sufficient HEADERS_DONE messages to know
@@ -442,13 +459,6 @@ Internet-Draft                    QPACK                    December 2017
    DEAD.  Upon receiving a DROP instruction, a LIVE checkpoint is
    removed from the decoder state and an ACK_DROP instruction is
    emitted.
-
-
-
-Bishop                    Expires June 10, 2018                 [Page 8]
-
-Internet-Draft                    QPACK                    December 2017
-
 
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
@@ -489,6 +499,13 @@ Internet-Draft                    QPACK                    December 2017
       main draft, but has manifested in several PRs, and would need to
       be resurrected.
 
+
+
+Bishop                    Expires June 10, 2018                 [Page 9]
+
+Internet-Draft                    QPACK                    December 2017
+
+
    Following the stream header, a checkpoint stream contains its
    checkpoint ID as an 8-bit prefix integer.  The remainder of the
    stream's data consists of the instructions defined in this section.
@@ -498,13 +515,6 @@ Internet-Draft                    QPACK                    December 2017
    process data on each as it arrives if it has sent
    "SETTINGS_QPACK_BLOCKING_PERMITTED", but MAY process checkpoint
    streams one at a time.
-
-
-
-Bishop                    Expires June 10, 2018                 [Page 9]
-
-Internet-Draft                    QPACK                    December 2017
-
 
 3.2.1.  INSERT
 
@@ -541,16 +551,6 @@ Internet-Draft                    QPACK                    December 2017
    Otherwise, the header field name is represented as a string literal
    (see Section 5.2 of [RFC7541]).  A value 0 is used in place of the
    table reference, followed by the header field name.
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -822,16 +822,16 @@ Internet-Draft                    QPACK                    December 2017
    table update streams.  Implementations SHOULD limit the size of table
    update messages to avoid head-of-line blocking within these messages.
 
-5.2.  Timely Delete Completion versus State Commitment
+5.2.  Timely State Transitions versus Decoder Complexity
 
-   Anything which prevent checkpoints from expiring can prevent the
-   encoder from adding any new entries due to the maximum table size.
-   This does not block the encoder from continuing to make requests, but
-   could sharply limit compression performance.  Encoders would be well-
-   served to begin moving checkpoint to DYING in advance of encountering
-   the table maximum.  Decoders SHOULD be prompt about emitting
-   STREAM_DONE and ACK_DROP instructions to enable the encoder to
-   recover the table space.
+   Anything which prevent checkpoints from transitioning from DYING to
+   DEAD can prevent the encoder from adding any new entries due to the
+   maximum table size.  This does not block the encoder from continuing
+   to make requests, but could sharply limit compression performance.
+   Encoders would be well-served to begin moving checkpoint to DYING in
+   advance of encountering the table maximum.  Decoders SHOULD be prompt
+   about emitting STREAM_DONE and ACK_DROP instructions to enable the
+   encoder to recover the table space.
 
 
 
@@ -841,6 +841,11 @@ Bishop                    Expires June 10, 2018                [Page 15]
 
 Internet-Draft                    QPACK                    December 2017
 
+
+   Similarly, for decoders which prohibit blocking references, delaying
+   the transition of a checkpoint from PENDING to LIVE will degrade
+   compression performance.  Decoders SHOULD consume checkpoint data and
+   emit ACK_FLUSH frames as promptly as possible.
 
 6.  Security Considerations
 
@@ -888,11 +893,6 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-
-
-
-
-
 Bishop                    Expires June 10, 2018                [Page 16]
 
 Internet-Draft                    QPACK                    December 2017
@@ -914,6 +914,8 @@ Internet-Draft                    QPACK                    December 2017
    o  Charles 'Buck' Krasic
 
    o  Kyle Rose
+
+   o  Alan Frindell
 
    A substantial portion of Mike's work on this draft was supported by
    Microsoft during his employment there.
@@ -942,9 +944,7 @@ Internet-Draft                    QPACK                    December 2017
               DOI 10.17487/RFC7540, May 2015,
               <https://www.rfc-editor.org/info/rfc7540>.
 
-   [RFC7541]  Peon, R. and H. Ruellan, "HPACK: Header Compression for
-              HTTP/2", RFC 7541, DOI 10.17487/RFC7541, May 2015,
-              <https://www.rfc-editor.org/info/rfc7541>.
+
 
 
 
@@ -953,6 +953,10 @@ Bishop                    Expires June 10, 2018                [Page 17]
 
 Internet-Draft                    QPACK                    December 2017
 
+
+   [RFC7541]  Peon, R. and H. Ruellan, "HPACK: Header Compression for
+              HTTP/2", RFC 7541, DOI 10.17487/RFC7541, May 2015,
+              <https://www.rfc-editor.org/info/rfc7541>.
 
 9.2.  Informative References
 
@@ -965,10 +969,6 @@ Author's Address
    Akamai
 
    Email: mbishop@evequefou.be
-
-
-
-
 
 
 
