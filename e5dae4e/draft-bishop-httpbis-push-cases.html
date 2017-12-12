@@ -1,0 +1,515 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+  <title>HTTP/2 Server Push Use Cases</title>
+
+  
+<style type="text/css">/*<![CDATA[*/
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+
+@media screen and (min-width: 1024px) {
+  ul.toc, #rfc\.toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 525px);
+    width: 300px;
+    z-index: 1;
+  }
+  #rfc\.toc {
+    top: 15px;
+  }
+  ul.toc {
+    top: 80px;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  body {
+    padding-right: 350px;
+  }
+}
+
+body {
+  font: 15px "Helvetica Neue",Helvetica,Arial,sans-serif;
+  color: #333;
+  font-size-adjust: 0.5;
+  line-height: 130%;
+  margin: 25px auto;
+  max-width: 724px;
+}
+
+.title, .filename, h1, h2, h3, h4 {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size-adjust: 0.5;
+  font-weight: 500;
+  color: #333;
+  line-height: 100%;
+  margin: 0.8em 0 0.3em;
+}
+.title { font-size: 36px; }
+h1 { font-size: 30px; }
+h2 { font-size: 24px; }
+h3, h4 { font-size: 18px; }
+h1 a[href], h2 a[href], h3 a[href], h4 a[href] {
+  color: #333;
+}
+
+ul.toc li {
+  list-style: none;
+  text-indent: -2.5em;
+  padding-left: 2.5em;
+  padding-bottom: 5px;
+  margin: 0;
+}
+ul.toc ul {
+  margin: 0;
+}
+/* xml2rfc nests ul directly inside ul which messes with the style badly */
+ul.toc, ul.toc>ul, ul.toc ul>ul {
+  margin: 0 0 0 1.5em;
+}
+
+table {
+  margin-left: 0em;
+  border-collapse: collapse;
+}
+th {
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+  vertical-align: top;
+}
+tr:nth-child(2n+1) > td,
+tr:nth-child(2n+1) > th {
+  background-color: #f9f9f9;
+}
+td.reference {
+  max-width: 200px;
+  border-top: none;
+  padding-right: 1em;
+}
+.right {
+  text-align: right;
+}
+
+
+table.header {
+  width: 100%;
+}
+table.header td {
+  border: none;
+  background-color: transparent;
+  color: black;
+}
+.filename {
+  color: rgb(119, 119, 119);
+  font-size: 23px;
+  font-weight: normal;
+  height: auto;
+  line-height: 100%;
+}
+#rfc\.abstract+p {
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 130%;
+}
+
+samp, tt, code, pre {
+  font: 11pt consolas, monospace;
+  font-size-adjust: none;
+}
+pre {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  overflow-x: auto;
+  padding: 5px;
+  margin: 5px;
+}
+.figure {
+  font-style: italic;
+  margin: 0 1.5em;
+}
+
+address {
+  margin: 10px 0 0;
+}
+.vcard {
+  font-style: normal;
+}
+.vcardline {
+  display: block;
+}
+.vcardline .fn {
+  font-weight: bold;
+}
+.vcardline .hidden {
+  display: none;
+}
+
+dl {
+  margin-left: 1em;
+}
+dl.dl-horizontal: {
+  margin-left: 0;
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.nohang > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .5em;
+}
+dl.compact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+ul.empty {
+  list-style-type: none;
+}
+ul.empty li {
+  margin-top: .5em;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #2a6496;
+}
+a[href]:hover {
+  background-color: #eee;
+}
+
+ol, ul, li, p {
+  padding: 0;
+  margin: 0.5em 0 0.5em 2em;
+}
+li, p {
+  margin-left: 0;
+}
+address {
+  font-style: normal;
+}
+
+.github-fork-ribbon-wrapper {
+  display: none;
+}
+@media screen and (min-width: 800px) {
+  /* "Fork me on GitHub" CSS ribbon based on
+   * https://github.com/simonwhitaker/github-fork-ribbon-css
+   */
+  .github-fork-ribbon {
+    position: absolute;
+    padding: 2px 0;
+    background-color: #a00;
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);
+    font: 700 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+    pointer-events: auto;
+
+    top: 38px;
+    right: -45px;
+
+    transform: rotate(45deg);
+  }
+
+  .github-fork-ribbon a[href],
+  .github-fork-ribbon a[href]:hover {
+    color: #fff;
+    background-color: transparent;
+    text-decoration: none;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+    text-align: center;
+
+    width: 190px;
+    line-height: 18px;
+
+    display: inline-block;
+    padding: 2px 0;
+
+    border: 1.5px dotted #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .github-fork-ribbon-wrapper {
+    display: block;
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    overflow: hidden;
+    top: 0; right: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .github-fork-ribbon-wrapper {
+    position: fixed;
+  }
+  /*]]>*/</style>
+
+
+  <link href="#rfc.toc" rel="Contents">
+<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
+<link href="#rfc.section.2" rel="Chapter" title="2 Types of Resources">
+<link href="#rfc.section.2.1" rel="Chapter" title="2.1 Browser Scenarios">
+<link href="#rfc.section.2.1.1" rel="Chapter" title="2.1.1 Static DOM contents">
+<link href="#rfc.section.2.1.2" rel="Chapter" title="2.1.2 Updated DOM contents">
+<link href="#rfc.section.2.1.3" rel="Chapter" title="2.1.3 Requests made by local script execution">
+<link href="#rfc.section.2.2" rel="Chapter" title="2.2 Non-Browser Scenarios">
+<link href="#rfc.section.2.2.1" rel="Chapter" title="2.2.1 Subsequent API Requests">
+<link href="#rfc.section.2.2.2" rel="Chapter" title="2.2.2 Streaming APIs">
+<link href="#rfc.section.3" rel="Chapter" title="3 Types of Pushes">
+<link href="#rfc.section.3.1" rel="Chapter" title="3.1 Pre-Satisfying Requests">
+<link href="#rfc.section.3.2" rel="Chapter" title="3.2 Cache Population">
+<link href="#rfc.section.3.3" rel="Chapter" title="3.3 Cache Revalidation">
+<link href="#rfc.section.3.4" rel="Chapter" title="3.4 Cache Invalidation">
+<link href="#rfc.section.4" rel="Chapter" title="4 Security Considerations">
+<link href="#rfc.references" rel="Chapter" title="5 Informative References">
+<link href="#rfc.authors" rel="Chapter">
+
+
+  <meta name="generator" content="xml2rfc version 2.8.2 - https://tools.ietf.org/tools/xml2rfc" />
+  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+
+  <meta name="dct.creator" content="Bishop, M." />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-httpbis-push-cases-latest" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-12-12" />
+  <meta name="dct.abstract" content="HTTP/2 defines the wire mechanics of Server Push in " />
+  <meta name="description" content="HTTP/2 defines the wire mechanics of Server Push in " />
+
+</head>
+
+<body>
+
+  <table class="header">
+    <tbody>
+    
+    	<tr>
+<td class="left">HTTPbis</td>
+<td class="right">M. Bishop</td>
+</tr>
+<tr>
+<td class="left">Internet-Draft</td>
+<td class="right">Akamai</td>
+</tr>
+<tr>
+<td class="left">Intended status: Informational</td>
+<td class="right">December 12, 2017</td>
+</tr>
+<tr>
+<td class="left">Expires: June 15, 2018</td>
+<td class="right"></td>
+</tr>
+
+    	
+    </tbody>
+  </table>
+
+  <p class="title">HTTP/2 Server Push Use Cases<br />
+  <span class="filename">draft-bishop-httpbis-push-cases-latest</span></p>
+  
+  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
+<p>HTTP/2 defines the wire mechanics of Server Push in <a href="#RFC7540" class="xref">[RFC7540]</a>, Section 8.2.  Though the mechanics of how a pushed resource is delivered are well-specified, the use cases that describe which resources can be pushed, in what states, and for what purpose are not described in HTTP/2.  As a result, support between implementations varies widely.</p>
+<p>This document attempts to enumerate interesting scenarios, in hopes that a more concrete taxonomy can assist the community in arriving at a standard set of supported scenarios.</p>
+<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
+<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
+<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
+<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
+<p>This Internet-Draft will expire on June 15, 2018.</p>
+<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
+<p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
+
+  
+  <hr class="noprint" />
+  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
+  <ul class="toc">
+
+  	<li>1.   <a href="#rfc.section.1">Introduction</a>
+</li>
+<li>2.   <a href="#rfc.section.2">Types of Resources</a>
+</li>
+<ul><li>2.1.   <a href="#rfc.section.2.1">Browser Scenarios</a>
+</li>
+<ul><li>2.1.1.   <a href="#rfc.section.2.1.1">Static DOM contents</a>
+</li>
+<li>2.1.2.   <a href="#rfc.section.2.1.2">Updated DOM contents</a>
+</li>
+<li>2.1.3.   <a href="#rfc.section.2.1.3">Requests made by local script execution</a>
+</li>
+</ul><li>2.2.   <a href="#rfc.section.2.2">Non-Browser Scenarios</a>
+</li>
+<ul><li>2.2.1.   <a href="#rfc.section.2.2.1">Subsequent API Requests</a>
+</li>
+<li>2.2.2.   <a href="#rfc.section.2.2.2">Streaming APIs</a>
+</li>
+</ul></ul><li>3.   <a href="#rfc.section.3">Types of Pushes</a>
+</li>
+<ul><li>3.1.   <a href="#rfc.section.3.1">Pre-Satisfying Requests</a>
+</li>
+<li>3.2.   <a href="#rfc.section.3.2">Cache Population</a>
+</li>
+<li>3.3.   <a href="#rfc.section.3.3">Cache Revalidation</a>
+</li>
+<li>3.4.   <a href="#rfc.section.3.4">Cache Invalidation</a>
+</li>
+</ul><li>4.   <a href="#rfc.section.4">Security Considerations</a>
+</li>
+<li>5.   <a href="#rfc.references">Informative References</a>
+</li>
+<li><a href="#rfc.authors">Author's Address</a>
+</li>
+
+
+  </ul>
+
+  <h1 id="rfc.section.1">
+<a href="#rfc.section.1">1.</a> <a href="#problems" id="problems">Introduction</a>
+</h1>
+<p id="rfc.section.1.p.1">HTTP is fundamentally a request/response mechanism.  Each request specifies some action (often content retrieval) which the user agent wishes the server to perform on a resource and return the result of the action.</p>
+<p id="rfc.section.1.p.2">HTTP/2 defines Server Push, a paradigm in which the server can also return the results of actions the user agent did <em>not</em> request.  In order to preserve the request-response semantics of HTTP, the server first &#8220;promises&#8221; something by supplying the request to which it will later provide a response as if the user agent had made the supplied request. Push is also restricted to methods which are defined to be safe and cacheable.  (Though the response itself need not be cacheable.)</p>
+<p id="rfc.section.1.p.3">A push is always associated directly with a client-generated request. No chaining is permitted (a push cannot be associated with another push), nor can a push be promised after the client-initiated stream has closed, though a promised push can be fulfilled at any subsequent time.</p>
+<p id="rfc.section.1.p.4">This document is an attempt to enumerate categories of resources and situations in which a server might choose to push a resource.</p>
+<h1 id="rfc.section.2">
+<a href="#rfc.section.2">2.</a> <a href="#types-of-resources" id="types-of-resources">Types of Resources</a>
+</h1>
+<h1 id="rfc.section.2.1">
+<a href="#rfc.section.2.1">2.1.</a> <a href="#browser-scenarios" id="browser-scenarios">Browser Scenarios</a>
+</h1>
+<p id="rfc.section.2.1.p.1">The most visible use case for HTTP is the web browser.  Because a web page is composed of a large number of resources, often spread across different domains, browsers issue a complex series of requests in the course of rendering a page.  However, because browsers are generating these requests based on the combination of server-supplied content (the initial response) and local state (the contents of the cache, if any), the server is able to partially predict the client&#8217;s rendering behavior.  Efforts to standardize the download process between clients (<a href="#FETCH" class="xref">[FETCH]</a>) and to supply more information about the local state to the server (<a href="#I-D.ietf-httpbis-cache-digest" class="xref">[I-D.ietf-httpbis-cache-digest]</a>) will improve the server&#8217;s ability to predict such subsequent requests.</p>
+<p id="rfc.section.2.1.p.2">However, web pages are increasingly dynamic, and this makes the browser&#8217;s job of determining what is logically connected with the initial request more complex.</p>
+<h1 id="rfc.section.2.1.1">
+<a href="#rfc.section.2.1.1">2.1.1.</a> <a href="#static-dom-contents" id="static-dom-contents">Static DOM contents</a>
+</h1>
+<p id="rfc.section.2.1.1.p.1">This is almost universally-supported among browsers.  If the resource directly references another resource, either via Link headers (<a href="#RFC5988" class="xref">[RFC5988]</a>) or via the entity body, almost all browsers will accept a match for this resource served as a push.</p>
+<p id="rfc.section.2.1.1.p.2">Such resources are typically CSS, JavaScript, images, or other elements required for the rendering or functionality of the page.</p>
+<h1 id="rfc.section.2.1.2">
+<a href="#rfc.section.2.1.2">2.1.2.</a> <a href="#updated-dom-contents" id="updated-dom-contents">Updated DOM contents</a>
+</h1>
+<p id="rfc.section.2.1.2.p.1">After the DOM is constructed, it can be locally modified.  Some web sites consist of very sparse static content, then rely on the execution of scripts locally to create DOM element or update existing elements to reference new target resources.</p>
+<h1 id="rfc.section.2.1.3">
+<a href="#rfc.section.2.1.3">2.1.3.</a> <a href="#browser-script" id="browser-script">Requests made by local script execution</a>
+</h1>
+<p id="rfc.section.2.1.3.p.1">The locally executed script, rather than updating DOM elements, is also able to directly generate new HTTP requests (typically so that they can populate DOM elements by script).  Many sites have expressed use-cases for pre-answering queries their script would generate in response to user action.</p>
+<p id="rfc.section.2.1.3.p.2">For example, the page might contain a list of e-mails, with script populating the contents of the e-mail once the user clicks a list entry.  If a site author knows the user is likely to click one of the first three unread e-mails, the contents of those e-mails are reasonable candidates for Server Push.</p>
+<h1 id="rfc.section.2.2">
+<a href="#rfc.section.2.2">2.2.</a> <a href="#non-browser-scenarios" id="non-browser-scenarios">Non-Browser Scenarios</a>
+</h1>
+<p id="rfc.section.2.2.p.1">Non-browser scenarios can typically be analyzed as an API.</p>
+<h1 id="rfc.section.2.2.1">
+<a href="#rfc.section.2.2.1">2.2.1.</a> <a href="#subsequent-api-requests" id="subsequent-api-requests">Subsequent API Requests</a>
+</h1>
+<p id="rfc.section.2.2.1.p.1">There is substantial overlap between non-browser scenarios and the in-browser script scenario described in <a href="#browser-script" class="xref">Section 2.1.3</a>.  In both cases, the server is predicting subsequent API calls based on where it believes the client is in the process of execution.</p>
+<p id="rfc.section.2.2.1.p.2">If the server can predict subsequent actions, it can pre-satisfy the most likely cases in order to minimize latency.</p>
+<h1 id="rfc.section.2.2.2">
+<a href="#rfc.section.2.2.2">2.2.2.</a> <a href="#streaming-apis" id="streaming-apis">Streaming APIs</a>
+</h1>
+<p id="rfc.section.2.2.2.p.1">Some APIs do not fit well with the request-response model of HTTP, but are better understood as a subscription to an event or a data stream.  Push can be used in this model, as in <a href="#RFC8030" class="xref">[RFC8030]</a>, by opening a request which never completes and pushing new data to the client as it becomes available.</p>
+<p id="rfc.section.2.2.2.p.2">Some implementations of push do not make incoming push streams available to clients unless the client makes a request for the corresponding URL.  As a result, clients and servers implementing this pattern might wish to also use the original request to stream back the resource identifiers which are being pushed.</p>
+<h1 id="rfc.section.3">
+<a href="#rfc.section.3">3.</a> <a href="#types-of-pushes" id="types-of-pushes">Types of Pushes</a>
+</h1>
+<p id="rfc.section.3.p.1">In addition to pushing different resources, push can be delivered in different ways and for different purposes.</p>
+<h1 id="rfc.section.3.1">
+<a href="#rfc.section.3.1">3.1.</a> <a href="#pre-satisfying-requests" id="pre-satisfying-requests">Pre-Satisfying Requests</a>
+</h1>
+<p id="rfc.section.3.1.p.1">The most common and most widely supported variety of push simply provides a request that the client is expected to make, along with a successful (typically 200) response carrying the content.</p>
+<h1 id="rfc.section.3.2">
+<a href="#rfc.section.3.2">3.2.</a> <a href="#cache-population" id="cache-population">Cache Population</a>
+</h1>
+<p id="rfc.section.3.2.p.1">Pushing resources into the client cache has been a subject of some controversy.  Almost all browsers implement a separate and ephemeral cache of pushed resources and do not allow pushed resources to write directly into the HTTP cache, theoretically as a mitigation against populating the cache with content that will never actually be needed.</p>
+<p id="rfc.section.3.2.p.2">However, mechanisms such as Link headers (<a href="#RFC5988" class="xref">[RFC5988]</a>) with the <samp>rel=preload</samp> attribute can cause the browser to request any resource, and these headers are also under the server&#8217;s control.  As a result, any client that implements <a href="#pre-satisfying-requests" class="xref">Section 3.1</a> will also enable cache population with one additional step.</p>
+<h1 id="rfc.section.3.3">
+<a href="#rfc.section.3.3">3.3.</a> <a href="#cache-revalidation" id="cache-revalidation">Cache Revalidation</a>
+</h1>
+<p id="rfc.section.3.3.p.1">While no user agents are known to support this, a server could hypothetically pre-validate stale items in the client&#8217;s cache by pushing a conditional request (If-Not-Match or If-Not-Modified) for a resource it believes is already in the cache and a 304 (Not Modified) response.</p>
+<h1 id="rfc.section.3.4">
+<a href="#rfc.section.3.4">3.4.</a> <a href="#cache-invalidation" id="cache-invalidation">Cache Invalidation</a>
+</h1>
+<p id="rfc.section.3.4.p.1">Alternatively, the server could push an unconditional request for the resource, but use the HEAD method instead of GET.  If interpreted appropriately by a user agent, this could revalidate a matching item in the cache, or invalidate an item even if the user agent currently believes the item to be fresh.</p>
+<h1 id="rfc.section.4">
+<a href="#rfc.section.4">4.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
+</h1>
+<p id="rfc.section.4.p.1">There probably are some. The existing mitigations against gratuitous pushes are largely ineffective (see <a href="#cache-population" class="xref">Section 3.2</a>), but clients MUST verify that servers are authoritative for any resources they attempt to push, regardless of the scenario being considered.</p>
+<h1 id="rfc.references">
+<a href="#rfc.references">5.</a> Informative References</h1>
+<table><tbody>
+<tr>
+<td class="reference"><b id="FETCH">[FETCH]</b></td>
+<td class="top">"<a href="https://fetch.spec.whatwg.org">Fetch Living Standard</a>", n.d..</td>
+</tr>
+<tr>
+<td class="reference"><b id="I-D.ietf-httpbis-cache-digest">[I-D.ietf-httpbis-cache-digest]</b></td>
+<td class="top">
+<a>Oku, K.</a> and <a>M. Nottingham</a>, "<a href="https://tools.ietf.org/html/draft-ietf-httpbis-cache-digest-02">Cache Digests for HTTP/2</a>", Internet-Draft draft-ietf-httpbis-cache-digest-02, May 2017.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC5988">[RFC5988]</b></td>
+<td class="top">
+<a>Nottingham, M.</a>, "<a href="https://tools.ietf.org/html/rfc5988">Web Linking</a>", RFC 5988, DOI 10.17487/RFC5988, October 2010.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7540">[RFC7540]</b></td>
+<td class="top">
+<a>Belshe, M.</a>, <a>Peon, R.</a> and <a>M. Thomson</a>, "<a href="https://tools.ietf.org/html/rfc7540">Hypertext Transfer Protocol Version 2 (HTTP/2)</a>", RFC 7540, DOI 10.17487/RFC7540, May 2015.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC8030">[RFC8030]</b></td>
+<td class="top">
+<a>Thomson, M.</a>, <a>Damaggio, E.</a> and <a>B. Raymor</a>, "<a href="https://tools.ietf.org/html/rfc8030">Generic Event Delivery Using HTTP Push</a>", RFC 8030, DOI 10.17487/RFC8030, December 2016.</td>
+</tr>
+</tbody></table>
+<h1 id="rfc.authors"><a href="#rfc.authors">Author's Address</a></h1>
+<div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Mike Bishop</span> 
+	  <span class="n hidden">
+		<span class="family-name">Bishop</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Akamai</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality"></span> 
+		<span class="region"></span>
+		<span class="code"></span>
+	  </span>
+	  <span class="country-name vcardline"></span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:mbishop@evequefou.be">mbishop@evequefou.be</a></span>
+
+  </address>
+</div>
+
+  <div class="github-fork-ribbon-wrapper"><div class="github-fork-ribbon"><a href="https://github.com/MikeBishop/http-misc-extensions">Fork me on GitHub</a></div></div>
+</body>
+</html>
