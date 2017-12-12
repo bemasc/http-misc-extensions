@@ -318,7 +318,7 @@ address {
 
   <meta name="dct.creator" content="Bishop, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-quic-http-and-qpack-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-12-7" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-12-12" />
   <meta name="dct.abstract" content="HTTP/2 " />
   <meta name="description" content="HTTP/2 " />
 
@@ -339,10 +339,10 @@ address {
 </tr>
 <tr>
 <td class="left">Intended status: Standards Track</td>
-<td class="right">December 7, 2017</td>
+<td class="right">December 12, 2017</td>
 </tr>
 <tr>
-<td class="left">Expires: June 10, 2018</td>
+<td class="left">Expires: June 15, 2018</td>
 <td class="right"></td>
 </tr>
 
@@ -359,7 +359,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on June 10, 2018.</p>
+<p>This Internet-Draft will expire on June 15, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -488,10 +488,11 @@ address {
 <p id="rfc.section.2.1.1.1.p.1">A checkpoint is created by opening a new checkpoint stream.  This places the checkpoint in the NEW state for both encoder and decoder.  The encoder typically has at least one checkpoint in the NEW state.</p>
 <p id="rfc.section.2.1.1.1.p.2">Flushing a checkpoint is a two-step operation.  First, the checkpoint stream is closed. At that time, the encoder&#8217;s NEW checkpoint becomes PENDING.  The decoder moves its NEW checkpoint directly to LIVE and responds with an ACK_FLUSH message on the feedback stream.  When the encoder receives this message, its PENDING checkpoint becomes LIVE.</p>
 <p id="rfc.section.2.1.1.1.p.3">Unused entries are evicted indirectly, by dropping checkpoints. Before a checkpoint can be dropped, its state is changed to DYING.  Changing a checkpoint&#8217;s state to DYING allows the checkpoint to age out.  This is a strictly internal state on the encoder, and not visible to the decoder. A DYING checkpoint can be returned to LIVE at the encoder&#8217;s discretion if necessary.</p>
-<p id="rfc.section.2.1.1.1.p.4">The encoder can change a DYING checkpoint to DEAD (sending a DROP instruction) when it is no longer referenced by any outstanding header blocks. The encoder sends the DROP command to the decoder when it declares a checkpoint DEAD; the decoder drops the corresponding checkpoint and responds with an ACK_DROP message.  The encoder drops the DEAD checkpoint upon receipt of the ACK_DROP message.</p>
-<p id="rfc.section.2.1.1.1.p.5">When a checkpoint is dropped, the table entries it references are checked: if an entry is no longer referenced by any checkpoint, the entry is evicted.</p>
-<p id="rfc.section.2.1.1.1.p.6">Dropping a checkpoint and the entries associated with it is not limited to just the oldest checkpoint; any DYING checkpoint &#8211; as long as state transition rules are followed &#8211; may be dropped.  This flexibility permits the encoder to use a number of strategies for entry eviction.</p>
-<p id="rfc.section.2.1.1.1.p.7">As long as the maximum dynamic table size is observed, new checkpoints can be created; no upper limit on the number of checkpoints is specified.  A well-balanced spread of checkpoints permits the encoder to recycle entries effectively.</p>
+<p id="rfc.section.2.1.1.1.p.4">The encoder can change a DYING checkpoint to DEAD (sending a DROP instruction) when it is no longer referenced by any outstanding header blocks. The encoder sends the DROP command to the decoder when it declares a checkpoint DEAD.</p>
+<p id="rfc.section.2.1.1.1.p.5">To ensure consistency, the decoder drops the corresponding checkpoint and responds with an ACK_DROP message only when it has fully received all instructions the encoder has issued up to that point.  The encoder drops the DEAD checkpoint upon receipt of the ACK_DROP message.</p>
+<p id="rfc.section.2.1.1.1.p.6">When a checkpoint is dropped by encoder or decoder, the table entries it references are checked: if an entry is no longer referenced by any checkpoint, the entry is evicted.</p>
+<p id="rfc.section.2.1.1.1.p.7">Dropping a checkpoint and the entries associated with it is not limited to just the oldest checkpoint; any DYING checkpoint &#8211; as long as state transition rules are followed &#8211; may be dropped.  This flexibility permits the encoder to use a number of strategies for entry eviction.</p>
+<p id="rfc.section.2.1.1.1.p.8">As long as the maximum dynamic table size is observed, new checkpoints can be created; no upper limit on the number of checkpoints is specified.  A well-balanced spread of checkpoints permits the encoder to recycle entries effectively.</p>
 <h1 id="rfc.section.2.2">
 <a href="#rfc.section.2.2">2.2.</a> <a href="#encoding-constraints" id="encoding-constraints">Encoding Constraints</a>
 </h1>
@@ -563,12 +564,15 @@ address {
 <h1 id="rfc.section.3.1.3">
 <a href="#rfc.section.3.1.3">3.1.3.</a> <a href="#drop" id="drop">DROP</a>
 </h1>
-<p id="rfc.section.3.1.3.p.1">When an encoder has received sufficient HEADERS_DONE messages to know that a DYING checkpoint has no outstanding references, it emits a DROP instruction to inform the decoder that the checkpoint can be removed.  Upon sending a DROP instruction, a DYING checkpoint becomes DEAD.  Upon receiving a DROP instruction, a LIVE checkpoint is removed from the decoder state and an ACK_DROP instruction is emitted.</p>
+<p id="rfc.section.3.1.3.p.1">When an encoder has received sufficient HEADERS_DONE messages to know that a DYING checkpoint has no outstanding references, it emits a DROP instruction to inform the decoder that the checkpoint can be removed.  Upon sending a DROP instruction, a DYING checkpoint becomes DEAD.  The DROP instruction also includes the ID of the encoder&#8217;s greatest checkpoint ID so far.</p>
+<p id="rfc.section.3.1.3.p.2">Upon receiving a DROP instruction, if all checkpoints up to and including the Most Recent ID have been fully processed (transitioned from NEW to LIVE), the identified LIVE checkpoint is removed from the decoder state and an ACK_DROP instruction is emitted.  Otherwise, the decoder saves the DROP instruction until other checkpoints become LIVE.</p>
 <pre>
   0   1   2   3   4   5   6   7
 +---+---+---+---+---+---+---+---+
 | 0 | 1 | 0 | Checkpoint ID (5+)|
-+---+---------------------------+
++---+---+---+-------------------+
+|      Most Recent ID (8+)      |
++-------------------------------+
 </pre>
 <p class="figure">DROP instruction</p>
 <h1 id="rfc.section.3.1.4">
@@ -579,7 +583,7 @@ address {
   0   1   2   3   4   5   6   7
 +---+---+---+---+---+---+---+---+
 | 0 | 1 | 1 | Checkpoint ID (5+)|
-+---+---------------------------+
++---+---+---+-------------------+
 </pre>
 <p class="figure">ACK_DROP instruction</p>
 <h1 id="rfc.section.3.2">
@@ -591,7 +595,7 @@ address {
 
 <ul class="empty"><li>
 <strong>Note to readers:</strong> This header does not currently exist in the main draft, but has manifested in several PRs, and would need to be resurrected.</li></ul>
-<p id="rfc.section.3.2.p.4">Following the stream header, a checkpoint stream contains its checkpoint ID as an 8-bit prefix integer. The remainder of the stream&#8217;s data consists of the instructions defined in this section.</p>
+<p id="rfc.section.3.2.p.4">Following the stream header, a checkpoint stream contains its checkpoint ID as an 8-bit prefix integer. The remainder of the stream&#8217;s data consists of the instructions defined in this section.  Checkpoint IDs begin at zero and increment by one for each new checkpoint.</p>
 <p id="rfc.section.3.2.p.5">Data on checkpoint streams SHOULD be processed as soon as it arrives.  If multiple checkpoint streams are received at once, a decoder SHOULD process data on each as it arrives if it has sent <samp>SETTINGS_QPACK_BLOCKING_PERMITTED</samp>, but MAY process checkpoint streams one at a time.</p>
 <h1 id="rfc.section.3.2.1">
 <a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#insert" id="insert">INSERT</a>
@@ -603,7 +607,7 @@ address {
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
    | 1 |       New Index (7+)      |
-   +---+---+-----------------------+
+   +---+---------------------------+
    | S |       Name Index (7+)     |
    +---+---------------------------+
    | H |     Value Length (7+)     |
@@ -617,9 +621,9 @@ address {
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
    | 1 |       New Index (7+)      |
-   +---+---+-----------------------+
+   +---+---------------------------+
    |               0               |
-   +---+---+-----------------------+
+   +---+---------------------------+
    | H |     Name Length (7+)      |
    +---+---------------------------+
    |  Name String (Length octets)  |
@@ -656,7 +660,7 @@ address {
   0   1   2   3   4   5   6   7
 +---+---+---+---+---+---+---+---+
 | 1 | S |      Index (6+)       |
-+---+---------------------------+
++---+---+-----------------------+
 </pre>
 <p class="figure">Indexed Header Field</p>
 <p id="rfc.section.3.3.1.p.2">An indexed header field starts with the &#8216;1&#8217; 1-bit pattern, followed by the <samp>S</samp> bit indicating whether the reference is into the static (S=1) or dynamic (S=0) table. Finally, the index of the matching header field is represented as an integer with a 6-bit prefix (see Section 5.1 of <a href="#RFC7541" class="xref">[RFC7541]</a>).</p>
@@ -671,7 +675,7 @@ address {
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
    | 0 | N | S |  Name Index (5+)  |
-   +---+---+-----------------------+
+   +---+---+---+-------------------+
    | H |     Value Length (7+)     |
    +---+---------------------------+
    | Value String (Length octets)  |
@@ -729,16 +733,18 @@ address {
 <p id="rfc.section.5.1.p.3">Better efficiency while being similarly conservative can be achieved by permitting references to table entries only once these entries are confirmed to be present in the table.  More optimization can be achieved when the reference is known to be in the same packet as the definition.</p>
 <p id="rfc.section.5.1.p.4">Increases in efficiency can be achieved by assuming greater risk of blocking &#8211; implementations might choose a particular balance, or adjust their aggressiveness based on observed network characteristics.</p>
 <p id="rfc.section.5.1.p.5">Since it is possible to insert header values without emitting them on a stream, an encoder MAY also proactively insert header values which it believes will be needed on future requests, at the cost of reduced compression efficiency for incorrect predictions.</p>
-<p id="rfc.section.5.1.p.6">The ability to split updates to the header table into discrete messages reduces the possibility for head-of-line blocking within the table update streams.  Implementations SHOULD limit the size of table update messages to avoid head-of-line blocking within these messages.</p>
+<p id="rfc.section.5.1.p.6">The ability to split updates to the header table into discrete checkpoints reduces the possibility for head-of-line blocking within the checkpoint streams.  Implementations SHOULD limit the size of checkpoints to avoid head-of-line blocking within these messages.</p>
 <h1 id="rfc.section.5.2">
 <a href="#rfc.section.5.2">5.2.</a> <a href="#timely-state-transitions-versus-decoder-complexity" id="timely-state-transitions-versus-decoder-complexity">Timely State Transitions versus Decoder Complexity</a>
 </h1>
 <p id="rfc.section.5.2.p.1">Anything which prevent checkpoints from transitioning from DYING to DEAD can prevent the encoder from adding any new entries due to the maximum table size.  This does not block the encoder from continuing to make requests, but could sharply limit compression performance. Encoders would be well-served to begin moving checkpoint to DYING in advance of encountering the table maximum.  Decoders SHOULD be prompt about emitting STREAM_DONE and ACK_DROP instructions to enable the encoder to recover the table space.</p>
 <p id="rfc.section.5.2.p.2">Similarly, for decoders which prohibit blocking references, delaying the transition of a checkpoint from PENDING to LIVE will degrade compression performance.  Decoders SHOULD consume checkpoint data and emit ACK_FLUSH frames as promptly as possible.</p>
+<p id="rfc.section.5.2.p.3">Since decoders cannot safely drop old checkpoints until they have fully processed any checkpoints which might have been open concurrently, a long-lived checkpoint can delay the completion of an ACK_DROP.  Encoders SHOULD flush all NEW checkpoints as soon as feasible after issuing a DROP instruction.</p>
 <h1 id="rfc.section.6">
 <a href="#rfc.section.6">6.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
 </h1>
 <p id="rfc.section.6.p.1">A malicious encoder might attempt to consume a large amount of space on the decoder, but as each decoder chooses how much memory to allow the peer to consume, this state is bounded.</p>
+<p id="rfc.section.6.p.2">A malicious encoder might also send blocking references to entries which will never actually be defined.  This attack is comparable to a &#8220;slow loris&#8221; attack in which a request is delivered very slowly in an attempt to consume resources on the server.  Similar mitigations (request timers, etc.) SHOULD be employed to guard against such attacks.</p>
 <h1 id="rfc.section.7">
 <a href="#rfc.section.7">7.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
 </h1>
