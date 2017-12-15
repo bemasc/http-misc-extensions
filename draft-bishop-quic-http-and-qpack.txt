@@ -638,13 +638,15 @@ Internet-Draft                    QPACK                    December 2017
 
 3.3.  Request Streams
 
-   Frames which carry HTTP message headers begin with a preface
-   indicating the QPACK state which is necessary to decode the frame
-   without blocking.  This header indicates one or more checkpoints on
-   which the request depends; if these checkpoints are not LIVE, it MAY
-   avoid reading the remainder of the frame until they are.  (If any of
-   these checkpoints have already been dropped, this must be treated as
-   a stream error of type ERROR_QPACK_INVALID_REFERENCE.)
+   Frames which carry HTTP message headers begin with an optional
+   preface indicating potentially-blocking references in the frame.  If
+   present, this preface indicates that the request depends on one or
+   more checkpoints which were NEW or PENDING for the encoder when the
+   frame was generated.  If these checkpoints are not LIVE on the
+   decoder, it MAY delay reading the remainder of the frame until they
+   are.  (If any of these checkpoints have already been dropped, this
+   must be treated as a stream error of type
+   ERROR_QPACK_INVALID_REFERENCE.)
 
    The preface is formatted as follows:
 
@@ -662,8 +664,6 @@ Internet-Draft                    QPACK                    December 2017
    The "L" bit indicates that this checkpoint is the last checkpoint in
    the preface; if the bit is unset (0), then another checkpoint
    follows.
-
-
 
 
 
@@ -772,12 +772,12 @@ Internet-Draft                    QPACK                    December 2017
 
    o  Header Blocks consist of QPACK data instead of HPACK data
 
+   o  HEADERS and PUSH_PROMISE frames define a flag indicating the
+      presence of a preface.
+
    o  Just as unidirectional push streams have a stream header
       identifying their Push ID, a header will need to be added to
       differentiate checkpoint streams from pushes
-
-   o  Stream 2 is reserved for the Feedback Stream
-
 
 
 
@@ -786,12 +786,12 @@ Bishop                    Expires June 18, 2018                [Page 14]
 Internet-Draft                    QPACK                    December 2017
 
 
+   o  Stream 2 is reserved for the Feedback Stream
+
    A HEADERS or PUSH_PROMISE frame MAY contain an arbitrary number of
-   QPACK instructions, but QPACK instructions SHOULD NOT cross a
-   boundary between successive HEADERS frames.  A partial HEADERS or
-   PUSH_PROMISE frame MAY be processed upon arrival and the resulting
-   partial header set emitted or buffered according to implementation
-   requirements.
+   QPACK instructions.  A partial HEADERS or PUSH_PROMISE frame MAY be
+   processed upon arrival and the resulting partial header set emitted
+   or buffered according to implementation requirements.
 
 4.1.  SETTING_QPACK_BLOCKING_PERMITTED
 

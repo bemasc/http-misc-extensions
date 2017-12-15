@@ -656,7 +656,7 @@ address {
 <h1 id="rfc.section.3.3">
 <a href="#rfc.section.3.3">3.3.</a> <a href="#request-streams" id="request-streams">Request Streams</a>
 </h1>
-<p id="rfc.section.3.3.p.1">Frames which carry HTTP message headers begin with a preface indicating the QPACK state which is necessary to decode the frame without blocking. This header indicates one or more checkpoints on which the request depends; if these checkpoints are not LIVE, it MAY avoid reading the remainder of the frame until they are.  (If any of these checkpoints have already been dropped, this must be treated as a stream error of type ERROR_QPACK_INVALID_REFERENCE.)</p>
+<p id="rfc.section.3.3.p.1">Frames which carry HTTP message headers begin with an optional preface indicating potentially-blocking references in the frame. If present, this preface indicates that the request depends on one or more checkpoints which were NEW or PENDING for the encoder when the frame was generated.  If these checkpoints are not LIVE on the decoder, it MAY delay reading the remainder of the frame until they are.  (If any of these checkpoints have already been dropped, this must be treated as a stream error of type ERROR_QPACK_INVALID_REFERENCE.)</p>
 <p id="rfc.section.3.3.p.2">The preface is formatted as follows:</p>
 <pre>
      0   1   2   3   4   5   6   7
@@ -725,10 +725,11 @@ address {
 
 <ul>
 <li>Header Blocks consist of QPACK data instead of HPACK data</li>
+<li>HEADERS and PUSH_PROMISE frames define a flag indicating the presence of a preface.</li>
 <li>Just as unidirectional push streams have a stream header identifying their Push ID, a header will need to be added to differentiate checkpoint streams from pushes</li>
 <li>Stream 2 is reserved for the Feedback Stream</li>
 </ul>
-<p id="rfc.section.4.p.3">A HEADERS or PUSH_PROMISE frame MAY contain an arbitrary number of QPACK instructions, but QPACK instructions SHOULD NOT cross a boundary between successive HEADERS frames.  A partial HEADERS or PUSH_PROMISE frame MAY be processed upon arrival and the resulting partial header set emitted or buffered according to implementation requirements.</p>
+<p id="rfc.section.4.p.3">A HEADERS or PUSH_PROMISE frame MAY contain an arbitrary number of QPACK instructions.  A partial HEADERS or PUSH_PROMISE frame MAY be processed upon arrival and the resulting partial header set emitted or buffered according to implementation requirements.</p>
 <h1 id="rfc.section.4.1">
 <a href="#rfc.section.4.1">4.1.</a> <a href="#setting-block" id="setting-block">SETTING_QPACK_BLOCKING_PERMITTED</a>
 </h1>
