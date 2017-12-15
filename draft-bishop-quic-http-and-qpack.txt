@@ -301,22 +301,18 @@ Internet-Draft                    QPACK                    December 2017
 
 2.2.1.  Permitted References
 
-   When encoding headers on a request stream or referencing existing
-   entries in a checkpoint stream, an encoder MAY reference any static
-   table entry or any dynamic header table entry referenced by a LIVE
-   checkpoint.  References to entries in NEW or PENDING checkpoints are
-   permitted only if the client has set
+   When encoding headers on a request stream, an encoder MAY reference
+   any static table entry or any dynamic header table entry referenced
+   by a LIVE checkpoint.  References to entries in NEW or PENDING
+   checkpoints are permitted only if the client has set
    "SETTING_QPACK_BLOCKING_PERMITTED" (see Section 4.1).
 
    If a decoder receives a reference to an empty slot in the dynamic
    table but has not sent "SETTING_QPACK_BLOCKING_PERMITTED", this MUST
-   be treated as:
-
-   o  A stream error of type "ERROR_QPACK_INVALID_REFERENCE" if on a
-      request stream
-
-   o  A connection error of type "ERROR_QPACK_INVALID_REFERENCE" if on a
-      checkpoint stream
+   be treated as a stream error of type "ERROR_QPACK_INVALID_REFERENCE"
+   if on a request stream.  References to empty slots in the dynamic
+   table on a checkpoint stream MUST be treated as a connection error of
+   type "ERROR_QPACK_INVALID_REFERENCE".
 
    References to DYING checkpoints are possible by returning the
    checkpoint to LIVE, but this is usually inadvisable.  Table entries
@@ -331,16 +327,16 @@ Internet-Draft                    QPACK                    December 2017
    encoders to reclaim space, encoders can drop old checkpoints (see
    Section 2.1.1).
 
+   The total table size is calculated as follows:
+
+   o  The size of each entry is calculated as in HPACK
+
 
 
 Bishop                    Expires June 18, 2018                 [Page 6]
 
 Internet-Draft                    QPACK                    December 2017
 
-
-   The total table size is calculated as follows:
-
-   o  The size of each entry is calculated as in HPACK
 
    o  Each checkpoint that has not been removed, regardless of state,
       consumes 64 bytes
@@ -385,6 +381,10 @@ Internet-Draft                    QPACK                    December 2017
 
    This section describes the instructions which are possible on each
    stream type.
+
+
+
+
 
 
 

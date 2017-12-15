@@ -499,15 +499,9 @@ address {
 <h1 id="rfc.section.2.2.1">
 <a href="#rfc.section.2.2.1">2.2.1.</a> <a href="#permitted-references" id="permitted-references">Permitted References</a>
 </h1>
-<p id="rfc.section.2.2.1.p.1">When encoding headers on a request stream or referencing existing entries in a checkpoint stream, an encoder MAY reference any static table entry or any dynamic header table entry referenced by a LIVE checkpoint.  References to entries in NEW or PENDING checkpoints are permitted only if the client has set <samp>SETTING_QPACK_BLOCKING_PERMITTED</samp> (see <a href="#setting-block" class="xref">Section 4.1</a>).</p>
-<p id="rfc.section.2.2.1.p.2">If a decoder receives a reference to an empty slot in the dynamic table but has not sent <samp>SETTING_QPACK_BLOCKING_PERMITTED</samp>, this MUST be treated as:</p>
-<p></p>
-
-<ul>
-<li>A stream error of type <samp>ERROR_QPACK_INVALID_REFERENCE</samp> if on a request stream</li>
-<li>A connection error of type <samp>ERROR_QPACK_INVALID_REFERENCE</samp> if on a checkpoint stream</li>
-</ul>
-<p id="rfc.section.2.2.1.p.4">References to DYING checkpoints are possible by returning the checkpoint to LIVE, but this is usually inadvisable.  Table entries contained only in a DEAD checkpoint can never be referenced.</p>
+<p id="rfc.section.2.2.1.p.1">When encoding headers on a request stream, an encoder MAY reference any static table entry or any dynamic header table entry referenced by a LIVE checkpoint.  References to entries in NEW or PENDING checkpoints are permitted only if the client has set <samp>SETTING_QPACK_BLOCKING_PERMITTED</samp> (see <a href="#setting-block" class="xref">Section 4.1</a>).</p>
+<p id="rfc.section.2.2.1.p.2">If a decoder receives a reference to an empty slot in the dynamic table but has not sent <samp>SETTING_QPACK_BLOCKING_PERMITTED</samp>, this MUST be treated as a stream error of type <samp>ERROR_QPACK_INVALID_REFERENCE</samp> if on a request stream. References to empty slots in the dynamic table on a checkpoint stream MUST be treated as a connection error of type <samp>ERROR_QPACK_INVALID_REFERENCE</samp>.</p>
+<p id="rfc.section.2.2.1.p.3">References to DYING checkpoints are possible by returning the checkpoint to LIVE, but this is usually inadvisable.  Table entries contained only in a DEAD checkpoint can never be referenced.</p>
 <h1 id="rfc.section.2.2.2">
 <a href="#rfc.section.2.2.2">2.2.2.</a> <a href="#header-table-size" id="header-table-size">Header Table Size</a>
 </h1>
