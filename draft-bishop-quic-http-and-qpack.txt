@@ -4,8 +4,8 @@
 
 QUIC Working Group                                             M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                       December 12, 2017
-Expires: June 15, 2018
+Intended status: Standards Track                       December 15, 2017
+Expires: June 18, 2018
 
 
                     Header Compression for HTTP/QUIC
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 15, 2018.
+   This Internet-Draft will expire on June 18, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 1]
+Bishop                    Expires June 18, 2018                 [Page 1]
 
 Internet-Draft                    QPACK                    December 2017
 
@@ -77,27 +77,27 @@ Table of Contents
        3.1.2.  ACK_FLUSH . . . . . . . . . . . . . . . . . . . . . .   8
        3.1.3.  DROP  . . . . . . . . . . . . . . . . . . . . . . . .   9
        3.1.4.  ACK_DROP  . . . . . . . . . . . . . . . . . . . . . .   9
-     3.2.  Checkpoint Streams  . . . . . . . . . . . . . . . . . . .   9
+     3.2.  Checkpoint Streams  . . . . . . . . . . . . . . . . . . .  10
        3.2.1.  INSERT  . . . . . . . . . . . . . . . . . . . . . . .  10
-       3.2.2.  TOUCH . . . . . . . . . . . . . . . . . . . . . . . .  11
+       3.2.2.  TOUCH . . . . . . . . . . . . . . . . . . . . . . . .  12
      3.3.  Request Streams . . . . . . . . . . . . . . . . . . . . .  12
-       3.3.1.  Indexed Header Field Representation . . . . . . . . .  12
-       3.3.2.  Literal Header Field Representation . . . . . . . . .  12
+       3.3.1.  Indexed Header Field Representation . . . . . . . . .  13
+       3.3.2.  Literal Header Field Representation . . . . . . . . .  13
    4.  Use in HTTP/QUIC  . . . . . . . . . . . . . . . . . . . . . .  14
-     4.1.  SETTING_QPACK_BLOCKING_PERMITTED  . . . . . . . . . . . .  14
-     4.2.  SETTING_QPACK_INITIAL_CHECKPOINT  . . . . . . . . . . . .  14
+     4.1.  SETTING_QPACK_BLOCKING_PERMITTED  . . . . . . . . . . . .  15
+     4.2.  SETTING_QPACK_INITIAL_CHECKPOINT  . . . . . . . . . . . .  15
    5.  Implementation trade-offs . . . . . . . . . . . . . . . . . .  15
-     5.1.  Compression Efficiency versus Blocking Avoidance  . . . .  15
-     5.2.  Timely State Transitions versus Decoder Complexity  . . .  15
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  16
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
-     7.1.  Settings  . . . . . . . . . . . . . . . . . . . . . . . .  16
-     7.2.  Errors  . . . . . . . . . . . . . . . . . . . . . . . . .  17
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  17
-   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  17
+     5.1.  Compression Efficiency versus Blocking Avoidance  . . . .  16
+     5.2.  Timely State Transitions versus Decoder Complexity  . . .  16
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
+     7.1.  Settings  . . . . . . . . . . . . . . . . . . . . . . . .  17
+     7.2.  Errors  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  18
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .  18
-     9.2.  Informative References  . . . . . . . . . . . . . . . . .  18
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  18
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .  19
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  19
 
 1.  Introduction
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 2]
+Bishop                    Expires June 18, 2018                 [Page 2]
 
 Internet-Draft                    QPACK                    December 2017
 
@@ -165,7 +165,7 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 3]
+Bishop                    Expires June 18, 2018                 [Page 3]
 
 Internet-Draft                    QPACK                    December 2017
 
@@ -221,7 +221,7 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 4]
+Bishop                    Expires June 18, 2018                 [Page 4]
 
 Internet-Draft                    QPACK                    December 2017
 
@@ -277,7 +277,7 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 5]
+Bishop                    Expires June 18, 2018                 [Page 5]
 
 Internet-Draft                    QPACK                    December 2017
 
@@ -333,7 +333,7 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 6]
+Bishop                    Expires June 18, 2018                 [Page 6]
 
 Internet-Draft                    QPACK                    December 2017
 
@@ -389,7 +389,7 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 7]
+Bishop                    Expires June 18, 2018                 [Page 7]
 
 Internet-Draft                    QPACK                    December 2017
 
@@ -445,7 +445,7 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 8]
+Bishop                    Expires June 18, 2018                 [Page 8]
 
 Internet-Draft                    QPACK                    December 2017
 
@@ -456,21 +456,27 @@ Internet-Draft                    QPACK                    December 2017
    that a DYING checkpoint has no outstanding references, it emits a
    DROP instruction to inform the decoder that the checkpoint can be
    removed.  Upon sending a DROP instruction, a DYING checkpoint becomes
-   DEAD.  The DROP instruction also includes the ID of the encoder's
-   greatest checkpoint ID so far.
+   DEAD.  The DROP instruction also includes the IDs of any PENDING or
+   NEW checkpoints which reference entries contained in the checkpoint
+   being dropped.  The "L" bit in each byte indicates whether another
+   checkpoint ID follows (L=0) or this is the final byte of the DROP
+   instruction (L=1).
 
-   Upon receiving a DROP instruction, if all checkpoints up to and
-   including the Most Recent ID have been fully processed (transitioned
-   from NEW to LIVE), the identified LIVE checkpoint is removed from the
-   decoder state and an ACK_DROP instruction is emitted.  Otherwise, the
-   decoder saves the DROP instruction until other checkpoints become
-   LIVE.
+   Upon receiving a DROP instruction, if all listed checkpoints have
+   been fully processed (transitioned from NEW to LIVE), the identified
+   LIVE checkpoint is immediately removed from the decoder state and an
+   ACK_DROP instruction is emitted.  Otherwise, the decoder saves the
+   DROP instruction until other checkpoints become LIVE.
 
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
-   | 0 | 1 | 0 | Checkpoint ID (5+)|
+   | 0 | 0 | L | Checkpoint ID (5+)|
    +---+---+---+-------------------+
-   |      Most Recent ID (8+)      |
+   | L |      Checkpoint (7+)      |
+   +---+---------------------------+
+   | L |      Checkpoint (7+)      |
+   +---+---------------------------+
+   |              ...              |
    +-------------------------------+
 
                              DROP instruction
@@ -491,20 +497,27 @@ Internet-Draft                    QPACK                    December 2017
 
                            ACK_DROP instruction
 
-3.2.  Checkpoint Streams
-
-   Each checkpoint stream indicates the creation and content of a NEW
-   checkpoint.  When the encoder has finished writing all data on the
-   stream, it changes the checkpoint to PENDING.  When the decoder has
-   received and processed all data on the stream, it changes the
-   checkpoint to LIVE and generates an ACK_FLUSH.
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 9]
+
+Bishop                    Expires June 18, 2018                 [Page 9]
 
 Internet-Draft                    QPACK                    December 2017
 
+
+3.2.  Checkpoint Streams
+
+   Each checkpoint stream indicates the creation and content of a NEW
+   checkpoint.  Each checkpoint has an ID; these IDs are chosen
+   arbitrarily by the encoder, though lower values SHOULD be preferred.
+   IDs of checkpoints which have been dropped MAY be reused for future
+   NEW checkpoints.
+
+   When the encoder has finished writing all data on the stream, it
+   changes the checkpoint to PENDING.  When the decoder has received and
+   processed all data on the stream, it changes the checkpoint to LIVE
+   and generates an ACK_FLUSH.
 
    Unidirectional streams in HTTP/QUIC begin with a stream header
    indicating the nature of the stream content; the identifier for QPACK
@@ -517,8 +530,6 @@ Internet-Draft                    QPACK                    December 2017
    Following the stream header, a checkpoint stream contains its
    checkpoint ID as an 8-bit prefix integer.  The remainder of the
    stream's data consists of the instructions defined in this section.
-   Checkpoint IDs begin at zero and increment by one for each new
-   checkpoint.
 
    Data on checkpoint streams SHOULD be processed as soon as it arrives.
    If multiple checkpoint streams are received at once, a decoder SHOULD
@@ -543,24 +554,19 @@ Internet-Draft                    QPACK                    December 2017
 
    If an INSERT instruction uses an existing dynamic table entry for the
    name of an entry being added to the NEW checkpoint, both the existing
-   entry and the new entry are referenced by the NEW checkpoint.
 
 
 
-
-
-
-
-
-
-
-
-
-
-Bishop                    Expires June 15, 2018                [Page 10]
+Bishop                    Expires June 18, 2018                [Page 10]
 
 Internet-Draft                    QPACK                    December 2017
 
+
+   entry and the new entry are referenced by the NEW checkpoint.  INSERT
+   instructions which reference the dynamic table MUST reference only
+   entries which are already included in a LIVE checkpoint.  This avoids
+   the possibility of one checkpoint stream blocking on a different
+   checkpoint.
 
         0   1   2   3   4   5   6   7
       +---+---+---+---+---+---+---+---+
@@ -602,7 +608,15 @@ Internet-Draft                    QPACK                    December 2017
 
    An encoder MUST NOT attempt to place a value at an index not known to
    be vacant.  A decoder MUST treat the attempt to insert into an
-   occupied slot as a fatal error.
+   occupied slot or reference a name in a vacant slot as a fatal error.
+
+
+
+
+Bishop                    Expires June 18, 2018                [Page 11]
+
+Internet-Draft                    QPACK                    December 2017
+
 
 3.2.2.  TOUCH
 
@@ -610,13 +624,6 @@ Internet-Draft                    QPACK                    December 2017
    header table entry created by a previous checkpoint.  This causes the
    entry not to be removed from the table so long as the current
    checkpoint is alive.
-
-
-
-Bishop                    Expires June 15, 2018                [Page 11]
-
-Internet-Draft                    QPACK                    December 2017
-
 
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
@@ -631,8 +638,41 @@ Internet-Draft                    QPACK                    December 2017
 
 3.3.  Request Streams
 
-   Frames which carry HTTP message headers encode them using the
-   following instructions:
+   Frames which carry HTTP message headers begin with a preface
+   indicating the QPACK state which is necessary to decode the frame
+   without blocking.  This header indicates one or more checkpoints on
+   which the request depends; if these checkpoints are not LIVE, it MAY
+   avoid reading the remainder of the frame until they are.  (If any of
+   these checkpoints have already been dropped, this must be treated as
+   a stream error of type ERROR_QPACK_INVALID_REFERENCE.)
+
+   The preface is formatted as follows:
+
+        0   1   2   3   4   5   6   7
+      +---+---+---+---+---+---+---+---+
+      | L |      Checkpoint (7+)      |
+      +---+---+---+-------------------+
+      | L |      Checkpoint (7+)      |
+      +---+---------------------------+
+      |              ...              |
+      +-------------------------------+
+
+                               QPACK preface
+
+   The "L" bit indicates that this checkpoint is the last checkpoint in
+   the preface; if the bit is unset (0), then another checkpoint
+   follows.
+
+
+
+
+
+
+
+Bishop                    Expires June 18, 2018                [Page 12]
+
+Internet-Draft                    QPACK                    December 2017
+
 
 3.3.1.  Indexed Header Field Representation
 
@@ -666,14 +706,6 @@ Internet-Draft                    QPACK                    December 2017
    The second bit, 'N', indicates whether an intermediary is permitted
    to add this header to the dynamic header table on subsequent hops.
    When the 'N' bit is set, the encoded header MUST always be encoded
-
-
-
-Bishop                    Expires June 15, 2018                [Page 12]
-
-Internet-Draft                    QPACK                    December 2017
-
-
    with this specific literal representation.  In particular, when a
    peer sends a header field that it received represented as a literal
    header field with the 'N' bit set, it MUST use the same
@@ -688,6 +720,15 @@ Internet-Draft                    QPACK                    December 2017
    dynamic (S=0) table and the index of the entry is represented as an
    integer with an 5-bit prefix (see Section 5.1 of [RFC7541]).  This
    value is always non-zero.
+
+
+
+
+
+Bishop                    Expires June 18, 2018                [Page 13]
+
+Internet-Draft                    QPACK                    December 2017
+
 
         0   1   2   3   4   5   6   7
       +---+---+---+---+---+---+---+---+
@@ -723,13 +764,6 @@ Internet-Draft                    QPACK                    December 2017
    header field value represented as a string literal (see Section 5.2
    of [RFC7541]).
 
-
-
-Bishop                    Expires June 15, 2018                [Page 13]
-
-Internet-Draft                    QPACK                    December 2017
-
-
 4.  Use in HTTP/QUIC
 
    HTTP/QUIC [I-D.ietf-quic-http] currently retains the HPACK encoder/
@@ -744,6 +778,14 @@ Internet-Draft                    QPACK                    December 2017
 
    o  Stream 2 is reserved for the Feedback Stream
 
+
+
+
+Bishop                    Expires June 18, 2018                [Page 14]
+
+Internet-Draft                    QPACK                    December 2017
+
+
    A HEADERS or PUSH_PROMISE frame MAY contain an arbitrary number of
    QPACK instructions, but QPACK instructions SHOULD NOT cross a
    boundary between successive HEADERS frames.  A partial HEADERS or
@@ -757,13 +799,18 @@ Internet-Draft                    QPACK                    December 2017
    decoder against compression efficiency by permitting the peer's
    compressor to reference unacknowledged entries.  In the case of loss
    on a checkpoint stream, such references might cause the processing of
-   request streams or other checkpoint streams to block, waiting for the
-   arrival of missing data.
+   request streams to block, waiting for the arrival of missing data.
 
    If the decoder permits the encoder to make blocking references, it
-   sets "SETTING_QPACK_BLOCKING_PERMITTED" (0xSETTING-TBD1) to true.  In
-   the default setting, false, the encoder MUST NOT encode a header
-   using a format that might block.
+   sets "SETTING_QPACK_BLOCKING_PERMITTED" (0xSETTING-TBD1) to a non-
+   zero value.  The encoder receiving this setting MAY encode up to this
+   number of potentially-blocking references at a time.
+
+   Sending this setting with no value indicates that a decoder is
+   willing to tolerate blocking references bounded only by the allowed
+   number of streams.  If a decoder does not send this setting or sends
+   this setting with a value of zero, the encoder MUST NOT encode a
+   header using a reference that might block.
 
 4.2.  SETTING_QPACK_INITIAL_CHECKPOINT
 
@@ -779,19 +826,21 @@ Internet-Draft                    QPACK                    December 2017
    decoder does not need to send an ACK_FLUSH message confirming receipt
    of this setting.
 
-
-
-Bishop                    Expires June 15, 2018                [Page 14]
-
-Internet-Draft                    QPACK                    December 2017
-
-
 5.  Implementation trade-offs
 
    This document specifies a means for the encoder to express the
    choices it made while encoding, but intentionally does not mandate
    what those choices should be.  In this section, potential areas for
    implementation tuning are explored.
+
+
+
+
+
+Bishop                    Expires June 18, 2018                [Page 15]
+
+Internet-Draft                    QPACK                    December 2017
+
 
 5.1.  Compression Efficiency versus Blocking Avoidance
 
@@ -834,19 +883,20 @@ Internet-Draft                    QPACK                    December 2017
    Anything which prevent checkpoints from transitioning from DYING to
    DEAD can prevent the encoder from adding any new entries due to the
    maximum table size.  This does not block the encoder from continuing
-
-
-
-Bishop                    Expires June 15, 2018                [Page 15]
-
-Internet-Draft                    QPACK                    December 2017
-
-
    to make requests, but could sharply limit compression performance.
    Encoders would be well-served to begin moving checkpoint to DYING in
    advance of encountering the table maximum.  Decoders SHOULD be prompt
    about emitting STREAM_DONE and ACK_DROP instructions to enable the
    encoder to recover the table space.
+
+
+
+
+
+Bishop                    Expires June 18, 2018                [Page 16]
+
+Internet-Draft                    QPACK                    December 2017
+
 
    Similarly, for decoders which prohibit blocking references, delaying
    the transition of a checkpoint from PENDING to LIVE will degrade
@@ -890,19 +940,19 @@ Internet-Draft                    QPACK                    December 2017
 
    and
 
-
-
-
-Bishop                    Expires June 15, 2018                [Page 16]
-
-Internet-Draft                    QPACK                    December 2017
-
-
    Setting Name:  SETTING_QPACK_INITIAL_CHECKPOINT
 
    Code:  0xSETTING-TBD2
 
    Specification:  Section 4.2
+
+
+
+
+Bishop                    Expires June 18, 2018                [Page 17]
+
+Internet-Draft                    QPACK                    December 2017
+
 
 7.2.  Errors
 
@@ -942,24 +992,23 @@ Internet-Draft                    QPACK                    December 2017
 
 9.  References
 
-
-
-
-
-
-
-
-Bishop                    Expires June 15, 2018                [Page 17]
-
-Internet-Draft                    QPACK                    December 2017
-
-
 9.1.  Normative References
 
    [I-D.ietf-quic-http]
               Bishop, M., "Hypertext Transfer Protocol (HTTP) over
               QUIC", draft-ietf-quic-http-07 (work in progress), October
               2017.
+
+
+
+
+
+
+
+Bishop                    Expires June 18, 2018                [Page 18]
+
+Internet-Draft                    QPACK                    December 2017
+
 
    [I-D.ietf-quic-transport]
               Iyengar, J. and M. Thomson, "QUIC: A UDP-Based Multiplexed
@@ -1005,4 +1054,11 @@ Author's Address
 
 
 
-Bishop                    Expires June 15, 2018                [Page 18]
+
+
+
+
+
+
+
+Bishop                    Expires June 18, 2018                [Page 19]

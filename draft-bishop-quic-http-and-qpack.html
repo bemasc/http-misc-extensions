@@ -318,7 +318,7 @@ address {
 
   <meta name="dct.creator" content="Bishop, M." />
   <meta name="dct.identifier" content="urn:ietf:id:draft-bishop-quic-http-and-qpack-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-12-12" />
+  <meta name="dct.issued" scheme="ISO8601" content="2017-12-15" />
   <meta name="dct.abstract" content="HTTP/2 " />
   <meta name="description" content="HTTP/2 " />
 
@@ -339,10 +339,10 @@ address {
 </tr>
 <tr>
 <td class="left">Intended status: Standards Track</td>
-<td class="right">December 12, 2017</td>
+<td class="right">December 15, 2017</td>
 </tr>
 <tr>
-<td class="left">Expires: June 15, 2018</td>
+<td class="left">Expires: June 18, 2018</td>
 <td class="right"></td>
 </tr>
 
@@ -359,7 +359,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on June 15, 2018.</p>
+<p>This Internet-Draft will expire on June 18, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -564,14 +564,18 @@ address {
 <h1 id="rfc.section.3.1.3">
 <a href="#rfc.section.3.1.3">3.1.3.</a> <a href="#drop" id="drop">DROP</a>
 </h1>
-<p id="rfc.section.3.1.3.p.1">When an encoder has received sufficient HEADERS_DONE messages to know that a DYING checkpoint has no outstanding references, it emits a DROP instruction to inform the decoder that the checkpoint can be removed.  Upon sending a DROP instruction, a DYING checkpoint becomes DEAD.  The DROP instruction also includes the ID of the encoder&#8217;s greatest checkpoint ID so far.</p>
-<p id="rfc.section.3.1.3.p.2">Upon receiving a DROP instruction, if all checkpoints up to and including the Most Recent ID have been fully processed (transitioned from NEW to LIVE), the identified LIVE checkpoint is removed from the decoder state and an ACK_DROP instruction is emitted.  Otherwise, the decoder saves the DROP instruction until other checkpoints become LIVE.</p>
+<p id="rfc.section.3.1.3.p.1">When an encoder has received sufficient HEADERS_DONE messages to know that a DYING checkpoint has no outstanding references, it emits a DROP instruction to inform the decoder that the checkpoint can be removed.  Upon sending a DROP instruction, a DYING checkpoint becomes DEAD.  The DROP instruction also includes the IDs of any PENDING or NEW checkpoints which reference entries contained in the checkpoint being dropped. The <samp>L</samp> bit in each byte indicates whether another checkpoint ID follows (L=0) or this is the final byte of the DROP instruction (L=1).</p>
+<p id="rfc.section.3.1.3.p.2">Upon receiving a DROP instruction, if all listed checkpoints have been fully processed (transitioned from NEW to LIVE), the identified LIVE checkpoint is immediately removed from the decoder state and an ACK_DROP instruction is emitted.  Otherwise, the decoder saves the DROP instruction until other checkpoints become LIVE.</p>
 <pre>
   0   1   2   3   4   5   6   7
 +---+---+---+---+---+---+---+---+
-| 0 | 1 | 0 | Checkpoint ID (5+)|
+| 0 | 0 | L | Checkpoint ID (5+)|
 +---+---+---+-------------------+
-|      Most Recent ID (8+)      |
+| L |      Checkpoint (7+)      |
++---+---------------------------+
+| L |      Checkpoint (7+)      |
++---+---------------------------+
+|              ...              |
 +-------------------------------+
 </pre>
 <p class="figure">DROP instruction</p>
@@ -589,20 +593,21 @@ address {
 <h1 id="rfc.section.3.2">
 <a href="#rfc.section.3.2">3.2.</a> <a href="#checkpoint-streams" id="checkpoint-streams">Checkpoint Streams</a>
 </h1>
-<p id="rfc.section.3.2.p.1">Each checkpoint stream indicates the creation and content of a NEW checkpoint.  When the encoder has finished writing all data on the stream, it changes the checkpoint to PENDING.  When the decoder has received and processed all data on the stream, it changes the checkpoint to LIVE and generates an ACK_FLUSH.</p>
-<p id="rfc.section.3.2.p.2">Unidirectional streams in HTTP/QUIC begin with a stream header indicating the nature of the stream content; the identifier for QPACK checkpoints is 0x4B.</p>
+<p id="rfc.section.3.2.p.1">Each checkpoint stream indicates the creation and content of a NEW checkpoint.  Each checkpoint has an ID; these IDs are chosen arbitrarily by the encoder, though lower values SHOULD be preferred.  IDs of checkpoints which have been dropped MAY be reused for future NEW checkpoints.</p>
+<p id="rfc.section.3.2.p.2">When the encoder has finished writing all data on the stream, it changes the checkpoint to PENDING.  When the decoder has received and processed all data on the stream, it changes the checkpoint to LIVE and generates an ACK_FLUSH.</p>
+<p id="rfc.section.3.2.p.3">Unidirectional streams in HTTP/QUIC begin with a stream header indicating the nature of the stream content; the identifier for QPACK checkpoints is 0x4B.</p>
 <p></p>
 
 <ul class="empty"><li>
 <strong>Note to readers:</strong> This header does not currently exist in the main draft, but has manifested in several PRs, and would need to be resurrected.</li></ul>
-<p id="rfc.section.3.2.p.4">Following the stream header, a checkpoint stream contains its checkpoint ID as an 8-bit prefix integer. The remainder of the stream&#8217;s data consists of the instructions defined in this section.  Checkpoint IDs begin at zero and increment by one for each new checkpoint.</p>
-<p id="rfc.section.3.2.p.5">Data on checkpoint streams SHOULD be processed as soon as it arrives.  If multiple checkpoint streams are received at once, a decoder SHOULD process data on each as it arrives if it has sent <samp>SETTINGS_QPACK_BLOCKING_PERMITTED</samp>, but MAY process checkpoint streams one at a time.</p>
+<p id="rfc.section.3.2.p.5">Following the stream header, a checkpoint stream contains its checkpoint ID as an 8-bit prefix integer. The remainder of the stream&#8217;s data consists of the instructions defined in this section.</p>
+<p id="rfc.section.3.2.p.6">Data on checkpoint streams SHOULD be processed as soon as it arrives.  If multiple checkpoint streams are received at once, a decoder SHOULD process data on each as it arrives if it has sent <samp>SETTINGS_QPACK_BLOCKING_PERMITTED</samp>, but MAY process checkpoint streams one at a time.</p>
 <h1 id="rfc.section.3.2.1">
 <a href="#rfc.section.3.2.1">3.2.1.</a> <a href="#insert" id="insert">INSERT</a>
 </h1>
 <p id="rfc.section.3.2.1.p.1">An addition to the dynamic table starts with the &#8216;1&#8217; one-bit pattern, followed by the new index of the header represented as an integer with a 7-bit prefix.  The decoder adds the supplied header to the checkpoint currently being processed, which is in the NEW state.</p>
 <p id="rfc.section.3.2.1.p.2">If the header field name matches the header field name of an entry stored in the static table or the dynamic table, the header field name can be represented using the index of that entry. In this case, the <samp>S</samp> bit indicates whether the reference is to the static (S=1) or dynamic (S=0) table and the index of the entry is represented as an integer with an 7-bit prefix (see Section 5.1 of <a href="#RFC7541" class="xref">[RFC7541]</a>). This value is always non-zero.</p>
-<p id="rfc.section.3.2.1.p.3">If an INSERT instruction uses an existing dynamic table entry for the name of an entry being added to the NEW checkpoint, both the existing entry and the new entry are referenced by the NEW checkpoint.</p>
+<p id="rfc.section.3.2.1.p.3">If an INSERT instruction uses an existing dynamic table entry for the name of an entry being added to the NEW checkpoint, both the existing entry and the new entry are referenced by the NEW checkpoint.  INSERT instructions which reference the dynamic table MUST reference only entries which are already included in a LIVE checkpoint.  This avoids the possibility of one checkpoint stream blocking on a different checkpoint.</p>
 <pre>
      0   1   2   3   4   5   6   7
    +---+---+---+---+---+---+---+---+
@@ -635,7 +640,7 @@ address {
 </pre>
 <p class="figure">INSERT instruction -- New Name</p>
 <p id="rfc.section.3.2.1.p.5">Either form of header field name representation is followed by the header field value represented as a string literal (see Section 5.2 of <a href="#RFC7541" class="xref">[RFC7541]</a>).</p>
-<p id="rfc.section.3.2.1.p.6">An encoder MUST NOT attempt to place a value at an index not known to be vacant.  A decoder MUST treat the attempt to insert into an occupied slot as a fatal error.</p>
+<p id="rfc.section.3.2.1.p.6">An encoder MUST NOT attempt to place a value at an index not known to be vacant.  A decoder MUST treat the attempt to insert into an occupied slot or reference a name in a vacant slot as a fatal error.</p>
 <h1 id="rfc.section.3.2.2">
 <a href="#rfc.section.3.2.2">3.2.2.</a> <a href="#touch" id="touch">TOUCH</a>
 </h1>
@@ -651,7 +656,20 @@ address {
 <h1 id="rfc.section.3.3">
 <a href="#rfc.section.3.3">3.3.</a> <a href="#request-streams" id="request-streams">Request Streams</a>
 </h1>
-<p id="rfc.section.3.3.p.1">Frames which carry HTTP message headers encode them using the following instructions:</p>
+<p id="rfc.section.3.3.p.1">Frames which carry HTTP message headers begin with a preface indicating the QPACK state which is necessary to decode the frame without blocking. This header indicates one or more checkpoints on which the request depends; if these checkpoints are not LIVE, it MAY avoid reading the remainder of the frame until they are.  (If any of these checkpoints have already been dropped, this must be treated as a stream error of type ERROR_QPACK_INVALID_REFERENCE.)</p>
+<p id="rfc.section.3.3.p.2">The preface is formatted as follows:</p>
+<pre>
+     0   1   2   3   4   5   6   7
+   +---+---+---+---+---+---+---+---+
+   | L |      Checkpoint (7+)      |
+   +---+---+---+-------------------+
+   | L |      Checkpoint (7+)      |
+   +---+---------------------------+
+   |              ...              |
+   +-------------------------------+
+</pre>
+<p class="figure">QPACK preface</p>
+<p id="rfc.section.3.3.p.3">The <samp>L</samp> bit indicates that this checkpoint is the last checkpoint in the preface; if the bit is unset (0), then another checkpoint follows.</p>
 <h1 id="rfc.section.3.3.1">
 <a href="#rfc.section.3.3.1">3.3.1.</a> <a href="#indexed-header-field-representation" id="indexed-header-field-representation">Indexed Header Field Representation</a>
 </h1>
@@ -714,8 +732,9 @@ address {
 <h1 id="rfc.section.4.1">
 <a href="#rfc.section.4.1">4.1.</a> <a href="#setting-block" id="setting-block">SETTING_QPACK_BLOCKING_PERMITTED</a>
 </h1>
-<p id="rfc.section.4.1.p.1">An HTTP/QUIC implementation can trade off the complexity of its QPACK decoder against compression efficiency by permitting the peer&#8217;s compressor to reference unacknowledged entries.  In the case of loss on a checkpoint stream, such references might cause the processing of request streams or other checkpoint streams to block, waiting for the arrival of missing data.</p>
-<p id="rfc.section.4.1.p.2">If the decoder permits the encoder to make blocking references, it sets <samp>SETTING_QPACK_BLOCKING_PERMITTED</samp> (0xSETTING-TBD1) to true.  In the default setting, false, the encoder MUST NOT encode a header using a format that might block.</p>
+<p id="rfc.section.4.1.p.1">An HTTP/QUIC implementation can trade off the complexity of its QPACK decoder against compression efficiency by permitting the peer&#8217;s compressor to reference unacknowledged entries.  In the case of loss on a checkpoint stream, such references might cause the processing of request streams to block, waiting for the arrival of missing data.</p>
+<p id="rfc.section.4.1.p.2">If the decoder permits the encoder to make blocking references, it sets <samp>SETTING_QPACK_BLOCKING_PERMITTED</samp> (0xSETTING-TBD1) to a non-zero value. The encoder receiving this setting MAY encode up to this number of potentially-blocking references at a time.</p>
+<p id="rfc.section.4.1.p.3">Sending this setting with no value indicates that a decoder is willing to tolerate blocking references bounded only by the allowed number of streams. If a decoder does not send this setting or sends this setting with a value of zero, the encoder MUST NOT encode a header using a reference that might block.</p>
 <h1 id="rfc.section.4.2">
 <a href="#rfc.section.4.2">4.2.</a> <a href="#setting-initial" id="setting-initial">SETTING_QPACK_INITIAL_CHECKPOINT</a>
 </h1>

@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                       December 12, 2017
-Expires: June 15, 2018
+Intended status: Standards Track                       December 15, 2017
+Expires: June 18, 2018
 
 
                        ALTSVC Frame in HTTP/QUIC
@@ -33,7 +33,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 15, 2018.
+   This Internet-Draft will expire on June 18, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 1]
+Bishop                    Expires June 18, 2018                 [Page 1]
 
 Internet-Draft             ALTSVC in HTTP/QUIC             December 2017
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 2]
+Bishop                    Expires June 18, 2018                 [Page 2]
 
 Internet-Draft             ALTSVC in HTTP/QUIC             December 2017
 
@@ -165,4 +165,4 @@ Author's Address
 
 
 
-Bishop                    Expires June 15, 2018                 [Page 3]
+Bishop                    Expires June 18, 2018                 [Page 3]
