@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Informational                         December 15, 2017
-Expires: June 18, 2018
+Intended status: Informational                           January 9, 2018
+Expires: July 13, 2018
 
 
                       HTTP/2 Server Push Use Cases
@@ -39,11 +39,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 18, 2018.
+   This Internet-Draft will expire on July 13, 2018.
 
 Copyright Notice
 
-   Copyright (c) 2017 IETF Trust and the persons identified as the
+   Copyright (c) 2018 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 1]
+Bishop                    Expires July 13, 2018                 [Page 1]
 
-Internet-Draft               Push Use Cases                December 2017
+Internet-Draft               Push Use Cases                 January 2018
 
 
    carefully, as they describe your rights and restrictions with respect
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 2]
+Bishop                    Expires July 13, 2018                 [Page 2]
 
-Internet-Draft               Push Use Cases                December 2017
+Internet-Draft               Push Use Cases                 January 2018
 
 
    This document is an attempt to enumerate categories of resources and
@@ -165,9 +165,9 @@ Internet-Draft               Push Use Cases                December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 3]
+Bishop                    Expires July 13, 2018                 [Page 3]
 
-Internet-Draft               Push Use Cases                December 2017
+Internet-Draft               Push Use Cases                 January 2018
 
 
    For example, the page might contain a list of e-mails, with script
@@ -221,9 +221,9 @@ Internet-Draft               Push Use Cases                December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 4]
+Bishop                    Expires July 13, 2018                 [Page 4]
 
-Internet-Draft               Push Use Cases                December 2017
+Internet-Draft               Push Use Cases                 January 2018
 
 
 3.2.  Cache Population
@@ -277,9 +277,9 @@ Internet-Draft               Push Use Cases                December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 5]
+Bishop                    Expires July 13, 2018                 [Page 5]
 
-Internet-Draft               Push Use Cases                December 2017
+Internet-Draft               Push Use Cases                 January 2018
 
 
    [RFC5988]  Nottingham, M., "Web Linking", RFC 5988,
@@ -333,4 +333,4 @@ Author's Address
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 6]
+Bishop                    Expires July 13, 2018                 [Page 6]

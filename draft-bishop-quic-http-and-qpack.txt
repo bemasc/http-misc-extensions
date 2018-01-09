@@ -4,8 +4,8 @@
 
 QUIC Working Group                                             M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                       December 15, 2017
-Expires: June 18, 2018
+Intended status: Standards Track                         January 9, 2018
+Expires: July 13, 2018
 
 
                     Header Compression for HTTP/QUIC
@@ -35,11 +35,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 18, 2018.
+   This Internet-Draft will expire on July 13, 2018.
 
 Copyright Notice
 
-   Copyright (c) 2017 IETF Trust and the persons identified as the
+   Copyright (c) 2018 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 1]
+Bishop                    Expires July 13, 2018                 [Page 1]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 2]
+Bishop                    Expires July 13, 2018                 [Page 2]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    The largest challenge is the fact that elements are referenced by a
@@ -165,9 +165,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 3]
+Bishop                    Expires July 13, 2018                 [Page 3]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    o  Connection-wide sets of table update instructions sent on non-
@@ -221,9 +221,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 4]
+Bishop                    Expires July 13, 2018                 [Page 4]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    maintaining the full state of which streams reference which table
@@ -277,9 +277,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 5]
+Bishop                    Expires July 13, 2018                 [Page 5]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    When a checkpoint is dropped by encoder or decoder, the table entries
@@ -333,9 +333,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 6]
+Bishop                    Expires July 13, 2018                 [Page 6]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    o  Each checkpoint that has not been removed, regardless of state,
@@ -389,9 +389,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 7]
+Bishop                    Expires July 13, 2018                 [Page 7]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
 3.1.  Feedback Stream
@@ -445,9 +445,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 8]
+Bishop                    Expires July 13, 2018                 [Page 8]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
 3.1.3.  DROP
@@ -501,9 +501,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                 [Page 9]
+Bishop                    Expires July 13, 2018                 [Page 9]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
 3.2.  Checkpoint Streams
@@ -557,9 +557,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                [Page 10]
+Bishop                    Expires July 13, 2018                [Page 10]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    entry and the new entry are referenced by the NEW checkpoint.  INSERT
@@ -613,9 +613,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                [Page 11]
+Bishop                    Expires July 13, 2018                [Page 11]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
 3.2.2.  TOUCH
@@ -669,9 +669,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                [Page 12]
+Bishop                    Expires July 13, 2018                [Page 12]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
 3.3.1.  Indexed Header Field Representation
@@ -725,9 +725,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                [Page 13]
+Bishop                    Expires July 13, 2018                [Page 13]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
         0   1   2   3   4   5   6   7
@@ -781,9 +781,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                [Page 14]
+Bishop                    Expires July 13, 2018                [Page 14]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    o  Stream 2 is reserved for the Feedback Stream
@@ -837,9 +837,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                [Page 15]
+Bishop                    Expires July 13, 2018                [Page 15]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
 5.1.  Compression Efficiency versus Blocking Avoidance
@@ -893,9 +893,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                [Page 16]
+Bishop                    Expires July 13, 2018                [Page 16]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    Similarly, for decoders which prohibit blocking references, delaying
@@ -949,9 +949,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                [Page 17]
+Bishop                    Expires July 13, 2018                [Page 17]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
 7.2.  Errors
@@ -1005,9 +1005,9 @@ Internet-Draft                    QPACK                    December 2017
 
 
 
-Bishop                    Expires June 18, 2018                [Page 18]
+Bishop                    Expires July 13, 2018                [Page 18]
 
-Internet-Draft                    QPACK                    December 2017
+Internet-Draft                    QPACK                     January 2018
 
 
    [I-D.ietf-quic-transport]
@@ -1061,4 +1061,4 @@ Author's Address
 
 
 
-Bishop                    Expires June 18, 2018                [Page 19]
+Bishop                    Expires July 13, 2018                [Page 19]
