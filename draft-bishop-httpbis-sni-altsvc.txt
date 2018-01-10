@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                         January 9, 2018
-Expires: July 13, 2018
+Intended status: Standards Track                        January 10, 2018
+Expires: July 14, 2018
 
 
                       The "SNI" Alt-Svc Parameter
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 13, 2018.
+   This Internet-Draft will expire on July 14, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 1]
+Bishop                    Expires July 14, 2018                 [Page 1]
 
 Internet-Draft                 SNI Alt-Svc                  January 2018
 
@@ -69,14 +69,18 @@ Table of Contents
      1.1.  Usage . . . . . . . . . . . . . . . . . . . . . . . . . .   3
      1.2.  Notational Conventions  . . . . . . . . . . . . . . . . .   3
    2.  The "sni" Alt-Svc Extension . . . . . . . . . . . . . . . . .   3
-   3.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
-   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
-   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
-     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   5
-     5.2.  Informative References  . . . . . . . . . . . . . . . . .   6
-     5.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   6
-   Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .   6
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   7
+   3.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  SNI of Unrelated Domain . . . . . . . . . . . . . . . . .   4
+     3.2.  Wildcard Subdomains . . . . . . . . . . . . . . . . . . .   5
+     3.3.  Omitting SNI  . . . . . . . . . . . . . . . . . . . . . .   5
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .   8
+     6.3.  URIs  . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+   Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .   8
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   9
 
 1.  Introduction
 
@@ -105,11 +109,7 @@ Table of Contents
 
 
 
-
-
-
-
-Bishop                    Expires July 13, 2018                 [Page 2]
+Bishop                    Expires July 14, 2018                 [Page 2]
 
 Internet-Draft                 SNI Alt-Svc                  January 2018
 
@@ -165,20 +165,23 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 3]
+Bishop                    Expires July 14, 2018                 [Page 3]
 
 Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
-   sni = host
+   sni = ( host / empty-string )
+   empty-string = DQUOTE DQUOTE
 
    "host" is defined in Section 3.2.2 of [RFC3986].
 
    When processing such an alternative, clients SHOULD present the
    hostname given in the "sni" parameter in the SNI extension during the
-   TLS handshake.  If the resulting certificate is also for the origin
-   which published the alternative service, the client MUST validate the
-   certificate in the handshake for authenticity according to [RFC2818].
+   TLS handshake.  If the hostname given is an empty string, clients
+   SHOULD omit the SNI extension from the TLS handshake.  If the
+   resulting certificate is also for the origin which published the
+   alternative service, the client MUST validate the certificate in the
+   handshake for authenticity according to [RFC2818].
 
    Otherwise, the client MAY choose not to validate the certificate, but
    MUST NOT make requests to any origin corresponding to this
@@ -191,7 +194,115 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
    "SETTINGS_HTTP_CERT_AUTH" setting, the client MUST consider the
    alternative connection to have failed.
 
-3.  Security Considerations
+3.  Examples
+
+3.1.  SNI of Unrelated Domain
+
+   Suppose a client has received the following Alt-Svc entry for
+   sensitive.example.com in the past:
+
+   h2=":443";ma=2635200;persist=true;sni=innocence.org
+
+   If the client now wishes to make a request to
+   https://sensitive.example.com/private, it would perform a DNS
+   resolution for sensitive.example.com (the Alt-Svc entry does not
+   specify a different hostname).  The client would then open a TCP
+   connection to the resulting IP address and begin a TLS handshake.
+
+   In the client's TLS handshake, it would request a certificate for the
+   hostname innocence.org.  The TLS server would present such a
+   certificate, which might not be issued by an authority trusted by the
+   client.
+
+   Because the client is not actually attempting to reach innocence.org,
+   the client will perform no validity checks on the provided
+   certificate.  Instead, the client will send a "CERTIFICATE_REQUEST"
+
+
+
+
+Bishop                    Expires July 14, 2018                 [Page 4]
+
+Internet-Draft                 SNI Alt-Svc                  January 2018
+
+
+   frame asking that the server also authenticate with a certificate for
+   sensitive.example.com.
+
+   After receiving the "CERTIFICATE" frame proving possession of a
+   certificate for sensitive.example.com, the client will verify that
+   this certificate is trusted.  If so, the client will proceed to send
+   HTTP/2 requests to the server requesting the resource
+   https://sensitive.example.com/private.
+
+3.2.  Wildcard Subdomains
+
+   Suppose a client has received the following Alt-Svc entry for
+   sensitive.example.com in the past:
+
+   h2="www.example.com:443";ma=2635200;persist=true;sni=www.example.com
+
+   If the client now wishes to make a request to
+   https://sensitive.example.com/private, it would perform a DNS
+   resolution for www.example.com, the specified alternative.  The
+   client would then open a TCP connection to the resulting IP address
+   and begin a TLS handshake.
+
+   In the client's TLS handshake, it would request a certificate for the
+   hostname www.example.com.  The TLS server would present a certificate
+   which included www.example.com as one of the covered hostnames.
+
+   Suppose that the certificate with which the server authenticated also
+   contained a Subject Alternative Name of "*.example.com".  Because the
+   certificate covers the desired origin, the client would perform
+   validity checks on this certificate.
+
+   If the certificate is trusted, the client will proceed to send HTTP/2
+   requests to the server requesting the resource
+   https://sensitive.example.com/private.
+
+3.3.  Omitting SNI
+
+   Suppose a client has received the following Alt-Svc entry for
+   sensitive.example.com in the past:
+
+   h2="alternative.example.com:443";ma=2635200;persist=true;sni=""
+
+   If the client now wishes to make a request to
+   https://sensitive.example.com/private, it would perform a DNS
+   resolution for alternative.example.com, the specified alternative.
+   The client would then open a TCP connection to the resulting IP
+   address and begin a TLS handshake.
+
+
+
+
+Bishop                    Expires July 14, 2018                 [Page 5]
+
+Internet-Draft                 SNI Alt-Svc                  January 2018
+
+
+   In the client's TLS handshake, it would omit the Server Name
+   Indication extension.  The TLS server would present a certificate
+   according to its configured defaults.
+
+   If the supplied certificate does cover sensitive.example.com, for
+   example because it contained a Subject Alternative Name of
+   "*.example.com", the client would perform validity checks on this
+   certificate.
+
+   If the supplied certificate does not cover sensitive.example.com, the
+   client will perform no authority checks on the provided certificate.
+   Instead, the client will send a "CERTIFICATE_REQUEST" frame asking
+   that the server also authenticate with a certificate for
+   sensitive.example.com.  Validity checks will be performed on the
+   certificate supplied by the corresponding "CERTIFICATE" frame.
+
+   In either case, if the validity checks are successful, the client
+   will proceed to send HTTP/2 requests to the server requesting the
+   resource https://sensitive.example.com/private.
+
+4.  Security Considerations
 
    [AltSvc] permits clients to ignore unrecognized parameters.  As a
    result, servers publishing records with the "sni" parameter cannot be
@@ -221,12 +332,13 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 4]
+
+Bishop                    Expires July 14, 2018                 [Page 6]
 
 Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
-4.  IANA Considerations
+5.  IANA Considerations
 
    The "Hypertext Transfer Protocol (HTTP) Alt-Svc Parameter Registry"
    defines the name space for parameters, as described in [AltSvc].  It
@@ -239,9 +351,9 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 
    Specification:  This document
 
-5.  References
+6.  References
 
-5.1.  Normative References
+6.1.  Normative References
 
    [AltSvc]   Nottingham, M., McManus, P., and J. Reschke, "HTTP
               Alternative Services", RFC 7838, DOI 10.17487/RFC7838,
@@ -277,7 +389,7 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 5]
+Bishop                    Expires July 14, 2018                 [Page 7]
 
 Internet-Draft                 SNI Alt-Svc                  January 2018
 
@@ -302,7 +414,7 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
               Version 1.3", draft-ietf-tls-tls13-23 (work in progress),
               January 2018.
 
-5.2.  Informative References
+6.2.  Informative References
 
    [DoH]      Hoffman, P. and P. McManus, "DNS Queries over HTTPS",
               draft-ietf-doh-dns-over-https-02 (work in progress),
@@ -318,7 +430,7 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
               Through Tunneling", draft-ietf-tls-sni-encryption-00 (work
               in progress), August 2017.
 
-5.3.  URIs
+6.3.  URIs
 
    [1] http://www.iana.org/assignments/http-alt-svc-parameters
 
@@ -333,7 +445,7 @@ Appendix A.  Acknowledgements
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 6]
+Bishop                    Expires July 14, 2018                 [Page 8]
 
 Internet-Draft                 SNI Alt-Svc                  January 2018
 
@@ -389,4 +501,4 @@ Author's Address
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 7]
+Bishop                    Expires July 14, 2018                 [Page 9]

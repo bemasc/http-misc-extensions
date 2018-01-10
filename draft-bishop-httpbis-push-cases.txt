@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Informational                           January 9, 2018
-Expires: July 13, 2018
+Intended status: Informational                          January 10, 2018
+Expires: July 14, 2018
 
 
                       HTTP/2 Server Push Use Cases
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 13, 2018.
+   This Internet-Draft will expire on July 14, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 1]
+Bishop                    Expires July 14, 2018                 [Page 1]
 
 Internet-Draft               Push Use Cases                 January 2018
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 2]
+Bishop                    Expires July 14, 2018                 [Page 2]
 
 Internet-Draft               Push Use Cases                 January 2018
 
@@ -165,7 +165,7 @@ Internet-Draft               Push Use Cases                 January 2018
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 3]
+Bishop                    Expires July 14, 2018                 [Page 3]
 
 Internet-Draft               Push Use Cases                 January 2018
 
@@ -221,7 +221,7 @@ Internet-Draft               Push Use Cases                 January 2018
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 4]
+Bishop                    Expires July 14, 2018                 [Page 4]
 
 Internet-Draft               Push Use Cases                 January 2018
 
@@ -277,7 +277,7 @@ Internet-Draft               Push Use Cases                 January 2018
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 5]
+Bishop                    Expires July 14, 2018                 [Page 5]
 
 Internet-Draft               Push Use Cases                 January 2018
 
@@ -333,4 +333,4 @@ Author's Address
 
 
 
-Bishop                    Expires July 13, 2018                 [Page 6]
+Bishop                    Expires July 14, 2018                 [Page 6]
