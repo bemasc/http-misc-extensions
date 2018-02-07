@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                        January 10, 2018
-Expires: July 14, 2018
+Intended status: Standards Track                        February 7, 2018
+Expires: August 11, 2018
 
 
                     Priority Placeholders in HTTP/2
@@ -13,12 +13,12 @@ Expires: July 14, 2018
 
 Abstract
 
-   [RFC7540] defines HTTP/2, including a method for communicating
+   RFC7540 defines HTTP/2, including a method for communicating
    priorities.  Some implementations have begun using closed streams as
    placeholders when constructing their priority tree, but this has
-   unbounded state commitments and interacts poorly with HTTP/QUIC
-   ([I-D.ietf-quic-http]).  This document proposes an extension to the
-   HTTP/2 priority scheme for both protocols.
+   unbounded state commitments and interacts poorly with HTTP/QUIC.
+   This document proposes an extension to the HTTP/2 priority scheme for
+   both protocols.
 
 Status of This Memo
 
@@ -35,7 +35,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 14, 2018.
+   This Internet-Draft will expire on August 11, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 1]
+Bishop                   Expires August 11, 2018                [Page 1]
 
-Internet-Draft           Placeholders in HTTP/2             January 2018
+Internet-Draft           Placeholders in HTTP/2            February 2018
 
 
    the Trust Legal Provisions and are provided without warranty as
@@ -65,22 +65,23 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
      1.1.  Notational Conventions  . . . . . . . . . . . . . . . . .   3
-   2.  The Priority Placeholder Extension  . . . . . . . . . . . . .   3
+   2.  The Priority Placeholder Extension to HTTP/2  . . . . . . . .   3
      2.1.  Priority Placeholder Setting  . . . . . . . . . . . . . .   3
        2.1.1.  Mid-session updates . . . . . . . . . . . . . . . . .   3
-     2.2.  Frame Modifications . . . . . . . . . . . . . . . . . . .   3
+     2.2.  Frame Modifications . . . . . . . . . . . . . . . . . . .   4
        2.2.1.  Existing Frame Types  . . . . . . . . . . . . . . . .   4
        2.2.2.  PLACEHOLDER_PRIORITY Frame  . . . . . . . . . . . . .   4
      2.3.  Priority Management Logic . . . . . . . . . . . . . . . .   5
-   3.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
-   4.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   6
-     4.1.  SETTINGS_PLACEHOLDERS Setting . . . . . . . . . . . . . .   6
-     4.2.  PLACEHOLDER_PRIORITY Frame  . . . . . . . . . . . . . . .   6
-   5.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
-     5.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
-     5.2.  Informative References  . . . . . . . . . . . . . . . . .   7
-   Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .   7
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   7
+   3.  Incorporating Placeholders in HTTP/QUIC . . . . . . . . . . .   6
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+     5.1.  SETTINGS_PLACEHOLDERS Setting . . . . . . . . . . . . . .   7
+     5.2.  PLACEHOLDER_PRIORITY Frame  . . . . . . . . . . . . . . .   7
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .   8
+   Appendix A.  Acknowledgements . . . . . . . . . . . . . . . . . .   8
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction
 
@@ -108,19 +109,20 @@ Table of Contents
 
 
 
-
-Bishop                    Expires July 14, 2018                 [Page 2]
+Bishop                   Expires August 11, 2018                [Page 2]
 
-Internet-Draft           Placeholders in HTTP/2             January 2018
+Internet-Draft           Placeholders in HTTP/2            February 2018
 
 
 1.1.  Notational Conventions
 
-   The words "MUST", "MUST NOT", "SHOULD", and "MAY" are used in this
-   document.  It's not shouting; when they are capitalized, they have
-   the special meaning defined in [RFC2119].
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
 
-2.  The Priority Placeholder Extension
+2.  The Priority Placeholder Extension to HTTP/2
 
    This extension consists of an additional setting Section 2.1, changes
    to the set of HTTP/2 frames Section 2.2, and modified state
@@ -157,18 +159,18 @@ Internet-Draft           Placeholders in HTTP/2             January 2018
    servers should treat the excess placeholders as inactive and prune
    them following the same logic in Section 2.3.
 
-2.2.  Frame Modifications
 
 
 
 
 
 
-
-Bishop                    Expires July 14, 2018                 [Page 3]
+Bishop                   Expires August 11, 2018                [Page 3]
 
-Internet-Draft           Placeholders in HTTP/2             January 2018
+Internet-Draft           Placeholders in HTTP/2            February 2018
 
+
+2.2.  Frame Modifications
 
 2.2.1.  Existing Frame Types
 
@@ -215,16 +217,18 @@ Internet-Draft           Placeholders in HTTP/2             January 2018
    Prioritized Stream:  A 31-bit stream identifier for the request
       stream whose priority is being updated.
 
+
+
+
+
+Bishop                   Expires August 11, 2018                [Page 4]
+
+Internet-Draft           Placeholders in HTTP/2            February 2018
+
+
    Stream Dependency:  A 31-bit stream or placeholder identifier for the
       request stream that this stream depends on (see [RFC7540],
       Section 5.3).
-
-
-
-Bishop                    Expires July 14, 2018                 [Page 4]
-
-Internet-Draft           Placeholders in HTTP/2             January 2018
-
 
    Weight:  An unsigned 8-bit integer representing a priority weight for
       the stream (see [RFC7540], Section 5.3).  Add one to the value to
@@ -262,6 +266,22 @@ Internet-Draft           Placeholders in HTTP/2             January 2018
    o  Identify and condense interior regions of the tree containing only
       inactive nodes, allocating weight appropriately
 
+
+
+
+
+
+
+
+
+
+
+
+Bishop                   Expires August 11, 2018                [Page 5]
+
+Internet-Draft           Placeholders in HTTP/2            February 2018
+
+
        x                x                 x
        |                |                 |
        P                P                 P
@@ -274,14 +294,6 @@ Internet-Draft           Placeholders in HTTP/2             January 2018
 
                 Figure 2: Example of Priority Tree Pruning
 
-
-
-
-Bishop                    Expires July 14, 2018                 [Page 5]
-
-Internet-Draft           Placeholders in HTTP/2             January 2018
-
-
    In the example in Figure 2, "P" represents a Placeholder, "A"
    represents an active node, and "I" represents an inactive node.  In
    the first step, the server discards two inactive branches (each a
@@ -293,16 +305,49 @@ Internet-Draft           Placeholders in HTTP/2             January 2018
    and MUST NOT declare a dependency on a stream it knows to have been
    closed.
 
-3.  Security Considerations
+3.  Incorporating Placeholders in HTTP/QUIC
+
+   HTTP/QUIC [HQ] uses a different PRIORITY frame which already permits
+   selecting either a stream or a Push ID (a new concept in HTTP/QUIC)
+   to be prioritized or used as a dependency.  Expanding this frame to
+   support placeholders as well requires additional bits.
+
+   The PRIORITY frame currently uses two flag bits to indicate Request/
+   Push dependencies on Request/Push.  If the full matrix of
+   dependencies is to be supported (Request/Push/Placeholder dependent
+   on Request/Push/Placeholder), four bits would be required to
+   represent the space, with several invalid flag combinations being
+   defined.  (If one combination were eliminated, three flags would be
+   sufficient to represent the remaining combinations, but the semantics
+   of individual flags would be unclear.)
+
+   HTTP/QUIC does not have the implicit closure of streams like HTTP/2.
+   While client implementations could reset streams which they intend to
+   use as priority placeholders, there has been interest in creating
+   greater clarity and synchronization between the client and server
+   views of the priority tree.
+
+
+
+
+
+
+
+Bishop                   Expires August 11, 2018                [Page 6]
+
+Internet-Draft           Placeholders in HTTP/2            February 2018
+
+
+4.  Security Considerations
 
    This extension is believed to improve security relative to [RFC7540],
    as it helps to constrain a previously unbounded state commitment.
 
-4.  IANA Considerations
+5.  IANA Considerations
 
    This document registers one new frame type and one new setting.
 
-4.1.  SETTINGS_PLACEHOLDERS Setting
+5.1.  SETTINGS_PLACEHOLDERS Setting
 
    The "SETTINGS_PLACEHOLDERS" setting is registered in the "HTTP/2
    Settings" registry established in [RFC7540].
@@ -315,7 +360,7 @@ Internet-Draft           Placeholders in HTTP/2             January 2018
 
    Specification:  This document.
 
-4.2.  PLACEHOLDER_PRIORITY Frame
+5.2.  PLACEHOLDER_PRIORITY Frame
 
    The "PLACEHOLDER_PRIORITY" frame is registered in the "HTTP/2 Frames"
    registry established in [RFC7540].
@@ -326,33 +371,39 @@ Internet-Draft           Placeholders in HTTP/2             January 2018
 
    Specification:  This document.
 
+6.  References
 
+6.1.  Normative References
 
-
-
-
-
-
-Bishop                    Expires July 14, 2018                 [Page 6]
-
-Internet-Draft           Placeholders in HTTP/2             January 2018
-
-
-5.  References
-
-5.1.  Normative References
+   [HQ]       Bishop, M., "Hypertext Transfer Protocol (HTTP) over
+              QUIC", draft-ietf-quic-http-07 (work in progress), October
+              2017.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
+
+
+
+
+
+Bishop                   Expires August 11, 2018                [Page 7]
+
+Internet-Draft           Placeholders in HTTP/2            February 2018
+
+
    [RFC7540]  Belshe, M., Peon, R., and M. Thomson, Ed., "Hypertext
               Transfer Protocol Version 2 (HTTP/2)", RFC 7540,
               DOI 10.17487/RFC7540, May 2015,
               <https://www.rfc-editor.org/info/rfc7540>.
 
-5.2.  Informative References
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+6.2.  Informative References
 
    [I-D.ietf-quic-http]
               Bishop, M., "Hypertext Transfer Protocol (HTTP) over
@@ -389,4 +440,9 @@ Author's Address
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 7]
+
+
+
+
+
+Bishop                   Expires August 11, 2018                [Page 8]

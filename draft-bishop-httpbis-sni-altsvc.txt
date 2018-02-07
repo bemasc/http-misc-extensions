@@ -4,8 +4,8 @@
 
 HTTPbis                                                        M. Bishop
 Internet-Draft                                                    Akamai
-Intended status: Standards Track                        January 10, 2018
-Expires: July 14, 2018
+Intended status: Standards Track                        February 7, 2018
+Expires: August 11, 2018
 
 
                       The "SNI" Alt-Svc Parameter
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 14, 2018.
+   This Internet-Draft will expire on August 11, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 1]
+Bishop                   Expires August 11, 2018                [Page 1]
 
-Internet-Draft                 SNI Alt-Svc                  January 2018
+Internet-Draft                 SNI Alt-Svc                 February 2018
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 2]
+Bishop                   Expires August 11, 2018                [Page 2]
 
-Internet-Draft                 SNI Alt-Svc                  January 2018
+Internet-Draft                 SNI Alt-Svc                 February 2018
 
 
 1.1.  Usage
@@ -165,9 +165,9 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 3]
+Bishop                   Expires August 11, 2018                [Page 3]
 
-Internet-Draft                 SNI Alt-Svc                  January 2018
+Internet-Draft                 SNI Alt-Svc                 February 2018
 
 
    sni = ( host / empty-string )
@@ -221,9 +221,9 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 4]
+Bishop                   Expires August 11, 2018                [Page 4]
 
-Internet-Draft                 SNI Alt-Svc                  January 2018
+Internet-Draft                 SNI Alt-Svc                 February 2018
 
 
    frame asking that the server also authenticate with a certificate for
@@ -277,9 +277,9 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 5]
+Bishop                   Expires August 11, 2018                [Page 5]
 
-Internet-Draft                 SNI Alt-Svc                  January 2018
+Internet-Draft                 SNI Alt-Svc                 February 2018
 
 
    In the client's TLS handshake, it would omit the Server Name
@@ -333,9 +333,9 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 6]
+Bishop                   Expires August 11, 2018                [Page 6]
 
-Internet-Draft                 SNI Alt-Svc                  January 2018
+Internet-Draft                 SNI Alt-Svc                 February 2018
 
 
 5.  IANA Considerations
@@ -389,9 +389,9 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 7]
+Bishop                   Expires August 11, 2018                [Page 7]
 
-Internet-Draft                 SNI Alt-Svc                  January 2018
+Internet-Draft                 SNI Alt-Svc                 February 2018
 
 
    [SecondaryCerts]
@@ -417,8 +417,8 @@ Internet-Draft                 SNI Alt-Svc                  January 2018
 6.2.  Informative References
 
    [DoH]      Hoffman, P. and P. McManus, "DNS Queries over HTTPS",
-              draft-ietf-doh-dns-over-https-02 (work in progress),
-              November 2017.
+              draft-ietf-doh-dns-over-https-03 (work in progress),
+              February 2018.
 
    [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
               and P. Hoffman, "Specification for DNS over Transport
@@ -445,9 +445,9 @@ Appendix A.  Acknowledgements
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 8]
+Bishop                   Expires August 11, 2018                [Page 8]
 
-Internet-Draft                 SNI Alt-Svc                  January 2018
+Internet-Draft                 SNI Alt-Svc                 February 2018
 
 
 Author's Address
@@ -501,4 +501,4 @@ Author's Address
 
 
 
-Bishop                    Expires July 14, 2018                 [Page 9]
+Bishop                   Expires August 11, 2018                [Page 9]
